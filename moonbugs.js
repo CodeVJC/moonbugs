@@ -12,7 +12,7 @@ class PreloadScene extends Phaser.Scene {
         // create clickable button
         const nextLevelButton = this.add.text(350, 330, 'Start', { fontFamily: 'Arial', fontSize: '36px', fill: '#0f0', backgroundColor: 'black'})
             .setInteractive()
-            .on('pointerdown', () => this.scene.start('Level1'));
+            .on('pointerup', () => this.scene.start('Level1'));
     }
 }
 
@@ -26,6 +26,7 @@ class Level1 extends Phaser.Scene {
         this.load.image('cannon', 'assets/cannon.png');
     }
     create() {
+        this.level = 1;
         this.attempt = 1;
         this.score = 0;
         this.scoreFill = 0;
@@ -55,12 +56,11 @@ class Level1 extends Phaser.Scene {
         this.scoreBarBorder.strokeRect(555, 8, 160, 20);
 
         // add text objects
-        this.welcomeText = this.add.text(config.width / 2, config.height / 2, 'Level 1', { fontFamily: 'Arial', fontSize: '36px', fill: '#fff' });
-        this.welcomeText.setOrigin(0.5); 
-        this.attemptText = this.add.text(15, 5, 'Attempt ' + this.attempt, { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });   
+        this.attemptText = this.add.text(15, 5, 'Attempt ' + this.attempt, { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' }); 
+        this.scoreText = this.add.text(720, 5, this.score + '/40', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
+        this.welcomeText = this.add.text(350, 300, 'Level ' + this.level, { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });  
         this.winText = this.add.text(config.width / 2, config.height / 2, '', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
         this.winText.setOrigin(0.5);
-        this.scoreText = this.add.text(720, 5, this.score + '/40', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
         this.gameOverText = this.add.text(config.width / 2, config.height / 2, 'GAMEOVER', { fontFamily: 'Arial', fontSize: '50px', fill: '#ff0000' });
         this.gameOverText.setOrigin(0.5);
         this.gameOverText.visible = false;
@@ -79,15 +79,10 @@ class Level1 extends Phaser.Scene {
             this.cannon.setRotation(angle);
         }, this);
 
-        // pointer down event listener to make sure pointer up only works if pointer down is true
-        this.input.on('pointerdown', function (pointer) {
-            this.isPointerDown = true;
-        }, this);
-
         // pointer up event listener to launch bug in direction cannon is facing
         this.input.on('pointerup', function (pointer) {
-            // only works if canLaunch is true and pointer's already down
-            if (!this.canLaunch || !this.isPointerDown) return;          
+            // only works if canLaunch is true
+            if (!this.canLaunch) return;          
 
             // add overlap check between bug and h3
             this.physics.add.overlap(this.bug, this.h3, this.collecth3, null, this);
@@ -180,7 +175,7 @@ class Level1 extends Phaser.Scene {
                 // add button
                 const tryAgainButton = this.add.text(250, 330, 'Try Level 1 Again?', { fontFamily: 'Arial', fontSize: '36px', fill: '#0f0', backgroundColor: 'black'})
                     .setInteractive()
-                    .on('pointerdown', () => this.scene.start('Level1'));
+                    .on('pointerup', () => this.scene.start('Level1'));
             }
             this.canLaunch = true; // bug allowed to launch again
         }
@@ -229,6 +224,7 @@ class Level2 extends Phaser.Scene {
         this.load.spritesheet('satellite', 'assets/satellite.png', { frameWidth: 128, frameHeight: 111 });
     }
     create() {
+        this.level = 2;
         this.attempt = 1;
         this.score = 0;
         this.scoreFill = 0;
@@ -269,12 +265,11 @@ class Level2 extends Phaser.Scene {
         this.scoreBarBorder.lineStyle(2, 0xffffff, 1);
         this.scoreBarBorder.strokeRect(555, 8, 160, 20);
 
-        this.welcomeText = this.add.text(config.width / 2, config.height / 2, 'Level 2', { fontFamily: 'Arial', fontSize: '36px', fill: '#fff' });
-        this.welcomeText.setOrigin(0.5); 
-        this.attemptText = this.add.text(15, 5, 'Attempt ' + this.attempt, { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });   
+        this.attemptText = this.add.text(15, 5, 'Attempt ' + this.attempt, { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' }); 
+        this.scoreText = this.add.text(720, 5, this.score + '/40', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
+        this.welcomeText = this.add.text(350, 300, 'Level ' + this.level, { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });  
         this.winText = this.add.text(config.width / 2, config.height / 2, '', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
         this.winText.setOrigin(0.5);
-        this.scoreText = this.add.text(720, 5, this.score + '/40', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
         this.gameOverText = this.add.text(config.width / 2, config.height / 2, 'GAMEOVER', { fontFamily: 'Arial', fontSize: '50px', fill: '#ff0000' });
         this.gameOverText.setOrigin(0.5);
         this.gameOverText.visible = false;
@@ -291,12 +286,8 @@ class Level2 extends Phaser.Scene {
             this.cannon.setRotation(angle);
         }, this);
 
-        this.input.on('pointerdown', function (pointer) {
-            this.isPointerDown = true;
-        }, this);
-
         this.input.on('pointerup', function (pointer) {
-            if (!this.canLaunch || !this.isPointerDown) return;        
+            if (!this.canLaunch) return;        
 
             this.physics.add.overlap(this.bug, this.h3, this.collecth3, null, this);
 
@@ -375,7 +366,7 @@ class Level2 extends Phaser.Scene {
                 this.physics.pause();
                 const tryAgainButton = this.add.text(250, 330, 'Try Level 2 Again?', { fontFamily: 'Arial', fontSize: '36px', fill: '#0f0', backgroundColor: 'black'})
                     .setInteractive()
-                    .on('pointerdown', () => this.scene.start('Level2'));
+                    .on('pointerup', () => this.scene.start('Level2'));
             }
             this.canLaunch = true;
         }
@@ -441,6 +432,7 @@ class Level3 extends Phaser.Scene {
         this.load.image('vertical', 'assets/vertical.png');
     }
     create() {
+        this.level = 3;
         this.attempt = 1;
         this.score = 0;
         this.scoreFill = 0;
@@ -502,12 +494,11 @@ class Level3 extends Phaser.Scene {
         this.scoreBarBorder.lineStyle(2, 0xffffff, 1);
         this.scoreBarBorder.strokeRect(555, 8, 160, 20);
 
-        this.welcomeText = this.add.text(config.width / 2, config.height / 2, 'Level 3', { fontFamily: 'Arial', fontSize: '36px', fill: '#fff' });
-        this.welcomeText.setOrigin(0.5); 
-        this.attemptText = this.add.text(15, 5, 'Attempt ' + this.attempt, { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });   
+        this.attemptText = this.add.text(15, 5, 'Attempt ' + this.attempt, { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' }); 
+        this.scoreText = this.add.text(720, 5, this.score + '/40', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
+        this.welcomeText = this.add.text(350, 300, 'Level ' + this.level, { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });  
         this.winText = this.add.text(config.width / 2, config.height / 2, '', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
         this.winText.setOrigin(0.5);
-        this.scoreText = this.add.text(720, 5, this.score + '/40', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
         this.gameOverText = this.add.text(config.width / 2, config.height / 2, 'GAMEOVER', { fontFamily: 'Arial', fontSize: '50px', fill: '#ff0000' });
         this.gameOverText.setOrigin(0.5);
         this.gameOverText.visible = false;
@@ -524,12 +515,8 @@ class Level3 extends Phaser.Scene {
             this.cannon.setRotation(angle);
         }, this);
 
-        this.input.on('pointerdown', function (pointer) {
-            this.isPointerDown = true;
-        }, this);
-
         this.input.on('pointerup', function (pointer) {
-            if (!this.canLaunch || !this.isPointerDown) return;     
+            if (!this.canLaunch) return;     
 
             this.physics.add.overlap(this.bug, this.h3, this.collecth3, null, this);
 
@@ -618,7 +605,7 @@ class Level3 extends Phaser.Scene {
                 this.physics.pause();
                 const tryAgainButton = this.add.text(250, 330, 'Try Level 3 Again?', { fontFamily: 'Arial', fontSize: '36px', fill: '#0f0', backgroundColor: 'black'})
                     .setInteractive()
-                    .on('pointerdown', () => this.scene.start('Level3'));
+                    .on('pointerup', () => this.scene.start('Level3'));
             }
 
             this.canLaunch = true;
