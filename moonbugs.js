@@ -56,7 +56,7 @@ class Level1 extends Phaser.Scene {
         this.scoreBarBorder.strokeRect(555, 8, 160, 20);
 
         // add text objects
-        this.attemptText = this.add.text(15, 5, 'Attempt ' + this.attempt, { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' }); 
+        this.attemptText = this.add.text(25, 5, 'Attempt ' + this.attempt, { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' }); 
         this.scoreText = this.add.text(720, 5, this.score + '/40', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
         this.welcomeText = this.add.text(355, 300, 'Level ' + this.level, { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });  
         this.winText = this.add.text(config.width / 2, config.height / 2, '', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
@@ -265,7 +265,7 @@ class Level2 extends Phaser.Scene {
         this.scoreBarBorder.lineStyle(2, 0xffffff, 1);
         this.scoreBarBorder.strokeRect(555, 8, 160, 20);
 
-        this.attemptText = this.add.text(15, 5, 'Attempt ' + this.attempt, { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' }); 
+        this.attemptText = this.add.text(25, 5, 'Attempt ' + this.attempt, { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' }); 
         this.scoreText = this.add.text(720, 5, this.score + '/40', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
         this.welcomeText = this.add.text(355, 300, 'Level ' + this.level, { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });  
         this.winText = this.add.text(config.width / 2, config.height / 2, '', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
@@ -494,7 +494,7 @@ class Level3 extends Phaser.Scene {
         this.scoreBarBorder.lineStyle(2, 0xffffff, 1);
         this.scoreBarBorder.strokeRect(555, 8, 160, 20);
 
-        this.attemptText = this.add.text(15, 5, 'Attempt ' + this.attempt, { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' }); 
+        this.attemptText = this.add.text(25, 5, 'Attempt ' + this.attempt, { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' }); 
         this.scoreText = this.add.text(720, 5, this.score + '/40', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
         this.welcomeText = this.add.text(355, 300, 'Level ' + this.level, { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });  
         this.winText = this.add.text(config.width / 2, config.height / 2, '', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
