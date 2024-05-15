@@ -202,7 +202,7 @@ class Level1 extends Phaser.Scene {
         }
 
         if (this.score == 40) { // check for winning level
-            this.winText.setText('Level 1 Complete!');
+            this.winText.setText('Level ' + this.level + ' Complete!');
             this.bug.setFrame(0);
             this.bug.setTint(0x00ff00);
             this.physics.pause();
@@ -392,7 +392,7 @@ class Level2 extends Phaser.Scene {
         }
 
         if (this.score == 40) {
-            this.winText.setText('Level 2 Complete!');
+            this.winText.setText('Level ' + this.level + ' Complete!');
             this.bug.setFrame(0);
             this.bug.setTint(0x00ff00);
             this.physics.pause();
@@ -631,7 +631,7 @@ class Level3 extends Phaser.Scene {
         }
 
         if (this.score == 40) {
-            this.winText.setText('Level 3 Complete!');
+            this.winText.setText('Level ' + this.level + ' Complete!');
             this.bug.setFrame(0);
             this.bug.setTint(0x00ff00);
             this.physics.pause();
