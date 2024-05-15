@@ -26,9 +26,9 @@ class Level1 extends Phaser.Scene {
         this.load.image('cannon', 'assets/cannon.png');
     }
     create() {
-        this.level = 1;
         this.attempt = 1;
         this.score = 0;
+        this.level = 1;
         this.scoreFill = 0;
         this.canLaunch = true;
         this.canCollect = false;
@@ -58,7 +58,7 @@ class Level1 extends Phaser.Scene {
         // add text objects
         this.attemptText = this.add.text(15, 5, 'Attempt ' + this.attempt, { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' }); 
         this.scoreText = this.add.text(720, 5, this.score + '/40', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
-        this.welcomeText = this.add.text(350, 300, 'Level ' + this.level, { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });  
+        this.welcomeText = this.add.text(355, 300, 'Level ' + this.level, { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });  
         this.winText = this.add.text(config.width / 2, config.height / 2, '', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
         this.winText.setOrigin(0.5);
         this.gameOverText = this.add.text(config.width / 2, config.height / 2, 'GAMEOVER', { fontFamily: 'Arial', fontSize: '50px', fill: '#ff0000' });
@@ -224,9 +224,9 @@ class Level2 extends Phaser.Scene {
         this.load.spritesheet('satellite', 'assets/satellite.png', { frameWidth: 128, frameHeight: 111 });
     }
     create() {
-        this.level = 2;
         this.attempt = 1;
         this.score = 0;
+        this.level = 2;
         this.scoreFill = 0;
         this.canLaunch = true;
         this.canCollect = false;
@@ -267,7 +267,7 @@ class Level2 extends Phaser.Scene {
 
         this.attemptText = this.add.text(15, 5, 'Attempt ' + this.attempt, { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' }); 
         this.scoreText = this.add.text(720, 5, this.score + '/40', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
-        this.welcomeText = this.add.text(350, 300, 'Level ' + this.level, { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });  
+        this.welcomeText = this.add.text(355, 300, 'Level ' + this.level, { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });  
         this.winText = this.add.text(config.width / 2, config.height / 2, '', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
         this.winText.setOrigin(0.5);
         this.gameOverText = this.add.text(config.width / 2, config.height / 2, 'GAMEOVER', { fontFamily: 'Arial', fontSize: '50px', fill: '#ff0000' });
@@ -432,9 +432,9 @@ class Level3 extends Phaser.Scene {
         this.load.image('vertical', 'assets/vertical.png');
     }
     create() {
-        this.level = 3;
         this.attempt = 1;
         this.score = 0;
+        this.level = 3;
         this.scoreFill = 0;
         this.canLaunch = true;
         this.canCollect = false;
@@ -496,7 +496,7 @@ class Level3 extends Phaser.Scene {
 
         this.attemptText = this.add.text(15, 5, 'Attempt ' + this.attempt, { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' }); 
         this.scoreText = this.add.text(720, 5, this.score + '/40', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
-        this.welcomeText = this.add.text(350, 300, 'Level ' + this.level, { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });  
+        this.welcomeText = this.add.text(355, 300, 'Level ' + this.level, { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });  
         this.winText = this.add.text(config.width / 2, config.height / 2, '', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
         this.winText.setOrigin(0.5);
         this.gameOverText = this.add.text(config.width / 2, config.height / 2, 'GAMEOVER', { fontFamily: 'Arial', fontSize: '50px', fill: '#ff0000' });
