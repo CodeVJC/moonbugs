@@ -173,7 +173,7 @@ class Level1 extends Phaser.Scene {
                 this.physics.pause();  // pause game
 
                 // add button
-                const tryAgainButton = this.add.text(250, 330, 'Try Level 1 Again?', { fontFamily: 'Arial', fontSize: '36px', fill: '#0f0', backgroundColor: 'black'})
+                const tryAgainButton = this.add.text(250, 330, 'Try Level ' + this.level + ' Again?', { fontFamily: 'Arial', fontSize: '36px', fill: '#0f0', backgroundColor: 'black'})
                     .setInteractive()
                     .on('pointerup', () => this.scene.start('Level1'));
             }
@@ -364,7 +364,7 @@ class Level2 extends Phaser.Scene {
                 this.bug.setFrame(0);
                 this.bug.setTint(0xaaffbb);
                 this.physics.pause();
-                const tryAgainButton = this.add.text(250, 330, 'Try Level 2 Again?', { fontFamily: 'Arial', fontSize: '36px', fill: '#0f0', backgroundColor: 'black'})
+                const tryAgainButton = this.add.text(250, 330, 'Try Level ' + this.level + ' Again?', { fontFamily: 'Arial', fontSize: '36px', fill: '#0f0', backgroundColor: 'black'})
                     .setInteractive()
                     .on('pointerup', () => this.scene.start('Level2'));
             }
@@ -603,7 +603,7 @@ class Level3 extends Phaser.Scene {
                 this.bug.setFrame(0);
                 this.bug.setTint(0xaaffbb);
                 this.physics.pause();
-                const tryAgainButton = this.add.text(250, 330, 'Try Level 3 Again?', { fontFamily: 'Arial', fontSize: '36px', fill: '#0f0', backgroundColor: 'black'})
+                const tryAgainButton = this.add.text(250, 330, 'Try Level ' + this.level + ' Again?', { fontFamily: 'Arial', fontSize: '36px', fill: '#0f0', backgroundColor: 'black'})
                     .setInteractive()
                     .on('pointerup', () => this.scene.start('Level3'));
             }
