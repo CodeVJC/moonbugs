@@ -607,7 +607,6 @@ class Level3 extends Phaser.Scene {
                     .setInteractive()
                     .on('pointerup', () => this.scene.start('Level3'));
             }
-
             this.canLaunch = true;
         }
     }
