@@ -23,7 +23,7 @@ class Level1 extends Phaser.Scene {
     preload() {
         this.load.spritesheet('bug', 'assets/bug.png', { frameWidth: 40, frameHeight: 37 });
         this.load.image('h3', 'assets/h3.png');
-        this.load.image('cannon', 'assets/cannon.png');
+        this.load.spritesheet('cannon', 'assets/cannon.png', { frameWidth: 100, frameHeight: 57 });
     }
     create() {
         this.attempt = 1;
@@ -32,6 +32,7 @@ class Level1 extends Phaser.Scene {
         this.scoreFill = 0;
         this.canLaunch = true;
         this.canCollect = false;
+        this.distance = 0;
 
         this.add.image(400, 300, 'moonscape');
 
@@ -44,7 +45,7 @@ class Level1 extends Phaser.Scene {
         this.bug.setDrag(.2);
         this.bug.body.gravity.y = 0;
 
-        this.cannon = this.add.sprite(this.bug.x, this.bug.y, 'cannon');  // create cannon
+        this.cannon = this.physics.add.sprite(this.bug.x, this.bug.y, 'cannon');  // create cannon
         this.cannon.setOrigin(0.5, 0.5);  // set rotation axis to center
 
         this.scoreBar = this.add.graphics(); // create score bar
@@ -73,10 +74,23 @@ class Level1 extends Phaser.Scene {
             this.h3.create(x, y, 'h3');
         };
 
-        // pointer move event listener to rotate the cannon toward the pointer
-        this.input.on('pointermove', function (pointer) {
+        this.input.on('pointermove', function (pointer) { // pointer move event listener
             const angle = Phaser.Math.Angle.Between(this.cannon.x, this.cannon.y, pointer.x, pointer.y);
-            this.cannon.setRotation(angle);
+            this.cannon.setRotation(angle); // rotate cannon toward the pointer
+
+            // calculate distance between cannon and pointer
+            this.distance = Phaser.Math.Distance.Between(this.cannon.x, this.cannon.y, pointer.x, pointer.y);
+            if (this.distance == 0) { // change cannon's color based on distance from pointer
+                this.cannon.setFrame(0);
+            } else if (this.distance <= 100) {
+                this.cannon.setFrame(1);
+            } else if (this.distance <= 250) {
+                this.cannon.setFrame(2);
+            } else if (this.distance <= 400) {
+                this.cannon.setFrame(3);
+            } else {
+                this.cannon.setFrame(4);
+            }
         }, this);
 
         // pointer up event listener to launch bug in direction cannon is facing
@@ -91,15 +105,12 @@ class Level1 extends Phaser.Scene {
                 this.cannon.setVisible(false);  // remove cannon after delay
             });
 
-            // calculate distance between cannon and pointer
-            const distance = Phaser.Math.Distance.Between(this.cannon.x, this.cannon.y, pointer.x, pointer.y);
-
-            // normalize this distance to suitable range for speed
+            // normalize distance to suitable range for speed
             const minDistance = 0;  // min distance
             const maxDistance = 800;  // max distance
             const minSpeed = 200;  // min speed
             const maxSpeed = 800;  // max speed
-            const speed = Phaser.Math.Percent(distance, minDistance, maxDistance) * (maxSpeed - minSpeed) + minSpeed;
+            const speed = Phaser.Math.Percent(this.distance, minDistance, maxDistance) * (maxSpeed - minSpeed) + minSpeed;
 
             // only access collecth3 logic after delay, to prevent collecting h3 while still inside cannon
             // faster speeds will enable collection sooner, since bug leaves cannon sooner
@@ -161,6 +172,7 @@ class Level1 extends Phaser.Scene {
                 this.bug.setVelocity(0, 0);
                 this.bug.body.gravity.y = 0;
                 this.cannon.setVisible(true);
+                this.cannon.setFrame(0);
                 this.cannon.setPosition(this.bug.x, this.bug.y);
 
                 this.attempt += 1; // update attempt
@@ -220,7 +232,7 @@ class Level2 extends Phaser.Scene {
     preload() {
         this.load.spritesheet('bug', 'assets/bug.png', { frameWidth: 40, frameHeight: 37 });
         this.load.image('h3', 'assets/h3.png');
-        this.load.image('cannon', 'assets/cannon.png');
+        this.load.spritesheet('cannon', 'assets/cannon.png', { frameWidth: 100, frameHeight: 57 });
         this.load.spritesheet('satellite', 'assets/satellite.png', { frameWidth: 128, frameHeight: 111 });
     }
     create() {
@@ -230,6 +242,7 @@ class Level2 extends Phaser.Scene {
         this.scoreFill = 0;
         this.canLaunch = true;
         this.canCollect = false;
+        this.distance = 0;
 
         this.add.image(400, 300, 'moonscape');
 
@@ -252,7 +265,7 @@ class Level2 extends Phaser.Scene {
         this.bug.setDrag(.2);
         this.bug.body.gravity.y = 0;
 
-        this.cannon = this.add.sprite(this.bug.x, this.bug.y, 'cannon');
+        this.cannon = this.physics.add.sprite(this.bug.x, this.bug.y, 'cannon');
         this.cannon.setOrigin(0.5, 0.5);
 
         this.bug.setPosition(this.cannon.x, this.cannon.y);
@@ -281,9 +294,23 @@ class Level2 extends Phaser.Scene {
             this.h3.create(x, y, 'h3');
         };
 
-        this.input.on('pointermove', function (pointer) {
+        this.input.on('pointermove', function (pointer) { // pointer move event listener
             const angle = Phaser.Math.Angle.Between(this.cannon.x, this.cannon.y, pointer.x, pointer.y);
-            this.cannon.setRotation(angle);
+            this.cannon.setRotation(angle); // rotate cannon toward the pointer
+
+            // calculate distance between cannon and pointer
+            this.distance = Phaser.Math.Distance.Between(this.cannon.x, this.cannon.y, pointer.x, pointer.y);
+            if (this.distance == 0) { // change cannon's color based on distance from pointer
+                this.cannon.setFrame(0);
+            } else if (this.distance <= 100) {
+                this.cannon.setFrame(1);
+            } else if (this.distance <= 250) {
+                this.cannon.setFrame(2);
+            } else if (this.distance <= 400) {
+                this.cannon.setFrame(3);
+            } else {
+                this.cannon.setFrame(4);
+            }
         }, this);
 
         this.input.on('pointerup', function (pointer) {
@@ -299,13 +326,12 @@ class Level2 extends Phaser.Scene {
                 this.cannon.setVisible(false);
             });
 
-            const distance = Phaser.Math.Distance.Between(this.cannon.x, this.cannon.y, pointer.x, pointer.y);
-
             const minDistance = 0;
             const maxDistance = 800;
             const minSpeed = 200;
             const maxSpeed = 800;
-            const speed = Phaser.Math.Percent(distance, minDistance, maxDistance) * (maxSpeed - minSpeed) + minSpeed;
+            const speed = Phaser.Math.Percent(this.distance, minDistance, maxDistance) * (maxSpeed - minSpeed) + minSpeed;
+
             if (speed < 300) {
                 this.time.delayedCall(250, () => {
                     this.canCollect = true;
@@ -356,6 +382,7 @@ class Level2 extends Phaser.Scene {
                 this.bug.setVelocity(0, 0);
                 this.bug.body.gravity.y = 0;
                 this.cannon.setVisible(true);
+                this.cannon.setFrame(0);
                 this.cannon.setPosition(this.bug.x, this.bug.y);
                 this.attempt += 1;
                 this.attemptText.setText('Attempt ' + this.attempt);
@@ -426,7 +453,7 @@ class Level3 extends Phaser.Scene {
     preload() {
         this.load.spritesheet('bug', 'assets/bug.png', { frameWidth: 40, frameHeight: 37 });
         this.load.image('h3', 'assets/h3.png');
-        this.load.image('cannon', 'assets/cannon.png');
+        this.load.spritesheet('cannon', 'assets/cannon.png', { frameWidth: 100, frameHeight: 57 });
         this.load.spritesheet('satellite', 'assets/satellite.png', { frameWidth: 128, frameHeight: 111 });
         this.load.image('horizontal', 'assets/horizontal.png');
         this.load.image('vertical', 'assets/vertical.png');
@@ -438,6 +465,7 @@ class Level3 extends Phaser.Scene {
         this.scoreFill = 0;
         this.canLaunch = true;
         this.canCollect = false;
+        this.distance = 0;
 
         this.add.image(400, 300, 'moonscape');
 
@@ -475,7 +503,7 @@ class Level3 extends Phaser.Scene {
         this.bug.setDrag(.2);
         this.bug.body.gravity.y = 0;
 
-        this.cannon = this.add.sprite(this.bug.x, this.bug.y, 'cannon');
+        this.cannon = this.physics.add.sprite(this.bug.x, this.bug.y, 'cannon');
         this.cannon.setOrigin(0.5, 0.5);
 
         this.bug.setPosition(this.cannon.x, this.cannon.y);
@@ -510,9 +538,23 @@ class Level3 extends Phaser.Scene {
             this.h3.create(x, y, 'h3');
         };
 
-        this.input.on('pointermove', function (pointer) {
+        this.input.on('pointermove', function (pointer) { // pointer move event listener
             const angle = Phaser.Math.Angle.Between(this.cannon.x, this.cannon.y, pointer.x, pointer.y);
-            this.cannon.setRotation(angle);
+            this.cannon.setRotation(angle); // rotate cannon toward the pointer
+
+            // calculate distance between cannon and pointer
+            this.distance = Phaser.Math.Distance.Between(this.cannon.x, this.cannon.y, pointer.x, pointer.y);
+            if (this.distance == 0) { // change cannon's color based on distance from pointer
+                this.cannon.setFrame(0);
+            } else if (this.distance <= 100) {
+                this.cannon.setFrame(1);
+            } else if (this.distance <= 250) {
+                this.cannon.setFrame(2);
+            } else if (this.distance <= 400) {
+                this.cannon.setFrame(3);
+            } else {
+                this.cannon.setFrame(4);
+            }
         }, this);
 
         this.input.on('pointerup', function (pointer) {
@@ -527,13 +569,12 @@ class Level3 extends Phaser.Scene {
                 this.cannon.setVisible(false);
             });
 
-            const distance = Phaser.Math.Distance.Between(this.cannon.x, this.cannon.y, pointer.x, pointer.y);
-
             const minDistance = 0;
             const maxDistance = 800;
             const minSpeed = 200;
             const maxSpeed = 800;
-            const speed = Phaser.Math.Percent(distance, minDistance, maxDistance) * (maxSpeed - minSpeed) + minSpeed;
+            const speed = Phaser.Math.Percent(this.distance, minDistance, maxDistance) * (maxSpeed - minSpeed) + minSpeed;
+
             if (speed < 300) {
                 this.time.delayedCall(250, () => {
                     this.canCollect = true;
@@ -595,6 +636,7 @@ class Level3 extends Phaser.Scene {
                 this.bug.setVelocity(0, 0);
                 this.bug.body.gravity.y = 0;
                 this.cannon.setVisible(true);
+                this.cannon.setFrame(0);
                 this.cannon.setPosition(this.bug.x, this.bug.y);
                 this.attempt += 1;
                 this.attemptText.setText('Attempt ' + this.attempt);
