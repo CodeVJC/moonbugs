@@ -6,7 +6,7 @@ class PreloadScene extends Phaser.Scene {
     create() {
         this.add.image(400, 300, 'moonscape');
 
-        this.welcomeText = this.add.text(config.width / 2, config.height / 2, 'MOONBUGS', { fontFamily: 'Arial', fontSize: '70px', fill: '#fff'});
+        this.welcomeText = this.add.text(config.scale.width / 2, config.scale.height / 2, 'MOONBUGS', { fontFamily: 'Arial', fontSize: '70px', fill: '#fff'});
         this.welcomeText.setOrigin(0.5);
 
         // create clickable button
@@ -60,9 +60,9 @@ class Level1 extends Phaser.Scene {
         this.attemptText = this.add.text(25, 5, 'Attempt ' + this.attempt, { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' }); 
         this.scoreText = this.add.text(720, 5, this.score + '/40', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
         this.welcomeText = this.add.text(355, 300, 'Level ' + this.level, { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });  
-        this.winText = this.add.text(config.width / 2, config.height / 2, '', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
+        this.winText = this.add.text(config.scale.width / 2, config.scale.height / 2, '', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
         this.winText.setOrigin(0.5);
-        this.gameOverText = this.add.text(config.width / 2, config.height / 2, 'GAMEOVER', { fontFamily: 'Arial', fontSize: '50px', fill: '#ff0000' });
+        this.gameOverText = this.add.text(config.scale.width / 2, config.scale.height / 2, 'GAMEOVER', { fontFamily: 'Arial', fontSize: '50px', fill: '#ff0000' });
         this.gameOverText.setOrigin(0.5);
         this.gameOverText.visible = false;
 
@@ -281,9 +281,9 @@ class Level2 extends Phaser.Scene {
         this.attemptText = this.add.text(25, 5, 'Attempt ' + this.attempt, { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' }); 
         this.scoreText = this.add.text(720, 5, this.score + '/40', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
         this.welcomeText = this.add.text(355, 300, 'Level ' + this.level, { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });  
-        this.winText = this.add.text(config.width / 2, config.height / 2, '', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
+        this.winText = this.add.text(config.scale.width / 2, config.scale.height / 2, '', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
         this.winText.setOrigin(0.5);
-        this.gameOverText = this.add.text(config.width / 2, config.height / 2, 'GAMEOVER', { fontFamily: 'Arial', fontSize: '50px', fill: '#ff0000' });
+        this.gameOverText = this.add.text(config.scale.width / 2, config.scale.height / 2, 'GAMEOVER', { fontFamily: 'Arial', fontSize: '50px', fill: '#ff0000' });
         this.gameOverText.setOrigin(0.5);
         this.gameOverText.visible = false;
 
@@ -525,9 +525,9 @@ class Level3 extends Phaser.Scene {
         this.attemptText = this.add.text(25, 5, 'Attempt ' + this.attempt, { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' }); 
         this.scoreText = this.add.text(720, 5, this.score + '/40', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
         this.welcomeText = this.add.text(355, 300, 'Level ' + this.level, { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });  
-        this.winText = this.add.text(config.width / 2, config.height / 2, '', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
+        this.winText = this.add.text(config.scale.width / 2, config.scale.height / 2, '', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
         this.winText.setOrigin(0.5);
-        this.gameOverText = this.add.text(config.width / 2, config.height / 2, 'GAMEOVER', { fontFamily: 'Arial', fontSize: '50px', fill: '#ff0000' });
+        this.gameOverText = this.add.text(config.scale.width / 2, config.scale.height / 2, 'GAMEOVER', { fontFamily: 'Arial', fontSize: '50px', fill: '#ff0000' });
         this.gameOverText.setOrigin(0.5);
         this.gameOverText.visible = false;
 
@@ -699,8 +699,12 @@ class Level3 extends Phaser.Scene {
 // create game config and game
 const config = {
     type: Phaser.AUTO,
-    width: 800,
-    height: 600,
+    scale: {
+        mode: Phaser.Scale.FIT,
+        autoCenter: Phaser.Scale.CENTER_BOTH,
+        width: 800,
+        height: 600
+    },
     physics: {
         default: 'arcade',
         arcade: {
