@@ -80,16 +80,20 @@ class Level1 extends Phaser.Scene {
 
             // calculate distance between cannon and pointer
             this.distance = Phaser.Math.Distance.Between(this.cannon.x, this.cannon.y, pointer.x, pointer.y);
-            if (this.distance == 0) { // change cannon's color based on distance from pointer
+            if (this.distance <= 125) { // change cannon's color based on distance from pointer
                 this.cannon.setFrame(0);
-            } else if (this.distance <= 100) {
-                this.cannon.setFrame(1);
             } else if (this.distance <= 250) {
+                this.cannon.setFrame(1);
+            } else if (this.distance <= 375) {
                 this.cannon.setFrame(2);
-            } else if (this.distance <= 400) {
+            } else if (this.distance <= 500) {
                 this.cannon.setFrame(3);
-            } else {
+            } else if (this.distance <= 625) {
                 this.cannon.setFrame(4);
+            } else if (this.distance <= 750) {
+                this.cannon.setFrame(5);
+            } else {
+                this.cannon.setFrame(6);
             }
         }, this);
 
@@ -294,22 +298,25 @@ class Level2 extends Phaser.Scene {
             this.h3.create(x, y, 'h3');
         };
 
-        this.input.on('pointermove', function (pointer) { // pointer move event listener
+        this.input.on('pointermove', function (pointer) {
             const angle = Phaser.Math.Angle.Between(this.cannon.x, this.cannon.y, pointer.x, pointer.y);
-            this.cannon.setRotation(angle); // rotate cannon toward the pointer
+            this.cannon.setRotation(angle);
 
-            // calculate distance between cannon and pointer
             this.distance = Phaser.Math.Distance.Between(this.cannon.x, this.cannon.y, pointer.x, pointer.y);
-            if (this.distance == 0) { // change cannon's color based on distance from pointer
+            if (this.distance <= 125) {
                 this.cannon.setFrame(0);
-            } else if (this.distance <= 100) {
-                this.cannon.setFrame(1);
             } else if (this.distance <= 250) {
+                this.cannon.setFrame(1);
+            } else if (this.distance <= 375) {
                 this.cannon.setFrame(2);
-            } else if (this.distance <= 400) {
+            } else if (this.distance <= 500) {
                 this.cannon.setFrame(3);
-            } else {
+            } else if (this.distance <= 625) {
                 this.cannon.setFrame(4);
+            } else if (this.distance <= 750) {
+                this.cannon.setFrame(5);
+            } else {
+                this.cannon.setFrame(6);
             }
         }, this);
 
@@ -538,22 +545,25 @@ class Level3 extends Phaser.Scene {
             this.h3.create(x, y, 'h3');
         };
 
-        this.input.on('pointermove', function (pointer) { // pointer move event listener
+        this.input.on('pointermove', function (pointer) {
             const angle = Phaser.Math.Angle.Between(this.cannon.x, this.cannon.y, pointer.x, pointer.y);
-            this.cannon.setRotation(angle); // rotate cannon toward the pointer
+            this.cannon.setRotation(angle);
 
-            // calculate distance between cannon and pointer
             this.distance = Phaser.Math.Distance.Between(this.cannon.x, this.cannon.y, pointer.x, pointer.y);
-            if (this.distance == 0) { // change cannon's color based on distance from pointer
+            if (this.distance <= 125) {
                 this.cannon.setFrame(0);
-            } else if (this.distance <= 100) {
-                this.cannon.setFrame(1);
             } else if (this.distance <= 250) {
+                this.cannon.setFrame(1);
+            } else if (this.distance <= 375) {
                 this.cannon.setFrame(2);
-            } else if (this.distance <= 400) {
+            } else if (this.distance <= 500) {
                 this.cannon.setFrame(3);
-            } else {
+            } else if (this.distance <= 625) {
                 this.cannon.setFrame(4);
+            } else if (this.distance <= 750) {
+                this.cannon.setFrame(5);
+            } else {
+                this.cannon.setFrame(6);
             }
         }, this);
 
