@@ -30,6 +30,7 @@ class Level1 extends Phaser.Scene {
         this.score = 0;
         this.level = 1;
         this.scoreFill = 0;
+        this.scoreExtra = 0;
         this.canLaunch = true;
         this.canCollect = false;
         this.distance = 0;
@@ -158,7 +159,7 @@ class Level1 extends Phaser.Scene {
 
         // apply more drag when bug's touching a bottom surface
         if (this.bug.body.blocked.down) {
-            this.bug.setDragX(100);
+            this.bug.setDragX(1500);
         } else {
             this.bug.setDragX(0.2);
         }
@@ -178,20 +179,29 @@ class Level1 extends Phaser.Scene {
                 this.cannon.setVisible(true);
                 this.cannon.setFrame(0);
                 this.cannon.setPosition(this.bug.x, this.bug.y);
-
                 this.attempt += 1; // update attempt
                 this.attemptText.setText('Attempt ' + this.attempt);
             } else {
-                // gameover
-                this.gameOverText.visible = true;
-                this.bug.setFrame(0);
-                this.bug.setTint(0xaaffbb);
-                this.physics.pause();  // pause game
+                if (this.score >= 40) { // check for winning level
+                    this.winText.setText('Level ' + this.level + ' Complete!');
+                    this.bug.setFrame(0);
+                    this.bug.setTint(0x00ff00);
+                    this.physics.pause();
+                    this.time.delayedCall(2000, () => {
+                        this.scene.start('Level2'); // start next level after delay
+                    });
+                } else {
+                    // gameover
+                    this.gameOverText.visible = true;
+                    this.bug.setFrame(0);
+                    this.bug.setTint(0xaaffbb);
+                    this.physics.pause();  // pause game
 
-                // add button
-                const tryAgainButton = this.add.text(250, 330, 'Try Level ' + this.level + ' Again?', { fontFamily: 'Arial', fontSize: '36px', fill: '#0f0', backgroundColor: 'black'})
-                    .setInteractive()
-                    .on('pointerup', () => this.scene.start('Level1'));
+                    // add button
+                    const tryAgainButton = this.add.text(250, 330, 'Try Level ' + this.level + ' Again?', { fontFamily: 'Arial', fontSize: '36px', fill: '#0f0', backgroundColor: 'black'})
+                        .setInteractive()
+                        .on('pointerup', () => this.scene.start('Level1'));
+                }
             }
             this.canLaunch = true; // bug allowed to launch again
         }
@@ -209,21 +219,31 @@ class Level1 extends Phaser.Scene {
         if (this.score > 0) {
             this.welcomeText.visible = false; // once a score's on the board, remove welcome text
         }
-        this.scoreBar.clear();
-        this.scoreBar.fillStyle(0x00ff00, 1);
-        this.scoreBar.fillRect(555, 8, this.scoreFill, 20); // length of bar is determined by score
 
         if (this.score <= 40) {
-            this.scoreText.setText(this.score + '/40');            
-        }
-
-        if (this.score == 40) { // check for winning level
-            this.winText.setText('Level ' + this.level + ' Complete!');
+            this.scoreBar.clear();
+            this.scoreBar.fillStyle(0x00ff00, 1);
+            this.scoreBar.fillRect(555, 8, this.scoreFill, 20); // length of bar is determined by score
+            this.scoreText.setText(this.score + '/40'); 
+        } else if (this.score < 50) {
+            this.scoreExtra += 16;
+            this.scoreBar.clear();
+            this.scoreBar.fillStyle(0x0000ff, 1);
+            this.scoreBar.fillRect(555, 8, this.scoreExtra, 20);
+            this.scoreText.setText(this.score + '/50');   
+            this.scoreText.setTint(0x0000ff);   
+        } else {
+            this.scoreExtra += 16;
+            this.scoreBar.clear();
+            this.scoreBar.fillStyle(0x0000ff, 1);
+            this.scoreBar.fillRect(555, 8, this.scoreExtra, 20);
+            this.scoreText.setText(this.score + '/50');
+            this.winText.setText('PERFECTION!');
             this.bug.setFrame(0);
             this.bug.setTint(0x00ff00);
             this.physics.pause();
             this.time.delayedCall(2000, () => {
-                this.scene.start('Level2'); // start next level after delay
+                this.scene.start('Level2');
             });
         }
     }
@@ -244,25 +264,39 @@ class Level2 extends Phaser.Scene {
         this.score = 0;
         this.level = 2;
         this.scoreFill = 0;
+        this.scoreExtra = 0;
         this.canLaunch = true;
         this.canCollect = false;
         this.distance = 0;
+        this.sat1X = 0;
+        this.sat1Y = 0;
+        this.sat1Pose = 0;
+        this.sat2X = 0;
+        this.sat2Y = 0;
+        this.sat2Pose = 0;
+        this.bugX = 0;
+        this.bugY = 0;
 
         this.add.image(400, 300, 'moonscape');
 
         // create satellites
-        var a = Phaser.Math.Between(100, 700);
-        var b = Phaser.Math.Between(100, 500);
-        var c = Phaser.Math.Between(0, 3);
-        var x = Phaser.Math.Between(100, 700);
-        var y = Phaser.Math.Between(100, 500);
-        var z = Phaser.Math.Between(0, 3);
-        this.satellite1 = this.physics.add.staticSprite(a, b, 'satellite', c);
-        this.satellite2 = this.physics.add.staticSprite(x, y, 'satellite', z);
+        this.sat1Pose = Phaser.Math.Between(0, 3);
+        this.sat2Pose = Phaser.Math.Between(0, 3);
+        while (Math.abs(this.sat1X - this.sat2X) < 200 && Math.abs(this.sat1Y - this.sat2Y) < 200) {
+            this.sat1X = Phaser.Math.Between(50, 750);
+            this.sat1Y = Phaser.Math.Between(50, 550);
+            this.sat2X = Phaser.Math.Between(50, 750);
+            this.sat2Y = Phaser.Math.Between(50, 550);          
+        }
+        this.satellite1 = this.physics.add.staticSprite(this.sat1X, this.sat1Y, 'satellite', this.sat1Pose);
+        this.satellite2 = this.physics.add.staticSprite(this.sat2X, this.sat2Y, 'satellite', this.sat2Pose);
 
-        var x = Phaser.Math.Between(20, 780);
-        var y = Phaser.Math.Between(20, 580);
-        this.bug = this.physics.add.sprite(x, y, 'bug', 0);
+        while (this.bugX == 0 && this.bugY == 0 || Math.abs(this.bugX - this.sat1X) < 200 && Math.abs(this.bugY - this.sat1Y) < 200 || Math.abs(this.bugX - this.sat2X) < 200 && Math.abs(this.bugY - this.sat2Y) < 200) {
+            this.bugX = Phaser.Math.Between(20, 780);
+            this.bugY = Phaser.Math.Between(20, 580);       
+        }
+
+        this.bug = this.physics.add.sprite(this.bugX, this.bugY, 'bug', 0);
         this.bug.setCollideWorldBounds(true);   
         this.bug.setVelocity(0, 0);
         this.bug.setBounce(.7);
@@ -374,7 +408,7 @@ class Level2 extends Phaser.Scene {
         }
 
         if (this.bug.body.blocked.down) {
-            this.bug.setDragX(100);
+            this.bug.setDragX(1500);
         } else {
             this.bug.setDragX(0.2);
         }
@@ -394,13 +428,24 @@ class Level2 extends Phaser.Scene {
                 this.attempt += 1;
                 this.attemptText.setText('Attempt ' + this.attempt);
             } else {
-                this.gameOverText.visible = true;
-                this.bug.setFrame(0);
-                this.bug.setTint(0xaaffbb);
-                this.physics.pause();
-                const tryAgainButton = this.add.text(250, 330, 'Try Level ' + this.level + ' Again?', { fontFamily: 'Arial', fontSize: '36px', fill: '#0f0', backgroundColor: 'black'})
-                    .setInteractive()
-                    .on('pointerup', () => this.scene.start('Level2'));
+                if (this.score >= 40) {
+                    this.winText.setText('Level ' + this.level + ' Complete!');
+                    this.bug.setFrame(0);
+                    this.bug.setTint(0x00ff00);
+                    this.physics.pause();
+                    this.time.delayedCall(2000, () => {
+                        this.scene.start('Level3');
+                    });
+                } else {
+                    this.gameOverText.visible = true;
+                    this.bug.setFrame(0);
+                    this.bug.setTint(0xaaffbb);
+                    this.physics.pause();
+
+                    const tryAgainButton = this.add.text(250, 330, 'Try Level ' + this.level + ' Again?', { fontFamily: 'Arial', fontSize: '36px', fill: '#0f0', backgroundColor: 'black'})
+                        .setInteractive()
+                        .on('pointerup', () => this.scene.start('Level2'));
+                }
             }
             this.canLaunch = true;
         }
@@ -417,16 +462,26 @@ class Level2 extends Phaser.Scene {
         if (this.score > 0) {
             this.welcomeText.visible = false;
         }
-        this.scoreBar.clear();
-        this.scoreBar.fillStyle(0x00ff00, 1);
-        this.scoreBar.fillRect(555, 8, this.scoreFill, 20);
 
         if (this.score <= 40) {
-            this.scoreText.setText(this.score + '/40');            
-        }
-
-        if (this.score == 40) {
-            this.winText.setText('Level ' + this.level + ' Complete!');
+            this.scoreBar.clear();
+            this.scoreBar.fillStyle(0x00ff00, 1);
+            this.scoreBar.fillRect(555, 8, this.scoreFill, 20);
+            this.scoreText.setText(this.score + '/40'); 
+        } else if (this.score < 50) {
+            this.scoreExtra += 16;
+            this.scoreBar.clear();
+            this.scoreBar.fillStyle(0x0000ff, 1);
+            this.scoreBar.fillRect(555, 8, this.scoreExtra, 20);
+            this.scoreText.setText(this.score + '/50');   
+            this.scoreText.setTint(0x0000ff);   
+        } else {
+            this.scoreExtra += 16;
+            this.scoreBar.clear();
+            this.scoreBar.fillStyle(0x0000ff, 1);
+            this.scoreBar.fillRect(555, 8, this.scoreExtra, 20);
+            this.scoreText.setText(this.score + '/50');
+            this.winText.setText('PERFECTION!');
             this.bug.setFrame(0);
             this.bug.setTint(0x00ff00);
             this.physics.pause();
@@ -470,20 +525,31 @@ class Level3 extends Phaser.Scene {
         this.score = 0;
         this.level = 3;
         this.scoreFill = 0;
+        this.scoreExtra = 0;
         this.canLaunch = true;
         this.canCollect = false;
         this.distance = 0;
+        this.sat1X = 0;
+        this.sat1Y = 0;
+        this.sat1Pose = 0;
+        this.sat2X = 0;
+        this.sat2Y = 0;
+        this.sat2Pose = 0;
+        this.bugX = 0;
+        this.bugY = 0;
 
         this.add.image(400, 300, 'moonscape');
 
-        var a = Phaser.Math.Between(100, 700);
-        var b = Phaser.Math.Between(100, 500);
-        var c = Phaser.Math.Between(0, 3);
-        var x = Phaser.Math.Between(100, 700);
-        var y = Phaser.Math.Between(100, 500);
-        var z = Phaser.Math.Between(0, 3);
-        this.satellite1 = this.physics.add.staticSprite(a, b, 'satellite', c);
-        this.satellite2 = this.physics.add.staticSprite(x, y, 'satellite', z);
+        this.sat1Pose = Phaser.Math.Between(0, 3);
+        this.sat2Pose = Phaser.Math.Between(0, 3);
+        while (Math.abs(this.sat1X - this.sat2X) < 200 && Math.abs(this.sat1Y - this.sat2Y) < 200) {
+            this.sat1X = Phaser.Math.Between(50, 750);
+            this.sat1Y = Phaser.Math.Between(50, 550);
+            this.sat2X = Phaser.Math.Between(50, 750);
+            this.sat2Y = Phaser.Math.Between(50, 550);          
+        }
+        this.satellite1 = this.physics.add.staticSprite(this.sat1X, this.sat1Y, 'satellite', this.sat1Pose);
+        this.satellite2 = this.physics.add.staticSprite(this.sat2X, this.sat2Y, 'satellite', this.sat2Pose);
 
         // create horizontal barrier
         this.horizontal = this.physics.add.staticGroup();
@@ -501,9 +567,12 @@ class Level3 extends Phaser.Scene {
             this.vertical.create(x, y, 'vertical');
         }
 
-        var x = Phaser.Math.Between(20, 780);
-        var y = Phaser.Math.Between(20, 580);
-        this.bug = this.physics.add.sprite(x, y, 'bug', 0);
+        while (this.bugX == 0 && this.bugY == 0 || Math.abs(this.bugX - this.sat1X) < 200 && Math.abs(this.bugY - this.sat1Y) < 200 || Math.abs(this.bugX - this.sat2X) < 200 && Math.abs(this.bugY - this.sat2Y) < 200) {
+            this.bugX = Phaser.Math.Between(20, 780);
+            this.bugY = Phaser.Math.Between(20, 580);       
+        }
+
+        this.bug = this.physics.add.sprite(this.bugX, this.bugY, 'bug', 0);
         this.bug.setCollideWorldBounds(true);
         this.bug.setVelocity(0, 0);
         this.bug.setBounce(.7);
@@ -628,7 +697,7 @@ class Level3 extends Phaser.Scene {
         }
 
         if (this.bug.body.blocked.down) {
-            this.bug.setDragX(100);
+            this.bug.setDragX(1500);
         } else {
             this.bug.setDragX(0.2);
         }
@@ -651,13 +720,24 @@ class Level3 extends Phaser.Scene {
                 this.attempt += 1;
                 this.attemptText.setText('Attempt ' + this.attempt);
             } else {
-                this.gameOverText.visible = true;
-                this.bug.setFrame(0);
-                this.bug.setTint(0xaaffbb);
-                this.physics.pause();
-                const tryAgainButton = this.add.text(250, 330, 'Try Level ' + this.level + ' Again?', { fontFamily: 'Arial', fontSize: '36px', fill: '#0f0', backgroundColor: 'black'})
-                    .setInteractive()
-                    .on('pointerup', () => this.scene.start('Level3'));
+                if (this.score >= 40) {
+                    this.winText.setText('Level ' + this.level + ' Complete!');
+                    this.bug.setFrame(0);
+                    this.bug.setTint(0x00ff00);
+                    this.physics.pause();
+                    this.time.delayedCall(2000, () => {
+                        this.scene.start('Level4');
+                    });
+                } else {
+                    this.gameOverText.visible = true;
+                    this.bug.setFrame(0);
+                    this.bug.setTint(0xaaffbb);
+                    this.physics.pause();
+
+                    const tryAgainButton = this.add.text(250, 330, 'Try Level ' + this.level + ' Again?', { fontFamily: 'Arial', fontSize: '36px', fill: '#0f0', backgroundColor: 'black'})
+                        .setInteractive()
+                        .on('pointerup', () => this.scene.start('Level3'));
+                }
             }
             this.canLaunch = true;
         }
@@ -674,19 +754,32 @@ class Level3 extends Phaser.Scene {
         if (this.score > 0) {
             this.welcomeText.visible = false;
         }
-        this.scoreBar.clear();
-        this.scoreBar.fillStyle(0x00ff00, 1);
-        this.scoreBar.fillRect(555, 8, this.scoreFill, 20);
 
         if (this.score <= 40) {
-            this.scoreText.setText(this.score + '/40');            
-        }
-
-        if (this.score == 40) {
-            this.winText.setText('Level ' + this.level + ' Complete!');
+            this.scoreBar.clear();
+            this.scoreBar.fillStyle(0x00ff00, 1);
+            this.scoreBar.fillRect(555, 8, this.scoreFill, 20);
+            this.scoreText.setText(this.score + '/40'); 
+        } else if (this.score < 50) {
+            this.scoreExtra += 16;
+            this.scoreBar.clear();
+            this.scoreBar.fillStyle(0x0000ff, 1);
+            this.scoreBar.fillRect(555, 8, this.scoreExtra, 20);
+            this.scoreText.setText(this.score + '/50');   
+            this.scoreText.setTint(0x0000ff);   
+        } else {
+            this.scoreExtra += 16;
+            this.scoreBar.clear();
+            this.scoreBar.fillStyle(0x0000ff, 1);
+            this.scoreBar.fillRect(555, 8, this.scoreExtra, 20);
+            this.scoreText.setText(this.score + '/50');
+            this.winText.setText('PERFECTION!');
             this.bug.setFrame(0);
             this.bug.setTint(0x00ff00);
             this.physics.pause();
+            this.time.delayedCall(2000, () => {
+                this.scene.start('Level4');
+            });
         }
     }
     hitSatellite(bug, satellite) {
@@ -710,7 +803,7 @@ class Level3 extends Phaser.Scene {
 const config = {
     type: Phaser.AUTO,
     scale: {
-        mode: Phaser.Scale.FIT,
+        mode: Phaser.Scale.STRETCH,
         autoCenter: Phaser.Scale.CENTER_BOTH,
         width: 800,
         height: 600
