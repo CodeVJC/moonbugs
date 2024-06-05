@@ -228,14 +228,14 @@ class Level1 extends Phaser.Scene {
         } else if (this.score < 50) {
             this.scoreExtra += 16;
             this.scoreBar.clear();
-            this.scoreBar.fillStyle(0x0000ff, 1);
+            this.scoreBar.fillStyle(0x00ffff, 1);
             this.scoreBar.fillRect(555, 8, this.scoreExtra, 20);
             this.scoreText.setText(this.score + '/50');   
-            this.scoreText.setTint(0x0000ff);   
+            this.scoreText.setTint(0x00ffff);   
         } else {
             this.scoreExtra += 16;
             this.scoreBar.clear();
-            this.scoreBar.fillStyle(0x0000ff, 1);
+            this.scoreBar.fillStyle(0x00ffff, 1);
             this.scoreBar.fillRect(555, 8, this.scoreExtra, 20);
             this.scoreText.setText(this.score + '/50');
             this.winText.setText('PERFECTION!');
@@ -471,14 +471,14 @@ class Level2 extends Phaser.Scene {
         } else if (this.score < 50) {
             this.scoreExtra += 16;
             this.scoreBar.clear();
-            this.scoreBar.fillStyle(0x0000ff, 1);
+            this.scoreBar.fillStyle(0x00ffff, 1);
             this.scoreBar.fillRect(555, 8, this.scoreExtra, 20);
             this.scoreText.setText(this.score + '/50');   
-            this.scoreText.setTint(0x0000ff);   
+            this.scoreText.setTint(0x00ffff);   
         } else {
             this.scoreExtra += 16;
             this.scoreBar.clear();
-            this.scoreBar.fillStyle(0x0000ff, 1);
+            this.scoreBar.fillStyle(0x00ffff, 1);
             this.scoreBar.fillRect(555, 8, this.scoreExtra, 20);
             this.scoreText.setText(this.score + '/50');
             this.winText.setText('PERFECTION!');
@@ -763,14 +763,14 @@ class Level3 extends Phaser.Scene {
         } else if (this.score < 50) {
             this.scoreExtra += 16;
             this.scoreBar.clear();
-            this.scoreBar.fillStyle(0x0000ff, 1);
+            this.scoreBar.fillStyle(0x00ffff, 1);
             this.scoreBar.fillRect(555, 8, this.scoreExtra, 20);
             this.scoreText.setText(this.score + '/50');   
-            this.scoreText.setTint(0x0000ff);   
+            this.scoreText.setTint(0x00ffff);   
         } else {
             this.scoreExtra += 16;
             this.scoreBar.clear();
-            this.scoreBar.fillStyle(0x0000ff, 1);
+            this.scoreBar.fillStyle(0x00ffff, 1);
             this.scoreBar.fillRect(555, 8, this.scoreExtra, 20);
             this.scoreText.setText(this.score + '/50');
             this.winText.setText('PERFECTION!');
