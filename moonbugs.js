@@ -331,6 +331,13 @@ class Level2 extends Phaser.Scene {
     constructor() {
         super({ key: 'Level2' });
     }
+    init (data) {
+        if (data.cumulativeScore == 0) {
+            this.runningTotal = 0;
+        } else {
+            this.runningTotal = data.cumulativeScore;
+        }
+    }
     create() {
         this.attempt = 1;
         this.score = 0;
@@ -386,7 +393,10 @@ downward`, { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
         this.scoreBarBorder.strokeRect(555, 8, 160, 20);
 
         // add text objects
-        this.attemptText = this.add.text(25, 5, 'Attempt ' + this.attempt + '/3', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' }); 
+        this.attemptText = this.add.text(25, 5, 'Attempt ' + this.attempt + '/3', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
+        if (this.runningTotal != 0) {
+            this.runningTotalText = this.add.text(350, 5, 'Running total: ' + this.runningTotal, { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' }); 
+        }
         this.scoreText = this.add.text(720, 5, this.score + '/20', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
         this.welcomeText = this.add.text(366, 240, 'Level ' + this.level, { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });  
         this.winText = this.add.text(config.scale.width / 2, config.scale.height / 2, '', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
@@ -568,7 +578,7 @@ downward`, { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
                     // add button
                     const tryAgainButton = this.add.text(250, 330, 'Try Level ' + this.level + ' Again?', { fontFamily: 'Arial', fontSize: '36px', fill: '#0f0', backgroundColor: 'black'})
                         .setInteractive()
-                        .on('pointerup', () => this.scene.start('Level2'));
+                        .on('pointerup', () => this.scene.start('Level2', { cumulativeScore: 0 }));
                 }
             }
             this.canLaunch = true; // bug allowed to launch again
@@ -632,7 +642,7 @@ downward`, { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
         this.physics.pause();
         const tryAgainButton = this.add.text(250, 330, 'Try Level ' + this.level + ' Again?', { fontFamily: 'Arial', fontSize: '36px', fill: '#0f0', backgroundColor: 'black'})
             .setInteractive()
-            .on('pointerup', () => this.scene.start('Level2'));
+            .on('pointerup', () => this.scene.start('Level2', { cumulativeScore: 0 }));
     }
     hitSatellite(bug, satellite) { // handle overlap with satellite
         if (!this.canCollect) {
