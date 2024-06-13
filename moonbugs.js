@@ -334,7 +334,7 @@ class Level2 extends Phaser.Scene {
     create() {
         this.attempt = 1;
         this.score = 0;
-        this.level = 1;
+        this.level = 2;
         this.scoreFill = 0;
         this.scoreExtra = 0;
         this.canLaunch = true;
