@@ -140,7 +140,7 @@ class Level1 extends Phaser.Scene {
         });
 
         this.soundBorder = this.sound.add("soundBorder", { 
-            volume: 5, 
+            volume: 3, 
             loop: false 
         });
 
@@ -482,7 +482,7 @@ class Level2 extends Phaser.Scene {
         });
 
         this.soundBorder = this.sound.add("soundBorder", { 
-            volume: 5, 
+            volume: 3, 
             loop: false 
         });
 
@@ -855,7 +855,7 @@ class Level3 extends Phaser.Scene {
         });
         
         this.soundBorder = this.sound.add("soundBorder", { 
-            volume: 5, 
+            volume: 3, 
             loop: false 
         });
 
@@ -1240,7 +1240,7 @@ class Level4 extends Phaser.Scene {
         });
    
         this.soundBorder = this.sound.add("soundBorder", { 
-            volume: 5, 
+            volume: 3, 
             loop: false 
         });
 
