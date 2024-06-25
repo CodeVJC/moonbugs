@@ -14,6 +14,10 @@ class PreloadScene extends Phaser.Scene {
         this.load.image('vertical', 'assets/vertical.png');
         this.load.audio("soundSatellite", "assets/soundSatellite.mp3");
         this.load.audio("soundCannon", "assets/soundCannon.mp3");
+        this.load.audio("soundBorder", "assets/soundBorder.mp3");
+        this.load.audio("soundGround", "assets/soundGround.mp3");
+        this.load.audio("soundBlackHoleOrSpiral", "assets/soundBlackHoleOrSpiral.mp3");
+        this.load.audio("soundH3OrStar", "assets/soundH3OrStar.mp3");
     }
     create() {
         this.add.image(400, 300, 'moonscape');
@@ -131,7 +135,27 @@ class Level1 extends Phaser.Scene {
         this.h3.create(666, 500, 'h3');
 
         this.soundCannon = this.sound.add("soundCannon", { 
+            volume: 7, 
+            loop: false 
+        });
+
+        this.soundBorder = this.sound.add("soundBorder", { 
             volume: 5, 
+            loop: false 
+        });
+
+        this.soundGround = this.sound.add("soundGround", { 
+            volume: 1, 
+            loop: false 
+        });
+
+        this.soundBlackHoleOrSpiral = this.sound.add("soundBlackHoleOrSpiral", { 
+            volume: 9, 
+            loop: false 
+        });
+
+        this.soundH3OrStar = this.sound.add("soundH3OrStar", { 
+            volume: .1, 
             loop: false 
         });
 
@@ -218,15 +242,19 @@ class Level1 extends Phaser.Scene {
     update() {
         // set bug's pose when it hits any left, right or top surface
         if (this.bug.body.blocked.left) { // hits left surface
+            this.soundBorder.play();
             this.bug.setFrame(4);  // right pose
         } else if (this.bug.body.blocked.right) { // hits right surface
+            this.soundBorder.play();
             this.bug.setFrame(3);  // left pose
         } else if (this.bug.body.blocked.up) { // hits top surface
+            this.soundBorder.play();
             this.bug.setFrame(2);  // down pose
         }
 
         // apply more drag when bug's touching a bottom surface
         if (this.bug.body.blocked.down) {
+            this.soundGround.play();
             this.bug.setDragX(500);
         } else {
             this.bug.setDragX(0.2);
@@ -250,6 +278,7 @@ class Level1 extends Phaser.Scene {
                 this.attemptText.setText('Attempt ' + this.attempt + '/3');
             } else {
                 if (this.score >= 20) { // check for winning level
+                    this.soundGround.stop();
                     this.winText.setText('Level ' + this.level + ' Complete!');
                     this.totalText.setText('Current score: ' + this.score);
                     this.bug.setFrame(0);
@@ -260,6 +289,7 @@ class Level1 extends Phaser.Scene {
                     });
                 } else {
                     // gameover
+                    this.soundGround.stop();
                     this.gameOverText.visible = true;
                     this.bug.setFrame(0);
                     this.bug.setTint(0xaaffbb);
@@ -278,6 +308,7 @@ class Level1 extends Phaser.Scene {
         if (!this.canCollect) {
             return;
         }
+        this.soundH3OrStar.play();
         h3.disableBody(true, true);  // remove collected h3
 
         // update score and scorebar
@@ -313,16 +344,19 @@ class Level1 extends Phaser.Scene {
         }
     }
     hitStar(bug, star) {
+        this.soundH3OrStar.play();
         this.attempt -=1;
         star.disableBody(true, true);  // remove star
         this.attemptText.setText('Attempt ' + this.attempt + '/3');
     }
     hitSpiral(bug, spiralGalaxy) {
+        this.soundBlackHoleOrSpiral.play();
         this.attempt +=1;
         spiralGalaxy.disableBody(true, true);  // remove star
         this.attemptText.setText('Attempt ' + this.attempt + '/3');
     }
     hitBlackHole(bug, blackHole) {
+        this.soundBlackHoleOrSpiral.play();
         this.gameOverText.visible = true;
         bug.setFrame(0);
         bug.setTint(0xaaffbb);
@@ -438,12 +472,32 @@ class Level2 extends Phaser.Scene {
         this.h3.create(666, 500, 'h3');
 
         this.soundSatellite = this.sound.add("soundSatellite", { 
-            volume: 3, 
+            volume: 9, 
             loop: false 
         });
 
         this.soundCannon = this.sound.add("soundCannon", { 
+            volume: 7, 
+            loop: false 
+        });
+
+        this.soundBorder = this.sound.add("soundBorder", { 
             volume: 5, 
+            loop: false 
+        });
+
+        this.soundGround = this.sound.add("soundGround", { 
+            volume: 1, 
+            loop: false 
+        });
+
+        this.soundBlackHoleOrSpiral = this.sound.add("soundBlackHoleOrSpiral", { 
+            volume: 9, 
+            loop: false 
+        });
+
+        this.soundH3OrStar = this.sound.add("soundH3OrStar", { 
+            volume: .1, 
             loop: false 
         });
 
@@ -533,18 +587,19 @@ class Level2 extends Phaser.Scene {
     update() {
         // set bug's pose when it hits any left, right or top surface
         if (this.bug.body.blocked.left) { // hits left surface
-            //this.soundObstacle.play();
+            this.soundBorder.play();
             this.bug.setFrame(4);  // right pose
         } else if (this.bug.body.blocked.right) { // hits right surface
-            //this.soundObstacle.play();
+            this.soundBorder.play();
             this.bug.setFrame(3);  // left pose
         } else if (this.bug.body.blocked.up) { // hits top surface
-            //this.soundObstacle.play();
+            this.soundBorder.play();
             this.bug.setFrame(2);  // down pose
         }
 
         // apply more drag when bug's touching a bottom surface
         if (this.bug.body.blocked.down) {
+            this.soundGround.play();
             this.bug.setDragX(500);
         } else {
             this.bug.setDragX(0.2);
@@ -568,6 +623,7 @@ class Level2 extends Phaser.Scene {
                 this.attemptText.setText('Attempt ' + this.attempt + '/3');
             } else {
                 if (this.score >= 20) { // check for winning level
+                    this.soundGround.stop();
                     this.winText.setText('Level ' + this.level + ' Complete!');
                     this.totalText.setText('Current score: ' + (this.score + this.runningTotal));
                     this.bug.setFrame(0);
@@ -578,6 +634,7 @@ class Level2 extends Phaser.Scene {
                     });
                 } else {
                     // gameover
+                    this.soundGround.stop();
                     this.gameOverText.visible = true;
                     this.bug.setFrame(0);
                     this.bug.setTint(0xaaffbb);
@@ -596,6 +653,7 @@ class Level2 extends Phaser.Scene {
         if (!this.canCollect) {
             return;
         }
+        this.soundH3OrStar.play();
         h3.disableBody(true, true);  // remove collected h3
 
         // update score and scorebar
@@ -631,16 +689,19 @@ class Level2 extends Phaser.Scene {
         }
     }
     hitStar(bug, star) {
+        this.soundH3OrStar.play();
         this.attempt -=1;
         star.disableBody(true, true);  // remove star
         this.attemptText.setText('Attempt ' + this.attempt + '/3');
     }
     hitSpiral(bug, spiralGalaxy) {
+        this.soundBlackHoleOrSpiral.play();
         this.attempt +=1;
         spiralGalaxy.disableBody(true, true);  // remove star
         this.attemptText.setText('Attempt ' + this.attempt + '/3');
     }
     hitBlackHole(bug, blackHole) {
+        this.soundBlackHoleOrSpiral.play();
         this.gameOverText.visible = true;
         bug.setFrame(0);
         bug.setTint(0xaaffbb);
@@ -784,12 +845,32 @@ class Level3 extends Phaser.Scene {
         this.h3.create(666, 500, 'h3');
 
         this.soundSatellite = this.sound.add("soundSatellite", { 
-            volume: 3, 
+            volume: 9, 
             loop: false 
         });
 
         this.soundCannon = this.sound.add("soundCannon", { 
+            volume: 7, 
+            loop: false 
+        });
+        
+        this.soundBorder = this.sound.add("soundBorder", { 
             volume: 5, 
+            loop: false 
+        });
+
+        this.soundGround = this.sound.add("soundGround", { 
+            volume: 1, 
+            loop: false 
+        });
+
+        this.soundBlackHoleOrSpiral = this.sound.add("soundBlackHoleOrSpiral", { 
+            volume: 9, 
+            loop: false 
+        });
+
+        this.soundH3OrStar = this.sound.add("soundH3OrStar", { 
+            volume: .1, 
             loop: false 
         });
 
@@ -887,15 +968,19 @@ class Level3 extends Phaser.Scene {
     update() {
         // set bug's pose when it hits any left, right or top surface
         if (this.bug.body.blocked.left) { // hits left surface
+            this.soundBorder.play();
             this.bug.setFrame(4);  // right pose
         } else if (this.bug.body.blocked.right) { // hits right surface
+            this.soundBorder.play();
             this.bug.setFrame(3);  // left pose
         } else if (this.bug.body.blocked.up) { // hits top surface
+            this.soundBorder.play();
             this.bug.setFrame(2);  // down pose
         }
 
         // apply more drag when bug's touching a bottom surface
         if (this.bug.body.blocked.down) {
+            this.soundGround.play();
             this.bug.setDragX(500);
         } else {
             this.bug.setDragX(0.2);
@@ -920,6 +1005,7 @@ class Level3 extends Phaser.Scene {
                 this.attemptText.setText('Attempt ' + this.attempt + '/3');
             } else {
                 if (this.score >= 20) { // check for winning level
+                    this.soundGround.stop();
                     this.winText.setText('Level ' + this.level + ' Complete!');
                     this.totalText.setText('Current score: ' + (this.score + this.runningTotal));
                     this.bug.setFrame(0);
@@ -930,6 +1016,7 @@ class Level3 extends Phaser.Scene {
                     });
                 } else {
                     // gameover
+                    this.soundGround.stop();
                     this.gameOverText.visible = true;
                     this.bug.setFrame(0);
                     this.bug.setTint(0xaaffbb);
@@ -948,6 +1035,7 @@ class Level3 extends Phaser.Scene {
         if (!this.canCollect) {
             return;
         }
+        this.soundH3OrStar.play();
         h3.disableBody(true, true);  // remove collected h3
 
         // update score and scorebar
@@ -983,16 +1071,19 @@ class Level3 extends Phaser.Scene {
         }
     }
     hitStar(bug, star) {
+        this.soundH3OrStar.play();
         this.attempt -=1;
         star.disableBody(true, true);  // remove star
         this.attemptText.setText('Attempt ' + this.attempt + '/3');
     }
     hitSpiral(bug, spiralGalaxy) {
+        this.soundBlackHoleOrSpiral.play();
         this.attempt +=1;
         spiralGalaxy.disableBody(true, true);  // remove star
         this.attemptText.setText('Attempt ' + this.attempt + '/3');
     }
     hitBlackHole(bug, blackHole) {
+        this.soundBlackHoleOrSpiral.play();
         this.gameOverText.visible = true;
         bug.setFrame(0);
         bug.setTint(0xaaffbb);
@@ -1139,12 +1230,32 @@ class Level4 extends Phaser.Scene {
         this.h3.create(666, 500, 'h3');
 
         this.soundSatellite = this.sound.add("soundSatellite", { 
-            volume: 3, 
+            volume: 9, 
             loop: false 
         });
 
         this.soundCannon = this.sound.add("soundCannon", { 
+            volume: 7, 
+            loop: false 
+        });
+   
+        this.soundBorder = this.sound.add("soundBorder", { 
             volume: 5, 
+            loop: false 
+        });
+
+        this.soundGround = this.sound.add("soundGround", { 
+            volume: 1, 
+            loop: false 
+        });
+
+        this.soundBlackHoleOrSpiral = this.sound.add("soundBlackHoleOrSpiral", { 
+            volume: 9, 
+            loop: false 
+        });
+
+        this.soundH3OrStar = this.sound.add("soundH3OrStar", { 
+            volume: .1, 
             loop: false 
         });
 
@@ -1243,15 +1354,19 @@ class Level4 extends Phaser.Scene {
     update() {
         // set bug's pose when it hits any left, right or top surface
         if (this.bug.body.blocked.left) { // hits left surface
+            this.soundBorder.play();
             this.bug.setFrame(4);  // right pose
         } else if (this.bug.body.blocked.right) { // hits right surface
+            this.soundBorder.play();
             this.bug.setFrame(3);  // left pose
         } else if (this.bug.body.blocked.up) { // hits top surface
+            this.soundBorder.play();
             this.bug.setFrame(2);  // down pose
         }
 
         // apply more drag when bug's touching a bottom surface
         if (this.bug.body.blocked.down) {
+            this.soundGround.play();
             this.bug.setDragX(500);
         } else {
             this.bug.setDragX(0.2);
@@ -1276,6 +1391,7 @@ class Level4 extends Phaser.Scene {
                 this.attemptText.setText('Attempt ' + this.attempt + '/3');
             } else {
                 if (this.score >= 20) { // check for winning level
+                    this.soundGround.stop();
                     this.winText.setText('Level ' + this.level + ' Complete!');
                     this.totalText.setText('Current score: ' + (this.score + this.runningTotal));
                     this.bug.setFrame(0);
@@ -1286,6 +1402,7 @@ class Level4 extends Phaser.Scene {
                     });*/
                 } else {
                     // gameover
+                    this.soundGround.stop();
                     this.gameOverText.visible = true;
                     this.bug.setFrame(0);
                     this.bug.setTint(0xaaffbb);
@@ -1304,6 +1421,7 @@ class Level4 extends Phaser.Scene {
         if (!this.canCollect) {
             return;
         }
+        this.soundH3OrStar.play();
         h3.disableBody(true, true);  // remove collected h3
 
         // update score and scorebar
@@ -1339,16 +1457,19 @@ class Level4 extends Phaser.Scene {
         }
     }
     hitStar(bug, star) {
+        this.soundH3OrStar.play();
         this.attempt -=1;
         star.disableBody(true, true);  // remove star
         this.attemptText.setText('Attempt ' + this.attempt + '/3');
     }
     hitSpiral(bug, spiralGalaxy) {
+        this.soundBlackHoleOrSpiral.play();
         this.attempt +=1;
         spiralGalaxy.disableBody(true, true);  // remove star
         this.attemptText.setText('Attempt ' + this.attempt + '/3');
     }
     hitBlackHole(bug, blackHole) {
+        this.soundBlackHoleOrSpiral.play();
         this.gameOverText.visible = true;
         bug.setFrame(0);
         bug.setTint(0xaaffbb);
