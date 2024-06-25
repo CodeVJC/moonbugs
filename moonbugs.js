@@ -12,6 +12,8 @@ class PreloadScene extends Phaser.Scene {
         this.load.spritesheet('satellite', 'assets/satellite.png', { frameWidth: 128, frameHeight: 111 });
         this.load.image('horizontal', 'assets/horizontal.png');
         this.load.image('vertical', 'assets/vertical.png');
+        this.load.audio("soundSatellite", "assets/soundSatellite.mp3");
+        this.load.audio("soundCannon", "assets/soundCannon.mp3");
     }
     create() {
         this.add.image(400, 300, 'moonscape');
@@ -33,7 +35,7 @@ class PreloadScene extends Phaser.Scene {
         // create clickable button
         const nextLevelButton = this.add.text(350, 330, 'Start', { fontFamily: 'Arial', fontSize: '36px', fill: '#0f0', backgroundColor: 'black'})
             .setInteractive()
-            .on('pointerup', () => this.scene.start('Level1'));
+            .on('pointerup', () => this.scene.start('Level2'));
     }
 }
 
@@ -128,6 +130,11 @@ class Level1 extends Phaser.Scene {
         this.h3.create(533, 500, 'h3');
         this.h3.create(666, 500, 'h3');
 
+        this.soundCannon = this.sound.add("soundCannon", { 
+            volume: 5, 
+            loop: false 
+        });
+
         this.input.on('pointermove', function (pointer) { // pointer move event listener
             const angle = Phaser.Math.Angle.Between(this.cannon.x, this.cannon.y, pointer.x, pointer.y);
             this.cannon.setRotation(angle); // rotate cannon toward the pointer
@@ -155,6 +162,7 @@ class Level1 extends Phaser.Scene {
         this.input.on('pointerup', function (pointer) {
             // only works if canLaunch is true
             if (!this.canLaunch) return;          
+            this.soundCannon.play();
 
             // add overlap checks between bug and other objects
             this.physics.add.overlap(this.bug, this.h3, this.collecth3, null, this);
@@ -429,6 +437,16 @@ class Level2 extends Phaser.Scene {
         this.h3.create(533, 500, 'h3');
         this.h3.create(666, 500, 'h3');
 
+        this.soundSatellite = this.sound.add("soundSatellite", { 
+            volume: 3, 
+            loop: false 
+        });
+
+        this.soundCannon = this.sound.add("soundCannon", { 
+            volume: 5, 
+            loop: false 
+        });
+
         this.input.on('pointermove', function (pointer) { // pointer move event listener
             const angle = Phaser.Math.Angle.Between(this.cannon.x, this.cannon.y, pointer.x, pointer.y);
             this.cannon.setRotation(angle); // rotate cannon toward the pointer
@@ -456,6 +474,7 @@ class Level2 extends Phaser.Scene {
         this.input.on('pointerup', function (pointer) {
             // only works if canLaunch is true
             if (!this.canLaunch) return;          
+            this.soundCannon.play();
 
             // add overlap checks between bug and other objects
             this.physics.add.overlap(this.bug, this.h3, this.collecth3, null, this);
@@ -514,10 +533,13 @@ class Level2 extends Phaser.Scene {
     update() {
         // set bug's pose when it hits any left, right or top surface
         if (this.bug.body.blocked.left) { // hits left surface
+            //this.soundObstacle.play();
             this.bug.setFrame(4);  // right pose
         } else if (this.bug.body.blocked.right) { // hits right surface
+            //this.soundObstacle.play();
             this.bug.setFrame(3);  // left pose
         } else if (this.bug.body.blocked.up) { // hits top surface
+            //this.soundObstacle.play();
             this.bug.setFrame(2);  // down pose
         }
 
@@ -631,6 +653,7 @@ class Level2 extends Phaser.Scene {
         if (!this.canCollect) {
             return;
         }
+        this.soundSatellite.play();
         satellite.disableBody(true, true);  // remove satellite
 
         if (satellite.frame.name == 0) { // satellite with up arrow
@@ -760,6 +783,16 @@ class Level3 extends Phaser.Scene {
         this.h3.create(533, 500, 'h3');
         this.h3.create(666, 500, 'h3');
 
+        this.soundSatellite = this.sound.add("soundSatellite", { 
+            volume: 3, 
+            loop: false 
+        });
+
+        this.soundCannon = this.sound.add("soundCannon", { 
+            volume: 5, 
+            loop: false 
+        });
+
         this.input.on('pointermove', function (pointer) { // pointer move event listener
             const angle = Phaser.Math.Angle.Between(this.cannon.x, this.cannon.y, pointer.x, pointer.y);
             this.cannon.setRotation(angle); // rotate cannon toward the pointer
@@ -787,6 +820,7 @@ class Level3 extends Phaser.Scene {
         this.input.on('pointerup', function (pointer) {
             // only works if canLaunch is true
             if (!this.canLaunch) return;          
+            this.soundCannon.play();
 
             // add overlap checks between bug and other objects
             this.physics.add.overlap(this.bug, this.h3, this.collecth3, null, this);
@@ -971,6 +1005,7 @@ class Level3 extends Phaser.Scene {
         if (!this.canCollect) {
             return;
         }
+        this.soundSatellite.play();
         satellite.disableBody(true, true);  // remove satellite
 
         if (satellite.frame.name == 0) { // satellite with up arrow
@@ -1103,6 +1138,16 @@ class Level4 extends Phaser.Scene {
         this.h3.create(533, 500, 'h3');
         this.h3.create(666, 500, 'h3');
 
+        this.soundSatellite = this.sound.add("soundSatellite", { 
+            volume: 3, 
+            loop: false 
+        });
+
+        this.soundCannon = this.sound.add("soundCannon", { 
+            volume: 5, 
+            loop: false 
+        });
+
         this.input.on('pointermove', function (pointer) { // pointer move event listener
             const angle = Phaser.Math.Angle.Between(this.cannon.x, this.cannon.y, pointer.x, pointer.y);
             this.cannon.setRotation(angle); // rotate cannon toward the pointer
@@ -1130,6 +1175,7 @@ class Level4 extends Phaser.Scene {
         this.input.on('pointerup', function (pointer) {
             // only works if canLaunch is true
             if (!this.canLaunch) return;          
+            this.soundCannon.play();
 
             // add overlap checks between bug and other objects
             this.physics.add.overlap(this.bug, this.h3, this.collecth3, null, this);
@@ -1315,6 +1361,7 @@ class Level4 extends Phaser.Scene {
         if (!this.canCollect) {
             return;
         }
+        this.soundSatellite.play();
         satellite.disableBody(true, true);  // remove satellite
 
         if (satellite.frame.name == 0) { // satellite with up arrow
