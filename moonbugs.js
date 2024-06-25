@@ -55,13 +55,10 @@ class Level1 extends Phaser.Scene {
 
         // create spiral galaxy
         this.spiralGalaxy = this.physics.add.staticSprite(600, 450, 'spiral_galaxy');
-        // this.spiralExplainer = this.add.text(645, 435, '= -1 attempts', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
         // create star   
         this.star = this.physics.add.staticSprite(333, 50, 'star');
-        // this.starExplainer = this.add.text(355, 35, '= +1 attempts', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
         // create black hole   
         this.blackHole = this.physics.add.staticSprite(600, 150, 'black_hole');
-        // this.blackHoleExplainer = this.add.text(645, 135, '= Game Over', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
         // create asteroids
         this.asteroid = this.physics.add.staticGroup();
         this.asteroid.create(66, 250, 'asteroid');
@@ -92,9 +89,9 @@ class Level1 extends Phaser.Scene {
         this.scoreBarBorder.strokeRect(555, 8, 160, 20);
 
         // add text objects
-        this.attemptText = this.add.text(25, 5, 'Attempt ' + this.attempt + '/3', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' }); 
+        this.attemptText = this.add.text(175, 5, 'Attempt ' + this.attempt + '/3', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' }); 
         this.scoreText = this.add.text(720, 5, this.score + '/20', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
-        this.welcomeText = this.add.text(290, 240, 'Level ' + this.level + ': Moon - Easy', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });  
+        this.welcomeText = this.add.text(25, 5, 'Level ' + this.level, { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });  
         this.winText = this.add.text(config.scale.width / 2, config.scale.height / 2, '', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
         this.winText.setOrigin(0.5);
         this.totalText = this.add.text(config.scale.width / 2, 350, '', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
@@ -102,13 +99,6 @@ class Level1 extends Phaser.Scene {
         this.gameOverText = this.add.text(config.scale.width / 2, config.scale.height / 2, 'GAMEOVER', { fontFamily: 'Arial', fontSize: '50px', fill: '#ff0000' });
         this.gameOverText.setOrigin(0.5);
         this.gameOverText.visible = false;
-
-        /*this.time.delayedCall(3000, () => {
-            this.welcomeText.visible = false;
-            this.starExplainer.visible = false;
-            this.spiralExplainer.visible = false;
-            this.blackHoleExplainer.visible = false;
-        });*/
 
         // create h3 molecules
         this.h3 = this.physics.add.group();
@@ -165,11 +155,6 @@ class Level1 extends Phaser.Scene {
         this.input.on('pointerup', function (pointer) {
             // only works if canLaunch is true
             if (!this.canLaunch) return;          
-
-            this.welcomeText.visible = false;
-            // this.starExplainer.visible = false;
-            // this.spiralExplainer.visible = false;
-            // this.blackHoleExplainer.visible = false;
 
             // add overlap checks between bug and other objects
             this.physics.add.overlap(this.bug, this.h3, this.collecth3, null, this);
@@ -257,7 +242,7 @@ class Level1 extends Phaser.Scene {
                 this.attemptText.setText('Attempt ' + this.attempt + '/3');
             } else {
                 if (this.score >= 20) { // check for winning level
-                    this.winText.setText('Level ' + this.level + ': Moon - Easy Complete!');
+                    this.winText.setText('Level ' + this.level + ' Complete!');
                     this.totalText.setText('Current score: ' + this.score);
                     this.bug.setFrame(0);
                     this.bug.setTint(0x00ff00);
@@ -290,10 +275,6 @@ class Level1 extends Phaser.Scene {
         // update score and scorebar
         this.score += 1;
         this.scoreFill += 8;
-
-        if (this.score > 0) {
-            this.welcomeText.visible = false; // once a score's on the board, remove welcome text
-        }
 
         if (this.score <= 20) {
             this.scoreBar.clear();
@@ -368,24 +349,20 @@ class Level2 extends Phaser.Scene {
         this.add.image(400, 300, 'moonscape');
 
         // create spiral galaxy
-        this.spiralGalaxy = this.physics.add.staticSprite(600, 450, 'spiral_galaxy');
+        this.spiralGalaxy = this.physics.add.staticSprite(333, 150, 'spiral_galaxy');
         // create star   
-        this.star = this.physics.add.staticSprite(333, 50, 'star');
+        this.star = this.physics.add.staticSprite(733, 50, 'star');
         // create black hole   
-        this.blackHole = this.physics.add.staticSprite(600, 150, 'black_hole');
+        this.blackHole = this.physics.add.staticSprite(400, 350, 'black_hole');
         // create asteroids
         this.asteroid = this.physics.add.staticGroup();
-        this.asteroid.create(66, 250, 'asteroid');
-        this.asteroid.create(200, 150, 'asteroid');
-        this.asteroid.create(733, 250, 'asteroid');
-        this.asteroid.create(466, 550, 'asteroid');
+        this.asteroid.create(466, 250, 'asteroid');
+        this.asteroid.create(200, 350, 'asteroid');
+        this.asteroid.create(733, 450, 'asteroid');
+        this.asteroid.create(333, 550, 'asteroid');
         // create satellites
-        this.satellite1 = this.physics.add.staticSprite(600, 350, 'satellite', 0);
-        /* this.satellite1Explainer = this.add.text(666, 335, `= launch
-upward`, { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });*/
-        this.satellite2 = this.physics.add.staticSprite(333, 150, 'satellite', 1);
-        /*this.satellite2Explainer = this.add.text(400, 135, `= launch
-downward`, { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });*/
+        this.satellite1 = this.physics.add.staticSprite(600, 450, 'satellite', 0);
+        this.satellite2 = this.physics.add.staticSprite(66, 150, 'satellite', 1);
 
         this.bug = this.physics.add.sprite(50, 550, 'bug', 0); // create bug before cannon so it's hidden under cannon
         this.bug.setCollideWorldBounds(true); // stay within boundaries of game   
@@ -410,12 +387,12 @@ downward`, { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });*/
         this.scoreBarBorder.strokeRect(555, 8, 160, 20);
 
         // add text objects
-        this.attemptText = this.add.text(25, 5, 'Attempt ' + this.attempt + '/3', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
+        this.attemptText = this.add.text(175, 5, 'Attempt ' + this.attempt + '/3', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
         if (this.runningTotal != 0) {
             this.runningTotalText = this.add.text(350, 5, 'Running total: ' + this.runningTotal, { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' }); 
         }
         this.scoreText = this.add.text(720, 5, this.score + '/20', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
-        this.welcomeText = this.add.text(290, 240, 'Level ' + this.level + ': Moon - Medium', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });  
+        this.welcomeText = this.add.text(25, 5, 'Level ' + this.level, { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });  
         this.winText = this.add.text(config.scale.width / 2, config.scale.height / 2, '', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
         this.winText.setOrigin(0.5);
         this.totalText = this.add.text(config.scale.width / 2, 350, '', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
@@ -423,13 +400,6 @@ downward`, { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });*/
         this.gameOverText = this.add.text(config.scale.width / 2, config.scale.height / 2, 'GAMEOVER', { fontFamily: 'Arial', fontSize: '50px', fill: '#ff0000' });
         this.gameOverText.setOrigin(0.5);
         this.gameOverText.visible = false;
-
-        /*this.time.delayedCall(3000, () => {
-            this.welcomeText.visible = false;
-            this.starExplainer.visible = false;
-            this.spiralExplainer.visible = false;
-            this.blackHoleExplainer.visible = false;
-        });*/
 
         // create h3 molecules
         this.h3 = this.physics.add.group();
@@ -486,10 +456,6 @@ downward`, { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });*/
         this.input.on('pointerup', function (pointer) {
             // only works if canLaunch is true
             if (!this.canLaunch) return;          
-
-            this.welcomeText.visible = false;
-            // this.satellite1Explainer.visible = false;
-            // this.satellite2Explainer.visible = false;
 
             // add overlap checks between bug and other objects
             this.physics.add.overlap(this.bug, this.h3, this.collecth3, null, this);
@@ -580,7 +546,7 @@ downward`, { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });*/
                 this.attemptText.setText('Attempt ' + this.attempt + '/3');
             } else {
                 if (this.score >= 20) { // check for winning level
-                    this.winText.setText('Level ' + this.level + ': Moon - Medium Complete!');
+                    this.winText.setText('Level ' + this.level + ' Complete!');
                     this.totalText.setText('Current score: ' + (this.score + this.runningTotal));
                     this.bug.setFrame(0);
                     this.bug.setTint(0x00ff00);
@@ -613,10 +579,6 @@ downward`, { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });*/
         // update score and scorebar
         this.score += 1;
         this.scoreFill += 8;
-
-        if (this.score > 0) {
-            this.welcomeText.visible = false; // once a score's on the board, remove welcome text
-        }
 
         if (this.score <= 20) {
             this.scoreBar.clear();
@@ -707,28 +669,26 @@ class Level3 extends Phaser.Scene {
         this.add.image(400, 300, 'moonscape');
 
         // create spiral galaxy
-        this.spiralGalaxy = this.physics.add.staticSprite(600, 450, 'spiral_galaxy');
+        this.spiralGalaxy = this.physics.add.staticSprite(600, 550, 'spiral_galaxy');
         // create star   
-        this.star = this.physics.add.staticSprite(333, 50, 'star');
+        this.star = this.physics.add.staticSprite(333, 450, 'star');
         // create black hole   
-        this.blackHole = this.physics.add.staticSprite(600, 150, 'black_hole');
+        this.blackHole = this.physics.add.staticSprite(200, 250, 'black_hole');
         // create asteroids
         this.asteroid = this.physics.add.staticGroup();
-        this.asteroid.create(66, 250, 'asteroid');
-        this.asteroid.create(200, 150, 'asteroid');
         this.asteroid.create(733, 250, 'asteroid');
-        this.asteroid.create(466, 550, 'asteroid');
+        this.asteroid.create(200, 550, 'asteroid');
+        this.asteroid.create(466, 150, 'asteroid');
+        this.asteroid.create(66, 150, 'asteroid');
         // create satellites
-        this.satellite1 = this.physics.add.staticSprite(600, 350, 'satellite', 0);
-        this.satellite2 = this.physics.add.staticSprite(333, 150, 'satellite', 1);
+        this.satellite1 = this.physics.add.staticSprite(600, 50, 'satellite', 2);
+        this.satellite2 = this.physics.add.staticSprite(333, 250, 'satellite', 3);
         // create horizontal barrier
         this.horizontal = this.physics.add.staticGroup();
-        this.horizontal.create(400, 350, 'horizontal');
-        // this.horizontalExplainer = this.add.text(300, 355, "^ horizontal barrier", { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
+        this.horizontal.create(266, 150, 'horizontal');
         // create vertical barrier
         this.vertical = this.physics.add.staticGroup();
-        this.vertical.create(200, 350, 'vertical');
-        // this.verticalExplainer = this.add.text(205, 320, "< vertical barrier", { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
+        this.vertical.create(466, 450, 'vertical');
 
         this.bug = this.physics.add.sprite(50, 550, 'bug', 0); // create bug before cannon so it's hidden under cannon
         this.bug.setCollideWorldBounds(true); // stay within boundaries of game   
@@ -758,12 +718,12 @@ class Level3 extends Phaser.Scene {
         this.scoreBarBorder.strokeRect(555, 8, 160, 20);
 
         // add text objects
-        this.attemptText = this.add.text(25, 5, 'Attempt ' + this.attempt + '/3', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
+        this.attemptText = this.add.text(175, 5, 'Attempt ' + this.attempt + '/3', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
         if (this.runningTotal != 0) {
             this.runningTotalText = this.add.text(350, 5, 'Running total: ' + this.runningTotal, { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' }); 
         }
         this.scoreText = this.add.text(720, 5, this.score + '/20', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
-        this.welcomeText = this.add.text(290, 240, 'Level ' + this.level + ': Moon - Hard', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });  
+        this.welcomeText = this.add.text(25, 5, 'Level ' + this.level, { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });  
         this.winText = this.add.text(config.scale.width / 2, config.scale.height / 2, '', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
         this.winText.setOrigin(0.5);
         this.totalText = this.add.text(config.scale.width / 2, 350, '', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
@@ -771,13 +731,6 @@ class Level3 extends Phaser.Scene {
         this.gameOverText = this.add.text(config.scale.width / 2, config.scale.height / 2, 'GAMEOVER', { fontFamily: 'Arial', fontSize: '50px', fill: '#ff0000' });
         this.gameOverText.setOrigin(0.5);
         this.gameOverText.visible = false;
-
-        /*this.time.delayedCall(3000, () => {
-            this.welcomeText.visible = false;
-            this.starExplainer.visible = false;
-            this.spiralExplainer.visible = false;
-            this.blackHoleExplainer.visible = false;
-        });*/
 
         // create h3 molecules
         this.h3 = this.physics.add.group();
@@ -834,10 +787,6 @@ class Level3 extends Phaser.Scene {
         this.input.on('pointerup', function (pointer) {
             // only works if canLaunch is true
             if (!this.canLaunch) return;          
-
-            this.welcomeText.visible = false;
-            // this.horizontalExplainer.visible = false;
-            // this.verticalExplainer.visible = false;
 
             // add overlap checks between bug and other objects
             this.physics.add.overlap(this.bug, this.h3, this.collecth3, null, this);
@@ -937,7 +886,7 @@ class Level3 extends Phaser.Scene {
                 this.attemptText.setText('Attempt ' + this.attempt + '/3');
             } else {
                 if (this.score >= 20) { // check for winning level
-                    this.winText.setText('Level ' + this.level + ': Moon - Hard Complete!');
+                    this.winText.setText('Level ' + this.level + ' Complete!');
                     this.totalText.setText('Current score: ' + (this.score + this.runningTotal));
                     this.bug.setFrame(0);
                     this.bug.setTint(0x00ff00);
@@ -970,10 +919,6 @@ class Level3 extends Phaser.Scene {
         // update score and scorebar
         this.score += 1;
         this.scoreFill += 8;
-
-        if (this.score > 0) {
-            this.welcomeText.visible = false; // once a score's on the board, remove welcome text
-        }
 
         if (this.score <= 20) {
             this.scoreBar.clear();
