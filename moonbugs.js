@@ -135,27 +135,27 @@ class Level1 extends Phaser.Scene {
         this.h3.create(666, 500, 'h3');
 
         this.soundCannon = this.sound.add("soundCannon", { 
-            volume: 7, 
+            volume: .7, 
             loop: false 
         });
 
         this.soundBorder = this.sound.add("soundBorder", { 
-            volume: 3, 
+            volume: .3, 
             loop: false 
         });
 
         this.soundGround = this.sound.add("soundGround", { 
-            volume: 1, 
+            volume: .3, 
             loop: false 
         });
 
         this.soundBlackHoleOrSpiral = this.sound.add("soundBlackHoleOrSpiral", { 
-            volume: 9, 
+            volume: .9, 
             loop: false 
         });
 
         this.soundH3OrStar = this.sound.add("soundH3OrStar", { 
-            volume: .1, 
+            volume: .01, 
             loop: false 
         });
 
@@ -472,32 +472,32 @@ class Level2 extends Phaser.Scene {
         this.h3.create(666, 500, 'h3');
 
         this.soundSatellite = this.sound.add("soundSatellite", { 
-            volume: 9, 
+            volume: .9, 
             loop: false 
         });
 
         this.soundCannon = this.sound.add("soundCannon", { 
-            volume: 7, 
+            volume: .7, 
             loop: false 
         });
 
         this.soundBorder = this.sound.add("soundBorder", { 
-            volume: 3, 
+            volume: .3, 
             loop: false 
         });
 
         this.soundGround = this.sound.add("soundGround", { 
-            volume: 1, 
+            volume: .3, 
             loop: false 
         });
 
         this.soundBlackHoleOrSpiral = this.sound.add("soundBlackHoleOrSpiral", { 
-            volume: 9, 
+            volume: .9, 
             loop: false 
         });
 
         this.soundH3OrStar = this.sound.add("soundH3OrStar", { 
-            volume: .1, 
+            volume: .01, 
             loop: false 
         });
 
@@ -845,32 +845,32 @@ class Level3 extends Phaser.Scene {
         this.h3.create(666, 500, 'h3');
 
         this.soundSatellite = this.sound.add("soundSatellite", { 
-            volume: 9, 
+            volume: .9, 
             loop: false 
         });
 
         this.soundCannon = this.sound.add("soundCannon", { 
-            volume: 7, 
+            volume: .7, 
             loop: false 
         });
-        
+
         this.soundBorder = this.sound.add("soundBorder", { 
-            volume: 3, 
+            volume: .3, 
             loop: false 
         });
 
         this.soundGround = this.sound.add("soundGround", { 
-            volume: 1, 
+            volume: .3, 
             loop: false 
         });
 
         this.soundBlackHoleOrSpiral = this.sound.add("soundBlackHoleOrSpiral", { 
-            volume: 9, 
+            volume: .9, 
             loop: false 
         });
 
         this.soundH3OrStar = this.sound.add("soundH3OrStar", { 
-            volume: .1, 
+            volume: .01, 
             loop: false 
         });
 
@@ -1230,32 +1230,32 @@ class Level4 extends Phaser.Scene {
         this.h3.create(666, 500, 'h3');
 
         this.soundSatellite = this.sound.add("soundSatellite", { 
-            volume: 9, 
+            volume: .9, 
             loop: false 
         });
 
         this.soundCannon = this.sound.add("soundCannon", { 
-            volume: 7, 
+            volume: .7, 
             loop: false 
         });
-   
+
         this.soundBorder = this.sound.add("soundBorder", { 
-            volume: 3, 
+            volume: .3, 
             loop: false 
         });
 
         this.soundGround = this.sound.add("soundGround", { 
-            volume: 1, 
+            volume: .3, 
             loop: false 
         });
 
         this.soundBlackHoleOrSpiral = this.sound.add("soundBlackHoleOrSpiral", { 
-            volume: 9, 
+            volume: .9, 
             loop: false 
         });
 
         this.soundH3OrStar = this.sound.add("soundH3OrStar", { 
-            volume: .1, 
+            volume: .01, 
             loop: false 
         });
 
