@@ -38,7 +38,7 @@ class PreloadScene extends Phaser.Scene {
         // create clickable button
         const nextLevelButton = this.add.text(350, 230, 'Start', { fontFamily: 'Arial', fontSize: '36px', fill: '#0f0', backgroundColor: 'black'})
             .setInteractive()
-            .on('pointerup', () => this.scene.start('Level1'));
+            .on('pointerup', () => this.scene.start('Level2'));
     }
 }
 
@@ -341,9 +341,8 @@ class Level2 extends Phaser.Scene {
         this.asteroid = this.physics.add.staticGroup();
         this.asteroid.create(66, 50, 'asteroid');
         this.asteroid.create(200, 150, 'asteroid');
-        this.asteroid.create(333, 450, 'asteroid');
+        this.asteroid.create(466, 450, 'asteroid');
         this.asteroid.create(466, 250, 'asteroid');
-        this.asteroid.create(600, 550, 'asteroid');
         this.asteroid.create(733, 350, 'asteroid');
         this.asteroid.create(600, 150, 'asteroid');
         this.asteroid.create(200, 350, 'asteroid');
