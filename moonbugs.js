@@ -38,7 +38,7 @@ class PreloadScene extends Phaser.Scene {
         // create clickable button
         const nextLevelButton = this.add.text(350, 230, 'Start', { fontFamily: 'Arial', fontSize: '36px', fill: '#0f0', backgroundColor: 'black'})
             .setInteractive()
-            .on('pointerup', () => this.scene.start('Level2'));
+            .on('pointerup', () => this.scene.start('Level1'));
     }
 }
 
