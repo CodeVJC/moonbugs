@@ -23,7 +23,7 @@ class PreloadScene extends Phaser.Scene {
         this.add.image(400, 300, 'moonscape');
         this.h3 = this.physics.add.group();
         this.h3.create(100, 300, 'h3');
-        this.h3Explainer = this.add.text(120, 290, `= Collect h3 to win!`, { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
+        this.h3Explainer = this.add.text(120, 290, `= Collect H-3 to win! Maintain an average of 20 per level.`, { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
         this.star = this.physics.add.staticSprite(100, 340, 'star');
         this.starExplainer = this.add.text(120, 330, '= Star, +1 attempts', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
         this.spiralGalaxy = this.physics.add.staticSprite(130, 380, 'spiral_galaxy');
@@ -70,16 +70,17 @@ class Level1 extends Phaser.Scene {
 
         this.scoreBar = this.add.graphics(); // create score bar
         this.scoreBar.fillStyle(0x00ff00, 1);
-        this.scoreBar.fillRect(555, 8, 0, 20);
+        this.scoreBar.fillRect(515, 8, 0, 20);
 
         this.scoreBarBorder = this.add.graphics(); // create score bar border
         this.scoreBarBorder.lineStyle(2, 0xffffff, 1);
-        this.scoreBarBorder.strokeRect(555, 8, 160, 20);
+        this.scoreBarBorder.strokeRect(515, 8, 200, 20);
 
         // add text objects
-        this.attemptText = this.add.text(175, 5, 'Attempt ' + this.attempt + '/3', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' }); 
-        this.scoreText = this.add.text(720, 5, this.score + '/20', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
-        this.welcomeText = this.add.text(25, 5, 'Level ' + this.level, { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });  
+        this.attemptText = this.add.text(100, 5, 'Attempt ' + this.attempt + '/3', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' }); 
+        this.requiredText = this.add.text(330, 5, '20 H-3 needed', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
+        this.scoreText = this.add.text(720, 5, this.score + '/25', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
+        this.welcomeText = this.add.text(10, 5, 'Level ' + this.level + ', ', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });  
         this.winText = this.add.text(config.scale.width / 2, config.scale.height / 2, '', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
         this.winText.setOrigin(0.5);
         this.totalText = this.add.text(config.scale.width / 2, 350, '', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
@@ -249,12 +250,12 @@ class Level1 extends Phaser.Scene {
                 if (this.score >= 20) { // check for winning level
                     this.soundGround.stop();
                     this.winText.setText('Level ' + this.level + ' Complete!');
-                    this.totalText.setText('Current score: ' + this.score);
+                    this.totalText.setText('Average: ' + this.score);
                     this.bug.setFrame(0);
                     this.bug.setTint(0x00ff00);
                     this.physics.pause();
                     this.time.delayedCall(2000, () => {
-                        this.scene.start('Level2', { cumulativeScore: this.score }); // start next level after delay
+                        this.scene.start('Level2', { cumulativeScore: this.score, levels: 1 }); // start next level after delay
                     });
                 } else {
                     // gameover
@@ -283,34 +284,11 @@ class Level1 extends Phaser.Scene {
         // update score and scorebar
         this.score += 1;
         this.scoreFill += 8;
-
-        if (this.score <= 20) {
-            this.scoreBar.clear();
-            this.scoreBar.fillStyle(0x00ff00, 1);
-            this.scoreBar.fillRect(555, 8, this.scoreFill, 20); // length of bar is determined by score
-            this.scoreText.setText(this.score + '/20'); 
-        } else if (this.score < 25) {
-            this.scoreExtra += 32;
-            this.scoreBar.clear();
-            this.scoreBar.fillStyle(0x00ffff, 1);
-            this.scoreBar.fillRect(555, 8, this.scoreExtra, 20);
-            this.scoreText.setText(this.score + '/25');   
-            this.scoreText.setTint(0x00ffff);   
-        } else {
-            this.scoreExtra += 32;
-            this.scoreBar.clear();
-            this.scoreBar.fillStyle(0x00ffff, 1);
-            this.scoreBar.fillRect(555, 8, this.scoreExtra, 20);
-            this.scoreText.setText(this.score + '/25');
-            this.winText.setText('PERFECTION! DOUBLE POINTS!');
-            this.totalText.setText('Current score: ' + 50);
-            this.bug.setFrame(0);
-            this.bug.setTint(0x00ff00);
-            this.physics.pause();
-            this.time.delayedCall(2000, () => {
-                this.scene.start('Level2', { cumulativeScore: 50 });
-            });
-        }
+        this.scoreBar.clear();
+        this.scoreBar.fillStyle(0x00ff00, 1);
+        this.scoreBar.fillRect(515, 8, this.scoreFill, 20); // length of bar is determined by score
+        this.scoreText.setText(this.score + '/25');   
+        this.scoreText.setTint(0x00ffff);
     }
 }
 
@@ -321,11 +299,14 @@ class Level2 extends Phaser.Scene {
     init (data) {
         if (data.cumulativeScore == 0) {
             this.runningTotal = 0;
+            this.levels = 0;
         } else {
             this.runningTotal = data.cumulativeScore;
+            this.levels = data.levels;
         }
     }
     create() {
+        this.needed = this.calcRequiredScore(this.runningTotal, this.levels);
         this.attempt = 1;
         this.score = 0;
         this.level = 2;
@@ -363,19 +344,21 @@ class Level2 extends Phaser.Scene {
 
         this.scoreBar = this.add.graphics(); // create score bar
         this.scoreBar.fillStyle(0x00ff00, 1);
-        this.scoreBar.fillRect(555, 8, 0, 20);
+        this.scoreBar.fillRect(515, 8, 0, 20);
 
         this.scoreBarBorder = this.add.graphics(); // create score bar border
         this.scoreBarBorder.lineStyle(2, 0xffffff, 1);
-        this.scoreBarBorder.strokeRect(555, 8, 160, 20);
+        this.scoreBarBorder.strokeRect(515, 8, 200, 20);
 
         // add text objects
-        this.attemptText = this.add.text(175, 5, 'Attempt ' + this.attempt + '/3', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' }); 
+        this.attemptText = this.add.text(100, 5, 'Attempt ' + this.attempt + '/3', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' }); 
         if (this.runningTotal != 0) {
-            this.runningTotalText = this.add.text(350, 5, 'Running total: ' + this.runningTotal, { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' }); 
+            this.requiredText = this.add.text(330, 5, this.needed + ' H-3 needed', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' }); 
+        } else {
+            this.requiredText = this.add.text(330, 5, '20 H-3 needed', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
         }
-        this.scoreText = this.add.text(720, 5, this.score + '/20', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
-        this.welcomeText = this.add.text(25, 5, 'Level ' + this.level, { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });  
+        this.scoreText = this.add.text(720, 5, this.score + '/25', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
+        this.welcomeText = this.add.text(10, 5, 'Level ' + this.level + ', ', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });  
         this.winText = this.add.text(config.scale.width / 2, config.scale.height / 2, '', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
         this.winText.setOrigin(0.5);
         this.totalText = this.add.text(config.scale.width / 2, 350, '', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
@@ -547,15 +530,15 @@ class Level2 extends Phaser.Scene {
                 this.attempt += 1; // update attempt
                 this.attemptText.setText('Attempt ' + this.attempt + '/3');
             } else {
-                if (this.score >= 20) { // check for winning level
+                if (this.score >= this.needed) { // check for winning level
                     this.soundGround.stop();
                     this.winText.setText('Level ' + this.level + ' Complete!');
-                    this.totalText.setText('Current score: ' + (this.score + this.runningTotal));
+                    this.totalText.setText('Average: ' + ( (this.score + this.runningTotal) / (this.levels + 1)));
                     this.bug.setFrame(0);
                     this.bug.setTint(0x00ff00);
                     this.physics.pause();
                     this.time.delayedCall(2000, () => {
-                        this.scene.start('Level3', { cumulativeScore: this.score + this.runningTotal}); // start next level after delay
+                        this.scene.start('Level3', { cumulativeScore: this.score + this.runningTotal, levels: this.levels + 1 }); // start next level after delay
                     });
                 } else {
                     // gameover
@@ -584,33 +567,17 @@ class Level2 extends Phaser.Scene {
         // update score and scorebar
         this.score += 1;
         this.scoreFill += 8;
-
-        if (this.score <= 20) {
-            this.scoreBar.clear();
-            this.scoreBar.fillStyle(0x00ff00, 1);
-            this.scoreBar.fillRect(555, 8, this.scoreFill, 20); // length of bar is determined by score
-            this.scoreText.setText(this.score + '/20'); 
-        } else if (this.score < 25) {
-            this.scoreExtra += 32;
-            this.scoreBar.clear();
-            this.scoreBar.fillStyle(0x00ffff, 1);
-            this.scoreBar.fillRect(555, 8, this.scoreExtra, 20);
-            this.scoreText.setText(this.score + '/25');   
-            this.scoreText.setTint(0x00ffff);   
-        } else {
-            this.scoreExtra += 32;
-            this.scoreBar.clear();
-            this.scoreBar.fillStyle(0x00ffff, 1);
-            this.scoreBar.fillRect(555, 8, this.scoreExtra, 20);
-            this.scoreText.setText(this.score + '/25');
-            this.winText.setText('PERFECTION! DOUBLE POINTS!');
-            this.totalText.setText('Current score: ' + (50 + this.runningTotal));
-            this.bug.setFrame(0);
-            this.bug.setTint(0x00ff00);
-            this.physics.pause();
-            this.time.delayedCall(2000, () => {
-                this.scene.start('Level3', { cumulativeScore: 50 + this.runningTotal });
-            });
+        this.scoreBar.clear();
+        this.scoreBar.fillStyle(0x00ff00, 1);
+        this.scoreBar.fillRect(515, 8, this.scoreFill, 20); // length of bar is determined by score
+        this.scoreText.setText(this.score + '/25');   
+        this.scoreText.setTint(0x00ffff);
+    }
+    calcRequiredScore(total, rounds) {
+        for (let i=0; i<=25; i++) {
+            if ((total + i)/(rounds + 1) >= 20) {
+                return i;
+            }
         }
     }
 }
@@ -622,11 +589,14 @@ class Level3 extends Phaser.Scene {
     init (data) {
         if (data.cumulativeScore == 0) {
             this.runningTotal = 0;
+            this.levels = 0;
         } else {
             this.runningTotal = data.cumulativeScore;
+            this.levels = data.levels;
         }
     }
     create() {
+        this.needed = this.calcRequiredScore(this.runningTotal, this.levels);
         this.attempt = 1;
         this.score = 0;
         this.level = 3;
@@ -672,19 +642,21 @@ class Level3 extends Phaser.Scene {
 
         this.scoreBar = this.add.graphics(); // create score bar
         this.scoreBar.fillStyle(0x00ff00, 1);
-        this.scoreBar.fillRect(555, 8, 0, 20);
+        this.scoreBar.fillRect(515, 8, 0, 20);
 
         this.scoreBarBorder = this.add.graphics(); // create score bar border
         this.scoreBarBorder.lineStyle(2, 0xffffff, 1);
-        this.scoreBarBorder.strokeRect(555, 8, 160, 20);
+        this.scoreBarBorder.strokeRect(515, 8, 200, 20);
 
         // add text objects
-        this.attemptText = this.add.text(175, 5, 'Attempt ' + this.attempt + '/3', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
+        this.attemptText = this.add.text(100, 5, 'Attempt ' + this.attempt + '/3', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' }); 
         if (this.runningTotal != 0) {
-            this.runningTotalText = this.add.text(350, 5, 'Running total: ' + this.runningTotal, { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' }); 
+            this.requiredText = this.add.text(330, 5, this.needed + ' H-3 needed', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' }); 
+        } else {
+            this.requiredText = this.add.text(330, 5, '20 H-3 needed', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
         }
-        this.scoreText = this.add.text(720, 5, this.score + '/20', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
-        this.welcomeText = this.add.text(25, 5, 'Level ' + this.level, { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });  
+        this.scoreText = this.add.text(720, 5, this.score + '/25', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
+        this.welcomeText = this.add.text(10, 5, 'Level ' + this.level + ', ', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
         this.winText = this.add.text(config.scale.width / 2, config.scale.height / 2, '', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
         this.winText.setOrigin(0.5);
         this.totalText = this.add.text(config.scale.width / 2, 350, '', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
@@ -868,15 +840,15 @@ class Level3 extends Phaser.Scene {
                 this.attempt += 1; // update attempt
                 this.attemptText.setText('Attempt ' + this.attempt + '/3');
             } else {
-                if (this.score >= 20) { // check for winning level
+                if (this.score >= this.needed) { // check for winning level
                     this.soundGround.stop();
                     this.winText.setText('Level ' + this.level + ' Complete!');
-                    this.totalText.setText('Current score: ' + (this.score + this.runningTotal));
+                    this.totalText.setText('Average: ' + ( (this.score + this.runningTotal) / (this.levels + 1)));
                     this.bug.setFrame(0);
                     this.bug.setTint(0x00ff00);
                     this.physics.pause();
                     this.time.delayedCall(2000, () => {
-                        this.scene.start('Level4', { cumulativeScore: this.score + this.runningTotal}); // start next level after delay
+                        this.scene.start('Level4', { cumulativeScore: this.score + this.runningTotal, levels: this.levels + 1 }); // start next level after delay
                     });
                 } else {
                     // gameover
@@ -905,34 +877,11 @@ class Level3 extends Phaser.Scene {
         // update score and scorebar
         this.score += 1;
         this.scoreFill += 8;
-
-        if (this.score <= 20) {
-            this.scoreBar.clear();
-            this.scoreBar.fillStyle(0x00ff00, 1);
-            this.scoreBar.fillRect(555, 8, this.scoreFill, 20); // length of bar is determined by score
-            this.scoreText.setText(this.score + '/20'); 
-        } else if (this.score < 25) {
-            this.scoreExtra += 32;
-            this.scoreBar.clear();
-            this.scoreBar.fillStyle(0x00ffff, 1);
-            this.scoreBar.fillRect(555, 8, this.scoreExtra, 20);
-            this.scoreText.setText(this.score + '/25');   
-            this.scoreText.setTint(0x00ffff);   
-        } else {
-            this.scoreExtra += 32;
-            this.scoreBar.clear();
-            this.scoreBar.fillStyle(0x00ffff, 1);
-            this.scoreBar.fillRect(555, 8, this.scoreExtra, 20);
-            this.scoreText.setText(this.score + '/25');
-            this.winText.setText('PERFECTION! DOUBLE POINTS!');
-            this.totalText.setText('Current score: ' + (50 + this.runningTotal));
-            this.bug.setFrame(0);
-            this.bug.setTint(0x00ff00);
-            this.physics.pause();
-            this.time.delayedCall(2000, () => {
-                this.scene.start('Level4', { cumulativeScore: 50 + this.runningTotal });
-            });
-        }
+        this.scoreBar.clear();
+        this.scoreBar.fillStyle(0x00ff00, 1);
+        this.scoreBar.fillRect(515, 8, this.scoreFill, 20); // length of bar is determined by score
+        this.scoreText.setText(this.score + '/25');   
+        this.scoreText.setTint(0x00ffff);
     }
     hitSatellite(bug, satellite) { // handle overlap with satellite
         if (!this.canCollect) {
@@ -951,6 +900,13 @@ class Level3 extends Phaser.Scene {
             bug.body.velocity.x += 700;  // launch bug right
         }
     }
+    calcRequiredScore(total, rounds) {
+        for (let i=0; i<=25; i++) {
+            if ((total + i)/(rounds + 1) >= 20) {
+                return i;
+            }
+        }
+    }
 }
 
 class Level4 extends Phaser.Scene {
@@ -960,11 +916,14 @@ class Level4 extends Phaser.Scene {
     init (data) {
         if (data.cumulativeScore == 0) {
             this.runningTotal = 0;
+            this.levels = 0;
         } else {
             this.runningTotal = data.cumulativeScore;
+            this.levels = data.levels;
         }
     }
     create() {
+        this.needed = this.calcRequiredScore(this.runningTotal, this.levels);
         this.attempt = 1;
         this.score = 0;
         this.level = 4;
@@ -1005,19 +964,21 @@ class Level4 extends Phaser.Scene {
 
         this.scoreBar = this.add.graphics(); // create score bar
         this.scoreBar.fillStyle(0x00ff00, 1);
-        this.scoreBar.fillRect(555, 8, 0, 20);
+        this.scoreBar.fillRect(515, 8, 0, 20);
 
         this.scoreBarBorder = this.add.graphics(); // create score bar border
         this.scoreBarBorder.lineStyle(2, 0xffffff, 1);
-        this.scoreBarBorder.strokeRect(555, 8, 160, 20);
+        this.scoreBarBorder.strokeRect(515, 8, 200, 20);
 
         // add text objects
-        this.attemptText = this.add.text(175, 5, 'Attempt ' + this.attempt + '/3', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' }); 
+        this.attemptText = this.add.text(100, 5, 'Attempt ' + this.attempt + '/3', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' }); 
         if (this.runningTotal != 0) {
-            this.runningTotalText = this.add.text(350, 5, 'Running total: ' + this.runningTotal, { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' }); 
+            this.requiredText = this.add.text(330, 5, this.needed + ' H-3 needed', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' }); 
+        } else {
+            this.requiredText = this.add.text(330, 5, '20 H-3 needed', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
         }
-        this.scoreText = this.add.text(720, 5, this.score + '/20', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
-        this.welcomeText = this.add.text(25, 5, 'Level ' + this.level, { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });  
+        this.scoreText = this.add.text(720, 5, this.score + '/25', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
+        this.welcomeText = this.add.text(10, 5, 'Level ' + this.level + ', ', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' }); 
         this.winText = this.add.text(config.scale.width / 2, config.scale.height / 2, '', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
         this.winText.setOrigin(0.5);
         this.totalText = this.add.text(config.scale.width / 2, 350, '', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
@@ -1197,15 +1158,15 @@ class Level4 extends Phaser.Scene {
                 this.attempt += 1; // update attempt
                 this.attemptText.setText('Attempt ' + this.attempt + '/3');
             } else {
-                if (this.score >= 20) { // check for winning level
+                if (this.score >= this.needed) { // check for winning level
                     this.soundGround.stop();
                     this.winText.setText('Level ' + this.level + ' Complete!');
-                    this.totalText.setText('Current score: ' + (this.score + this.runningTotal));
+                    this.totalText.setText('Average: ' + ( (this.score + this.runningTotal) / (this.levels + 1)));
                     this.bug.setFrame(0);
                     this.bug.setTint(0x00ff00);
                     this.physics.pause();
                     this.time.delayedCall(2000, () => {
-                        this.scene.start('Level5', { cumulativeScore: this.score + this.runningTotal}); // start next level after delay
+                        this.scene.start('Level5', { cumulativeScore: this.score + this.runningTotal, levels: this.levels + 1 }); // start next level after delay
                     });
                 } else {
                     // gameover
@@ -1234,34 +1195,11 @@ class Level4 extends Phaser.Scene {
         // update score and scorebar
         this.score += 1;
         this.scoreFill += 8;
-
-        if (this.score <= 20) {
-            this.scoreBar.clear();
-            this.scoreBar.fillStyle(0x00ff00, 1);
-            this.scoreBar.fillRect(555, 8, this.scoreFill, 20); // length of bar is determined by score
-            this.scoreText.setText(this.score + '/20'); 
-        } else if (this.score < 25) {
-            this.scoreExtra += 32;
-            this.scoreBar.clear();
-            this.scoreBar.fillStyle(0x00ffff, 1);
-            this.scoreBar.fillRect(555, 8, this.scoreExtra, 20);
-            this.scoreText.setText(this.score + '/25');   
-            this.scoreText.setTint(0x00ffff);   
-        } else {
-            this.scoreExtra += 32;
-            this.scoreBar.clear();
-            this.scoreBar.fillStyle(0x00ffff, 1);
-            this.scoreBar.fillRect(555, 8, this.scoreExtra, 20);
-            this.scoreText.setText(this.score + '/25');
-            this.winText.setText('PERFECTION! DOUBLE POINTS!');
-            this.totalText.setText('Current score: ' + (50 + this.runningTotal));
-            this.bug.setFrame(0);
-            this.bug.setTint(0x00ff00);
-            this.physics.pause();
-            this.time.delayedCall(2000, () => {
-                this.scene.start('Level5', { cumulativeScore: 50 + this.runningTotal });
-            });
-        }
+        this.scoreBar.clear();
+        this.scoreBar.fillStyle(0x00ff00, 1);
+        this.scoreBar.fillRect(515, 8, this.scoreFill, 20); // length of bar is determined by score
+        this.scoreText.setText(this.score + '/25');   
+        this.scoreText.setTint(0x00ffff);
     }
     hitStar(bug, star) {
         this.soundH3OrStar.play();
@@ -1285,6 +1223,13 @@ class Level4 extends Phaser.Scene {
             .setInteractive()
             .on('pointerup', () => this.scene.start('Level4', { cumulativeScore: 0 }));
     }
+    calcRequiredScore(total, rounds) {
+        for (let i=0; i<=25; i++) {
+            if ((total + i)/(rounds + 1) >= 20) {
+                return i;
+            }
+        }
+    }
 }
 
 class Level5 extends Phaser.Scene {
@@ -1294,11 +1239,14 @@ class Level5 extends Phaser.Scene {
     init (data) {
         if (data.cumulativeScore == 0) {
             this.runningTotal = 0;
+            this.levels = 0;
         } else {
             this.runningTotal = data.cumulativeScore;
+            this.levels = data.levels;
         }
     }
     create() {
+        this.needed = this.calcRequiredScore(this.runningTotal, this.levels);
         this.attempt = 1;
         this.score = 0;
         this.level = 5;
@@ -1342,19 +1290,21 @@ class Level5 extends Phaser.Scene {
 
         this.scoreBar = this.add.graphics(); // create score bar
         this.scoreBar.fillStyle(0x00ff00, 1);
-        this.scoreBar.fillRect(555, 8, 0, 20);
+        this.scoreBar.fillRect(515, 8, 0, 20);
 
         this.scoreBarBorder = this.add.graphics(); // create score bar border
         this.scoreBarBorder.lineStyle(2, 0xffffff, 1);
-        this.scoreBarBorder.strokeRect(555, 8, 160, 20);
+        this.scoreBarBorder.strokeRect(515, 8, 200, 20);
 
         // add text objects
-        this.attemptText = this.add.text(175, 5, 'Attempt ' + this.attempt + '/3', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
+        this.attemptText = this.add.text(100, 5, 'Attempt ' + this.attempt + '/3', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' }); 
         if (this.runningTotal != 0) {
-            this.runningTotalText = this.add.text(350, 5, 'Running total: ' + this.runningTotal, { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' }); 
+            this.requiredText = this.add.text(330, 5, this.needed + ' H-3 needed', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' }); 
+        } else {
+            this.requiredText = this.add.text(330, 5, '20 H-3 needed', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
         }
-        this.scoreText = this.add.text(720, 5, this.score + '/20', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
-        this.welcomeText = this.add.text(25, 5, 'Level ' + this.level, { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });  
+        this.scoreText = this.add.text(720, 5, this.score + '/25', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
+        this.welcomeText = this.add.text(10, 5, 'Level ' + this.level + ', ', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' }); 
         this.winText = this.add.text(config.scale.width / 2, config.scale.height / 2, '', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
         this.winText.setOrigin(0.5);
         this.totalText = this.add.text(config.scale.width / 2, 350, '', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
@@ -1542,15 +1492,15 @@ class Level5 extends Phaser.Scene {
                 this.attempt += 1; // update attempt
                 this.attemptText.setText('Attempt ' + this.attempt + '/3');
             } else {
-                if (this.score >= 20) { // check for winning level
+                if (this.score >= this.needed) { // check for winning level
                     this.soundGround.stop();
                     this.winText.setText('Level ' + this.level + ' Complete!');
-                    this.totalText.setText('Current score: ' + (this.score + this.runningTotal));
+                    this.totalText.setText('Average: ' + ( (this.score + this.runningTotal) / (this.levels + 1)));
                     this.bug.setFrame(0);
                     this.bug.setTint(0x00ff00);
                     this.physics.pause();
                     this.time.delayedCall(2000, () => {
-                        this.scene.start('Level6', { cumulativeScore: this.score + this.runningTotal}); // start next level after delay
+                        this.scene.start('Level6', { cumulativeScore: this.score + this.runningTotal, levels: this.levels + 1 }); // start next level after delay
                     });
                 } else {
                     // gameover
@@ -1579,34 +1529,11 @@ class Level5 extends Phaser.Scene {
         // update score and scorebar
         this.score += 1;
         this.scoreFill += 8;
-
-        if (this.score <= 20) {
-            this.scoreBar.clear();
-            this.scoreBar.fillStyle(0x00ff00, 1);
-            this.scoreBar.fillRect(555, 8, this.scoreFill, 20); // length of bar is determined by score
-            this.scoreText.setText(this.score + '/20'); 
-        } else if (this.score < 25) {
-            this.scoreExtra += 32;
-            this.scoreBar.clear();
-            this.scoreBar.fillStyle(0x00ffff, 1);
-            this.scoreBar.fillRect(555, 8, this.scoreExtra, 20);
-            this.scoreText.setText(this.score + '/25');   
-            this.scoreText.setTint(0x00ffff);   
-        } else {
-            this.scoreExtra += 32;
-            this.scoreBar.clear();
-            this.scoreBar.fillStyle(0x00ffff, 1);
-            this.scoreBar.fillRect(555, 8, this.scoreExtra, 20);
-            this.scoreText.setText(this.score + '/25');
-            this.winText.setText('PERFECTION! DOUBLE POINTS!');
-            this.totalText.setText('Current score: ' + (50 + this.runningTotal));
-            this.bug.setFrame(0);
-            this.bug.setTint(0x00ff00);
-            this.physics.pause();
-            this.time.delayedCall(2000, () => {
-                this.scene.start('Level6', { cumulativeScore: 50 + this.runningTotal });
-            });
-        }
+        this.scoreBar.clear();
+        this.scoreBar.fillStyle(0x00ff00, 1);
+        this.scoreBar.fillRect(515, 8, this.scoreFill, 20); // length of bar is determined by score
+        this.scoreText.setText(this.score + '/25');   
+        this.scoreText.setTint(0x00ffff);
     }
     hitStar(bug, star) {
         this.soundH3OrStar.play();
@@ -1647,6 +1574,13 @@ class Level5 extends Phaser.Scene {
             bug.body.velocity.x += 700;  // launch bug right
         }
     }
+    calcRequiredScore(total, rounds) {
+        for (let i=0; i<=25; i++) {
+            if ((total + i)/(rounds + 1) >= 20) {
+                return i;
+            }
+        }
+    }
 }
 
 class Level6 extends Phaser.Scene {
@@ -1656,11 +1590,14 @@ class Level6 extends Phaser.Scene {
     init (data) {
         if (data.cumulativeScore == 0) {
             this.runningTotal = 0;
+            this.levels = 0;
         } else {
             this.runningTotal = data.cumulativeScore;
+            this.levels = data.levels;
         }
     }
     create() {
+        this.needed = this.calcRequiredScore(this.runningTotal, this.levels);
         this.attempt = 1;
         this.score = 0;
         this.level = 6;
@@ -1715,19 +1652,21 @@ class Level6 extends Phaser.Scene {
 
         this.scoreBar = this.add.graphics(); // create score bar
         this.scoreBar.fillStyle(0x00ff00, 1);
-        this.scoreBar.fillRect(555, 8, 0, 20);
+        this.scoreBar.fillRect(515, 8, 0, 20);
 
         this.scoreBarBorder = this.add.graphics(); // create score bar border
         this.scoreBarBorder.lineStyle(2, 0xffffff, 1);
-        this.scoreBarBorder.strokeRect(555, 8, 160, 20);
+        this.scoreBarBorder.strokeRect(515, 8, 200, 20);
 
         // add text objects
-        this.attemptText = this.add.text(175, 5, 'Attempt ' + this.attempt + '/3', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
+        this.attemptText = this.add.text(100, 5, 'Attempt ' + this.attempt + '/3', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' }); 
         if (this.runningTotal != 0) {
-            this.runningTotalText = this.add.text(350, 5, 'Running total: ' + this.runningTotal, { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' }); 
+            this.requiredText = this.add.text(330, 5, this.needed + ' H-3 needed', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' }); 
+        } else {
+            this.requiredText = this.add.text(330, 5, '20 H-3 needed', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
         }
-        this.scoreText = this.add.text(720, 5, this.score + '/20', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
-        this.welcomeText = this.add.text(25, 5, 'Level ' + this.level, { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });  
+        this.scoreText = this.add.text(720, 5, this.score + '/25', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
+        this.welcomeText = this.add.text(10, 5, 'Level ' + this.level + ', ', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });  
         this.winText = this.add.text(config.scale.width / 2, config.scale.height / 2, '', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
         this.winText.setOrigin(0.5);
         this.totalText = this.add.text(config.scale.width / 2, 350, '', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
@@ -1924,15 +1863,15 @@ class Level6 extends Phaser.Scene {
                 this.attempt += 1; // update attempt
                 this.attemptText.setText('Attempt ' + this.attempt + '/3');
             } else {
-                if (this.score >= 20) { // check for winning level
+                if (this.score >= this.needed) { // check for winning level
                     this.soundGround.stop();
                     this.winText.setText('Level ' + this.level + ' Complete!');
-                    this.totalText.setText('Current score: ' + (this.score + this.runningTotal));
+                    this.totalText.setText('Average: ' + ( (this.score + this.runningTotal) / (this.levels + 1)));
                     this.bug.setFrame(0);
                     this.bug.setTint(0x00ff00);
                     this.physics.pause();
                     this.time.delayedCall(2000, () => {
-                        this.scene.start('Level7', { cumulativeScore: this.score + this.runningTotal}); // start next level after delay
+                        this.scene.start('Level7', { cumulativeScore: this.score + this.runningTotal, levels: this.levels + 1 }); // start next level after delay
                     });
                 } else {
                     // gameover
@@ -1961,34 +1900,11 @@ class Level6 extends Phaser.Scene {
         // update score and scorebar
         this.score += 1;
         this.scoreFill += 8;
-
-        if (this.score <= 20) {
-            this.scoreBar.clear();
-            this.scoreBar.fillStyle(0x00ff00, 1);
-            this.scoreBar.fillRect(555, 8, this.scoreFill, 20); // length of bar is determined by score
-            this.scoreText.setText(this.score + '/20'); 
-        } else if (this.score < 25) {
-            this.scoreExtra += 32;
-            this.scoreBar.clear();
-            this.scoreBar.fillStyle(0x00ffff, 1);
-            this.scoreBar.fillRect(555, 8, this.scoreExtra, 20);
-            this.scoreText.setText(this.score + '/25');   
-            this.scoreText.setTint(0x00ffff);   
-        } else {
-            this.scoreExtra += 32;
-            this.scoreBar.clear();
-            this.scoreBar.fillStyle(0x00ffff, 1);
-            this.scoreBar.fillRect(555, 8, this.scoreExtra, 20);
-            this.scoreText.setText(this.score + '/25');
-            this.winText.setText('PERFECTION! DOUBLE POINTS!');
-            this.totalText.setText('Current score: ' + (50 + this.runningTotal));
-            this.bug.setFrame(0);
-            this.bug.setTint(0x00ff00);
-            this.physics.pause();
-            this.time.delayedCall(2000, () => {
-                this.scene.start('Level7', { cumulativeScore: 50 + this.runningTotal });
-            });
-        }
+        this.scoreBar.clear();
+        this.scoreBar.fillStyle(0x00ff00, 1);
+        this.scoreBar.fillRect(515, 8, this.scoreFill, 20); // length of bar is determined by score
+        this.scoreText.setText(this.score + '/25');   
+        this.scoreText.setTint(0x00ffff);
     }
     hitStar(bug, star) {
         this.soundH3OrStar.play();
@@ -2029,6 +1945,13 @@ class Level6 extends Phaser.Scene {
             bug.body.velocity.x += 700;  // launch bug right
         }
     }
+    calcRequiredScore(total, rounds) {
+        for (let i=0; i<=25; i++) {
+            if ((total + i)/(rounds + 1) >= 20) {
+                return i;
+            }
+        }
+    }
 }
 
 class Level7 extends Phaser.Scene {
@@ -2038,11 +1961,14 @@ class Level7 extends Phaser.Scene {
     init (data) {
         if (data.cumulativeScore == 0) {
             this.runningTotal = 0;
+            this.levels = 0;
         } else {
             this.runningTotal = data.cumulativeScore;
+            this.levels = data.levels;
         }
     }
     create() {
+        this.needed = this.calcRequiredScore(this.runningTotal, this.levels);
         this.attempt = 1;
         this.score = 0;
         this.level = 7;
@@ -2100,19 +2026,21 @@ class Level7 extends Phaser.Scene {
 
         this.scoreBar = this.add.graphics(); // create score bar
         this.scoreBar.fillStyle(0x00ff00, 1);
-        this.scoreBar.fillRect(555, 8, 0, 20);
+        this.scoreBar.fillRect(515, 8, 0, 20);
 
         this.scoreBarBorder = this.add.graphics(); // create score bar border
         this.scoreBarBorder.lineStyle(2, 0xffffff, 1);
-        this.scoreBarBorder.strokeRect(555, 8, 160, 20);
+        this.scoreBarBorder.strokeRect(515, 8, 200, 20);
 
         // add text objects
-        this.attemptText = this.add.text(175, 5, 'Attempt ' + this.attempt + '/3', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
+        this.attemptText = this.add.text(100, 5, 'Attempt ' + this.attempt + '/3', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' }); 
         if (this.runningTotal != 0) {
-            this.runningTotalText = this.add.text(350, 5, 'Running total: ' + this.runningTotal, { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' }); 
+            this.requiredText = this.add.text(330, 5, this.needed + ' H-3 needed', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' }); 
+        } else {
+            this.requiredText = this.add.text(330, 5, '20 H-3 needed', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
         }
-        this.scoreText = this.add.text(720, 5, this.score + '/20', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
-        this.welcomeText = this.add.text(25, 5, 'Level ' + this.level, { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });  
+        this.scoreText = this.add.text(720, 5, this.score + '/25', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
+        this.welcomeText = this.add.text(10, 5, 'Level ' + this.level + ', ', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });  
         this.winText = this.add.text(config.scale.width / 2, config.scale.height / 2, '', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
         this.winText.setOrigin(0.5);
         this.totalText = this.add.text(config.scale.width / 2, 350, '', { fontFamily: 'Arial', fontSize: '24px', fill: '#fff' });
@@ -2310,10 +2238,10 @@ class Level7 extends Phaser.Scene {
                 this.attempt += 1; // update attempt
                 this.attemptText.setText('Attempt ' + this.attempt + '/3');
             } else {
-                if (this.score >= 20) { // check for winning level
+                if (this.score >= this.needed) { // check for winning level
                     this.soundGround.stop();
                     this.winText.setText('Level ' + this.level + ' Complete!');
-                    this.totalText.setText('Current score: ' + (this.score + this.runningTotal));
+                    this.totalText.setText('Average: ' + ( (this.score + this.runningTotal) / (this.levels + 1)));
                     this.bug.setFrame(0);
                     this.bug.setTint(0x00ff00);
                     this.physics.pause();
@@ -2347,34 +2275,11 @@ class Level7 extends Phaser.Scene {
         // update score and scorebar
         this.score += 1;
         this.scoreFill += 8;
-
-        if (this.score <= 20) {
-            this.scoreBar.clear();
-            this.scoreBar.fillStyle(0x00ff00, 1);
-            this.scoreBar.fillRect(555, 8, this.scoreFill, 20); // length of bar is determined by score
-            this.scoreText.setText(this.score + '/20'); 
-        } else if (this.score < 25) {
-            this.scoreExtra += 32;
-            this.scoreBar.clear();
-            this.scoreBar.fillStyle(0x00ffff, 1);
-            this.scoreBar.fillRect(555, 8, this.scoreExtra, 20);
-            this.scoreText.setText(this.score + '/25');   
-            this.scoreText.setTint(0x00ffff);   
-        } else {
-            this.scoreExtra += 32;
-            this.scoreBar.clear();
-            this.scoreBar.fillStyle(0x00ffff, 1);
-            this.scoreBar.fillRect(555, 8, this.scoreExtra, 20);
-            this.scoreText.setText(this.score + '/25');
-            this.winText.setText('PERFECTION! DOUBLE POINTS!');
-            this.totalText.setText('Current score: ' + (50 + this.runningTotal));
-            this.bug.setFrame(0);
-            this.bug.setTint(0x00ff00);
-            this.physics.pause();
-            /*this.time.delayedCall(2000, () => {
-                this.scene.start('Level8', { cumulativeScore: 50 + this.runningTotal });
-            });*/
-        }
+        this.scoreBar.clear();
+        this.scoreBar.fillStyle(0x00ff00, 1);
+        this.scoreBar.fillRect(515, 8, this.scoreFill, 20); // length of bar is determined by score
+        this.scoreText.setText(this.score + '/25');   
+        this.scoreText.setTint(0x00ffff);
     }
     hitStar(bug, star) {
         this.soundH3OrStar.play();
@@ -2413,6 +2318,13 @@ class Level7 extends Phaser.Scene {
             bug.body.velocity.x += -700;  // launch bug left
         } else { // satellite with right arrow
             bug.body.velocity.x += 700;  // launch bug right
+        }
+    }
+    calcRequiredScore(total, rounds) {
+        for (let i=0; i<=25; i++) {
+            if ((total + i)/(rounds + 1) >= 20) {
+                return i;
+            }
         }
     }
 }
