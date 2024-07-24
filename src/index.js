@@ -1,4 +1,5 @@
 import PreloadScene from "./PreloadScene.js";
+import ChoosePlayer from "./ChoosePlayer.js";
 import Level1 from "./Level1.js";
 import Level2 from "./Level2.js";
 import Level3 from "./Level3.js";
@@ -22,7 +23,7 @@ const config = {
             gravity: { y: 0 },
         }
     },
-    scene: [PreloadScene, Level1, Level2, Level3, Level4, Level5, Level6, Level7],
+    scene: [PreloadScene, ChoosePlayer, Level1, Level2, Level3, Level4, Level5, Level6, Level7],
 };
 
 new Phaser.Game(config);

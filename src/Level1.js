@@ -2,6 +2,15 @@ class Level1 extends Phaser.Scene {
     constructor() {
         super({ key: 'Level1' });
     }
+    init (data) {
+        if (data.bug == 'red') {
+            this.bug = 'red';
+        } else if (data.bug == 'yellow') {
+            this.bug = 'yellow';
+        } else {
+            this.bug = 'blue';
+        }
+    }
     create() {
         this.attempt = 1;
         this.score = 0;
@@ -14,7 +23,13 @@ class Level1 extends Phaser.Scene {
 
         this.add.image(400, 300, 'moonscape');
 
-        this.bug = this.physics.add.sprite(50, 550, 'bug', 0); // create bug before cannon so it's hidden under cannon
+        if (this.bug == 'red') {
+            this.bug = this.physics.add.sprite(50, 550, 'bug', 0); // create bug before cannon so it's hidden under cannon
+        } else if (this.bug == 'yellow') {
+            this.bug = this.physics.add.sprite(50, 550, 'bug_yellow', 0); // create bug before cannon so it's hidden under cannon
+        } else {
+            this.bug = this.physics.add.sprite(50, 550, 'bug_blue', 0); // create bug before cannon so it's hidden under cannon
+        }
         this.bug.setCollideWorldBounds(true); // stay within boundaries of game   
         this.bug.setVelocity(0, 0);
         this.bug.setBounce(.7);
@@ -211,7 +226,7 @@ class Level1 extends Phaser.Scene {
                     this.bug.setTint(0x00ff00);
                     this.physics.pause();
                     this.time.delayedCall(2000, () => {
-                        this.scene.start('Level2', { cumulativeScore: this.score, levels: 1 }); // start next level after delay
+                        this.scene.start('Level2', { bug: this.bug.texture.key, cumulativeScore: this.score, levels: 1 }); // start next level after delay
                     });
                 } else {
                     // gameover

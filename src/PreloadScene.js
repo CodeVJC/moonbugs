@@ -1,7 +1,9 @@
 class PreloadScene extends Phaser.Scene {
     preload() {
         this.load.image('moonscape', 'assets/moonscape.png');
-        this.load.spritesheet('bug', 'assets/bug.png', { frameWidth: 40, frameHeight: 37 });
+        this.load.spritesheet('bug', 'assets/bug_red.png', { frameWidth: 40, frameHeight: 37 });
+        this.load.spritesheet('bug_yellow', 'assets/bug_yellow.png', { frameWidth: 40, frameHeight: 37 });
+        this.load.spritesheet('bug_blue', 'assets/bug_blue.png', { frameWidth: 40, frameHeight: 37 });
         this.load.image('h3', 'assets/h3.png');
         this.load.spritesheet('cannon', 'assets/cannon.png', { frameWidth: 100, frameHeight: 57 });
         this.load.image('spiral_galaxy', 'assets/spiral_galaxy.png');
@@ -36,7 +38,16 @@ class PreloadScene extends Phaser.Scene {
         // create clickable button
         const nextLevelButton = this.add.text(350, 230, 'Start', { fontFamily: 'Arial', fontSize: '36px', fill: '#0f0', backgroundColor: 'black'})
             .setInteractive()
-            .on('pointerup', () => this.scene.start('Level1'));
+            .on('pointerup', () => this.scene.start('ChoosePlayer'));
+
+        this.input.on('gameobjectover', (pointer, gameObject) => {
+            gameObject.setTint(0x00ff00);
+            document.body.style.cursor = 'pointer';
+        });
+        this.input.on('gameobjectout', (pointer, gameObject) => {
+            gameObject.clearTint();
+            document.body.style.cursor = 'default';
+        });
     }
 }
 
