@@ -19,6 +19,7 @@ class Level2 extends Phaser.Scene {
         }
     }
     create() {
+        document.body.style.cursor = 'default';
         this.needed = this.calcRequiredScore(this.runningTotal, this.levels);
         this.attempt = 1;
         this.score = 0;
@@ -268,9 +269,17 @@ class Level2 extends Phaser.Scene {
                     this.physics.pause();  // pause game
 
                     // add button
-                    const tryAgainButton = this.add.text(250, 330, 'Try Level ' + this.level + ' Again?', { fontFamily: 'Arial', fontSize: '36px', fill: '#0f0', backgroundColor: 'black'})
+                    this.tryAgainButton = this.add.text(250, 330, 'Try Level ' + this.level + ' Again?', { fontFamily: 'Arial', fontSize: '36px', fill: '#0f0', backgroundColor: 'black'})
                         .setInteractive()
                         .on('pointerup', () => this.scene.start('Level2', { cumulativeScore: 0 }));
+                    this.input.on('gameobjectover', (pointer, tryAgainButton) => {
+                        tryAgainButton.setTint(0x00ff00);
+                        document.body.style.cursor = 'pointer';
+                    });
+                    this.input.on('gameobjectout', (pointer, tryAgainButton) => {
+                        tryAgainButton.clearTint();
+                        document.body.style.cursor = 'default';
+                    });
                 }
             }
             this.canLaunch = true; // bug allowed to launch again

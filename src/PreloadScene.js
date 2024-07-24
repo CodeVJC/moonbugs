@@ -36,16 +36,16 @@ class PreloadScene extends Phaser.Scene {
         this.welcomeText = this.add.text(180, 150, 'MOONBUGS', { fontFamily: 'Arial', fontSize: '70px', fill: '#fff'});
 
         // create clickable button
-        const nextLevelButton = this.add.text(350, 230, 'Start', { fontFamily: 'Arial', fontSize: '36px', fill: '#0f0', backgroundColor: 'black'})
+        this.nextLevelButton = this.add.text(350, 230, 'Start', { fontFamily: 'Arial', fontSize: '36px', fill: '#0f0', backgroundColor: 'black'})
             .setInteractive()
             .on('pointerup', () => this.scene.start('ChoosePlayer'));
 
-        this.input.on('gameobjectover', (pointer, gameObject) => {
-            gameObject.setTint(0x00ff00);
+        this.input.on('gameobjectover', (pointer, nextLevelButton) => {
+            nextLevelButton.setTint(0x00ff00);
             document.body.style.cursor = 'pointer';
         });
-        this.input.on('gameobjectout', (pointer, gameObject) => {
-            gameObject.clearTint();
+        this.input.on('gameobjectout', (pointer, nextLevelButton) => {
+            nextLevelButton.clearTint();
             document.body.style.cursor = 'default';
         });
     }
