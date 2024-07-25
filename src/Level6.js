@@ -360,9 +360,17 @@ class Level6 extends Phaser.Scene {
         bug.setFrame(0);
         bug.setTint(0xaaffbb);
         this.physics.pause();
-        const tryAgainButton = this.add.text(250, 330, 'Try Level ' + this.level + ' Again?', { fontFamily: 'Arial', fontSize: '36px', fill: '#0f0', backgroundColor: 'black'})
+        this.tryAgainButton = this.add.text(250, 330, 'Try Level ' + this.level + ' Again?', { fontFamily: 'Arial', fontSize: '36px', fill: '#0f0', backgroundColor: 'black'})
             .setInteractive()
             .on('pointerup', () => this.scene.start('Level6', { cumulativeScore: 0 }));
+        this.input.on('gameobjectover', (pointer, tryAgainButton) => {
+            tryAgainButton.setTint(0x00ff00);
+            document.body.style.cursor = 'pointer';
+        });
+        this.input.on('gameobjectout', (pointer, tryAgainButton) => {
+            tryAgainButton.clearTint();
+            document.body.style.cursor = 'default';
+        });
     }
     hitSatellite(bug, satellite) { // handle overlap with satellite
         if (!this.canCollect) {
