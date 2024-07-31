@@ -79,7 +79,7 @@ class Level3 extends Phaser.Scene {
         this.scoreBarBorder.strokeRect(515, 8, 200, 20);
 
         this.cutoff = this.add.graphics();
-        this.cutoff.lineStyle(3, 0xff0000);
+        this.cutoff.lineStyle(4, 0xff0000);
         this.cutoff.beginPath();
         this.cutoff.moveTo(515 + this.needed * 8, 9);
         this.cutoff.lineTo(515 + this.needed * 8, 27);
