@@ -38,7 +38,7 @@ class PreloadScene extends Phaser.Scene {
         // create clickable button
         this.nextLevelButton = this.add.text(350, 230, 'Start', { fontFamily: 'Arial', fontSize: '36px', fill: '#0f0', backgroundColor: 'black'})
             .setInteractive()
-            .on('pointerup', () => this.scene.start('Level1'));
+            .on('pointerup', () => this.scene.start('ChoosePlayer'));
 
         this.input.on('gameobjectover', (pointer, nextLevelButton) => {
             nextLevelButton.setTint(0x00ff00);
