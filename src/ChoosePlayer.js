@@ -8,7 +8,7 @@ class ChoosePlayer extends Phaser.Scene {
         this.bugRed = this.add.sprite(150, 300, 'bug', 0).setInteractive().on('pointerup', () => this.scene.start('Level1', { bug: 'red' }));
         this.bugYellow = this.add.sprite(400, 300, 'bug_yellow', 0).setInteractive().on('pointerup', () => this.scene.start('Level1', { bug: 'yellow' }));
         this.bugBlue = this.add.sprite(650, 300, 'bug_blue', 0).setInteractive().on('pointerup', () => this.scene.start('Level1', { bug: 'blue' }));
-        this.welcomeText = this.add.text(180, 150, 'Choose Your Bug', { fontFamily: 'Arial', fontSize: '50px', fill: '#fff'});
+        this.welcomeText = this.add.text(180, 150, 'Choose Your Bug', { fontFamily: 'Rubik Moonrocks', fontSize: '50px', fill: '#fff'});
 
         this.input.on('gameobjectover', (pointer, bugRed) => {
             bugRed.setTint(0x00ff00);
