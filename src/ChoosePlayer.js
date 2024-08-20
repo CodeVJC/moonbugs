@@ -5,9 +5,42 @@ class ChoosePlayer extends Phaser.Scene {
     create() {
         document.body.style.cursor = 'default';
         this.add.image(400, 300, 'moonscape');
-        this.bugRed = this.add.sprite(150, 300, 'bug', 0).setInteractive().on('pointerup', () => this.scene.start('Level1', { bug: 'red' }));
-        this.bugYellow = this.add.sprite(400, 300, 'bug_yellow', 0).setInteractive().on('pointerup', () => this.scene.start('Level1', { bug: 'yellow' }));
-        this.bugBlue = this.add.sprite(650, 300, 'bug_blue', 0).setInteractive().on('pointerup', () => this.scene.start('Level1', { bug: 'blue' }));
+        this.bugRed = this.add.sprite(150, 300, 'red', 0)
+            .setInteractive()
+            .on('pointerdown', () => {
+                this.bugRed.setScale(0.7);
+                this.bugRed.setX(151);
+                this.bugRed.setY(301);
+                this.input.once('pointerup', (pointer) => {
+                    this.time.delayedCall(250, () => {
+                        this.scene.start('Level1', { bug: 'red' });
+                    });
+                });
+            });
+        this.bugYellow = this.add.sprite(400, 300, 'yellow', 0)
+            .setInteractive()
+            .on('pointerdown', () => {
+                this.bugYellow.setScale(0.7);
+                this.bugYellow.setX(401);
+                this.bugYellow.setY(301);
+                this.input.once('pointerup', (pointer) => {
+                    this.time.delayedCall(250, () => {
+                        this.scene.start('Level1', { bug: 'yellow' });
+                    });
+                });
+            });
+        this.bugBlue = this.add.sprite(650, 300, 'blue', 0)
+            .setInteractive()
+            .on('pointerdown', () => {
+                this.bugBlue.setScale(0.7);
+                this.bugBlue.setX(651);
+                this.bugBlue.setY(301)
+                this.input.once('pointerup', (pointer) => {
+                    this.time.delayedCall(250, () => {
+                        this.scene.start('Level1', { bug: 'blue' });
+                    });
+                });
+            });
         this.welcomeText = this.add.text(180, 150, 'Choose Your Bug', { fontFamily: 'Rubik Moonrocks', fontSize: '50px', fill: '#fff'});
 
         this.input.on('gameobjectover', (pointer, bugRed) => {

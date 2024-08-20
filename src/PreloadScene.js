@@ -1,9 +1,9 @@
 class PreloadScene extends Phaser.Scene {
     preload() {
         this.load.image('moonscape', 'assets/moonscape.png');
-        this.load.spritesheet('bug', 'assets/bug_red.png', { frameWidth: 40, frameHeight: 37 });
-        this.load.spritesheet('bug_yellow', 'assets/bug_yellow.png', { frameWidth: 40, frameHeight: 37 });
-        this.load.spritesheet('bug_blue', 'assets/bug_blue.png', { frameWidth: 40, frameHeight: 37 });
+        this.load.spritesheet('red', 'assets/red.png', { frameWidth: 40, frameHeight: 37 });
+        this.load.spritesheet('yellow', 'assets/yellow.png', { frameWidth: 40, frameHeight: 37 });
+        this.load.spritesheet('blue', 'assets/blue.png', { frameWidth: 40, frameHeight: 37 });
         this.load.image('h3', 'assets/h3.png');
         this.load.spritesheet('cannon', 'assets/cannon.png', { frameWidth: 100, frameHeight: 57 });
         this.load.image('spiral_galaxy', 'assets/spiral_galaxy.png');
@@ -38,14 +38,20 @@ class PreloadScene extends Phaser.Scene {
         // create clickable button
         this.nextLevelButton = this.add.text(350, 230, 'Start', { fontFamily: 'Rubik Moonrocks', fontSize: '36px', fill: '#0f0', backgroundColor: 'black'})
             .setInteractive()
-            .on('pointerup', () => this.scene.start('ChoosePlayer'));
-
+            .on('pointerdown', () => {
+                this.nextLevelButton.setScale(0.7);
+                this.nextLevelButton.setX(360);
+                this.nextLevelButton.setY(240);
+                this.time.delayedCall(200, () => {
+                    this.scene.start('ChoosePlayer')
+                })
+            });
         this.input.on('gameobjectover', (pointer, nextLevelButton) => {
-            nextLevelButton.setTint(0x00ff00);
+            nextLevelButton.setStyle({ fill: '#f00' });
             document.body.style.cursor = 'pointer';
         });
         this.input.on('gameobjectout', (pointer, nextLevelButton) => {
-            nextLevelButton.clearTint();
+            nextLevelButton.setStyle({ fill: '#0f0' });
             document.body.style.cursor = 'default';
         });
     }

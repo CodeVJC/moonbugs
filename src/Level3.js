@@ -3,9 +3,9 @@ class Level3 extends Phaser.Scene {
         super({ key: 'Level3' });
     }
     init (data) {
-        if (data.bug == 'bug') {
+        if (data.bug == 'red') {
             this.bug = 'red';
-        } else if (data.bug == 'bug_yellow') {
+        } else if (data.bug == 'yellow') {
             this.bug = 'yellow';
         } else {
             this.bug = 'blue';
@@ -19,6 +19,7 @@ class Level3 extends Phaser.Scene {
         }
     }
     create() {
+        this.sound.mute = false;
         document.body.style.cursor = 'default';
         this.needed = this.calcRequiredScore(this.runningTotal, this.levels);
         this.attempt = 1;
@@ -49,11 +50,11 @@ class Level3 extends Phaser.Scene {
         this.vertical.create(600, 250, 'vertical');
 
         if (this.bug == 'red') {
-            this.bug = this.physics.add.sprite(50, 550, 'bug', 0); // create bug before cannon so it's hidden under cannon
+            this.bug = this.physics.add.sprite(50, 550, 'red', 0); // create bug before cannon so it's hidden under cannon
         } else if (this.bug == 'yellow') {
-            this.bug = this.physics.add.sprite(50, 550, 'bug_yellow', 0); // create bug before cannon so it's hidden under cannon
+            this.bug = this.physics.add.sprite(50, 550, 'yellow', 0); // create bug before cannon so it's hidden under cannon
         } else {
-            this.bug = this.physics.add.sprite(50, 550, 'bug_blue', 0); // create bug before cannon so it's hidden under cannon
+            this.bug = this.physics.add.sprite(50, 550, 'blue', 0); // create bug before cannon so it's hidden under cannon
         }
         this.bug.setCollideWorldBounds(true); // stay within boundaries of game   
         this.bug.setVelocity(0, 0);
@@ -102,6 +103,28 @@ class Level3 extends Phaser.Scene {
         this.gameOverText = this.add.text(this.sys.game.scale.width / 2, this.sys.game.scale.height / 2, 'GAMEOVER', { fontFamily: 'Rubik Moonrocks', fontSize: '50px', fill: '#00ffff' });
         this.gameOverText.setOrigin(0.5);
         this.gameOverText.visible = false;
+        // add button
+        this.tryAgainButton = this.add.text(230, 330, 'Try Level ' + this.level + ' Again?', { fontFamily: 'Rubik Moonrocks', fontSize: '36px', fill: '#0f0', backgroundColor: 'black'})
+            .setInteractive()
+            .on('pointerdown', () => {
+                this.tryAgainButton.setScale(0.7);
+                this.tryAgainButton.setX(280);
+                this.tryAgainButton.setY(330);
+                this.input.once('pointerup', (pointer) => {
+                    this.time.delayedCall(500, () => {
+                        this.scene.start('Level2', { cumulativeScore: 0, bug: this.bug.texture.key });
+                    });
+                });
+            })
+        this.input.on('gameobjectover', (pointer, tryAgainButton) => {
+            tryAgainButton.setStyle({ fill: '#f00' });
+            document.body.style.cursor = 'pointer';
+        });
+        this.input.on('gameobjectout', (pointer, tryAgainButton) => {
+            tryAgainButton.setStyle({ fill: '#0f0' });
+            document.body.style.cursor = 'default';
+        });
+        this.tryAgainButton.visible = false;
 
         // create h3 molecules
         this.h3 = this.physics.add.group();
@@ -155,7 +178,8 @@ class Level3 extends Phaser.Scene {
             volume: .01, 
             loop: false 
         });
-
+    }
+    update() {
         this.input.on('pointermove', function (pointer) { // pointer move event listener
             const angle = Phaser.Math.Angle.Between(this.cannon.x, this.cannon.y, pointer.x, pointer.y);
             this.cannon.setRotation(angle); // rotate cannon toward the pointer
@@ -239,8 +263,7 @@ class Level3 extends Phaser.Scene {
 
             this.canLaunch = false;  // can't launch bug again until it's reset back into cannon
         }, this);
-    }
-    update() {
+
         // set bug's pose when it hits any left, right or top surface
         if (this.bug.body.blocked.left) { // hits left surface
             this.soundBorder.play();
@@ -278,36 +301,20 @@ class Level3 extends Phaser.Scene {
                 this.attempt += 1; // update attempt
                 this.attemptText.setText('Attempt ' + this.attempt + '/3');
             } else {
+                this.sound.mute = true;
+                this.physics.pause();
+                this.bug.setFrame(0);
                 if (this.score >= this.needed) { // check for winning level
-                    this.soundGround.stop();
                     this.winText.setText('Level ' + this.level + ' Clear!');
                     this.totalText.setText('Average: ' + ( Math.round( ((this.score + this.runningTotal) / (this.levels + 1)) * 10 ) /10 ));
-                    this.bug.setFrame(0);
                     this.bug.setTint(0x00ff00);
-                    this.physics.pause();
                     this.time.delayedCall(2000, () => {
                         this.scene.start('Level4', { bug: this.bug.texture.key, cumulativeScore: this.score + this.runningTotal, levels: this.levels + 1 }); // start next level after delay
                     });
                 } else {
-                    // gameover
-                    this.soundGround.stop();
                     this.gameOverText.visible = true;
-                    this.bug.setFrame(0);
                     this.bug.setTint(0xaaffbb);
-                    this.physics.pause();  // pause game
-
-                    // add button
-                    this.tryAgainButton = this.add.text(230, 330, 'Try Level ' + this.level + ' Again?', { fontFamily: 'Rubik Moonrocks', fontSize: '36px', fill: '#0f0', backgroundColor: 'black'})
-                        .setInteractive()
-                        .on('pointerup', () => this.scene.start('Level3', { cumulativeScore: 0 }));
-                    this.input.on('gameobjectover', (pointer, tryAgainButton) => {
-                        tryAgainButton.setTint(0x00ff00);
-                        document.body.style.cursor = 'pointer';
-                    });
-                    this.input.on('gameobjectout', (pointer, tryAgainButton) => {
-                        tryAgainButton.clearTint();
-                        document.body.style.cursor = 'default';
-                    });
+                    this.tryAgainButton.visible = true;
                 }
             }
             this.canLaunch = true; // bug allowed to launch again
