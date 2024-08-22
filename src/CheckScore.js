@@ -1,5 +1,5 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
-import { doc, getFirestore, deleteDoc, addDoc, getDocs, collection, orderBy, limit, query } from 'https://www.gstatic.com/firebasejs/10.13/firebase-firestore.js'
+import { getFirestore, deleteDoc, addDoc, getDocs, collection, orderBy, limit, query, doc } from 'https://www.gstatic.com/firebasejs/10.13/firebase-firestore.js';
+import { db, app, leadersRef } from './firebaseConfig.js';
 
 class CheckScore extends Phaser.Scene {
     constructor() {
@@ -27,23 +27,11 @@ class CheckScore extends Phaser.Scene {
         this.replaceIndex = -1;
         this.highScore = false;
         this.add.image(400, 300, 'moonscape');
-
-        this.firebaseConfig = {
-            apiKey: "AIzaSyA4-4-i_tblMvRBaz6CMp7C2WqNe4y02oY",
-            authDomain: "moonbugs-ff885.firebaseapp.com",
-            projectId: "moonbugs-ff885",
-            storageBucket: "moonbugs-ff885.appspot.com",
-            messagingSenderId: "139146411424",
-            appId: "1:139146411424:web:258ad764219fb86d31b8c5"
-        };
-        this.app = initializeApp(this.firebaseConfig);
-        this.db = getFirestore(this.app);
-        this.leadersRef = collection(this.db, "leaderboard");
         this.checkScore();
     }
     async checkScore() {
         // get current leaderboard from database
-        this.query = query(this.leadersRef, orderBy("score", "desc"), limit(10));
+        this.query = query(leadersRef, orderBy("score", "desc"), limit(10));
         this.querySnapshot = await getDocs(this.query);
         this.querySnapshot.forEach((doc) => {
             this.documents.push( doc.id );
@@ -67,7 +55,7 @@ class CheckScore extends Phaser.Scene {
         if (this.highScore == true) {
             if (this.forDeletion !== undefined && this.leaderboard.length == 10) {
                 this.leaderboard.pop();
-                await deleteDoc(doc(this.db, "leaderboard", this.forDeletion));
+                await deleteDoc(doc(db, "leaderboard", this.forDeletion));
             }
             this.scene.start('HighScore', { leaders: this.leaderboard, bug: this.bug, cumulativeScore: this.runningTotal, leaders: this.leaderboard, outcome: this.outcome });
         } else {

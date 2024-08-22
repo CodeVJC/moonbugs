@@ -10,14 +10,14 @@ class Leaderboard extends Phaser.Scene {
         } else {
             this.bug = 'blue';
         }
-        this.leaders = data.leaders;
+        this.leadersReady = data.leadersList;
     }
     create() {
         this.add.image(400, 300, 'moonscape');
         this.add.text(250, 25, 'LEADERBOARD', { fontFamily: 'Rubik Moonrocks', fontSize: '36px', fill: '#00ffff' }); 
         let x = 300;
         let y = 75;
-        for (let i of this.leaders) {
+        for (let i of this.leadersReady) {
             this.add.text(x, y, i.name, { fontFamily: 'Concert One', fontSize: '36px', fill: '#00ffff' }); 
             x += 150;
             this.add.text(x, y, i.score, { fontFamily: 'Concert One', fontSize: '36px', fill: '#00ffff' }); 
