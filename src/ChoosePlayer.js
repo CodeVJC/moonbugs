@@ -8,7 +8,7 @@ class ChoosePlayer extends Phaser.Scene {
         this.bugRed = this.add.sprite(150, 300, 'red', 0)
             .setInteractive()
             .on('pointerdown', () => {
-                this.bugRed.setScale(0.7);
+                this.bugRed.setScale(0.8);
                 this.bugRed.setX(151);
                 this.bugRed.setY(301);
                 this.input.once('pointerup', (pointer) => {
@@ -20,7 +20,7 @@ class ChoosePlayer extends Phaser.Scene {
         this.bugYellow = this.add.sprite(400, 300, 'yellow', 0)
             .setInteractive()
             .on('pointerdown', () => {
-                this.bugYellow.setScale(0.7);
+                this.bugYellow.setScale(0.8);
                 this.bugYellow.setX(401);
                 this.bugYellow.setY(301);
                 this.input.once('pointerup', (pointer) => {
@@ -32,7 +32,7 @@ class ChoosePlayer extends Phaser.Scene {
         this.bugBlue = this.add.sprite(650, 300, 'blue', 0)
             .setInteractive()
             .on('pointerdown', () => {
-                this.bugBlue.setScale(0.7);
+                this.bugBlue.setScale(0.8);
                 this.bugBlue.setX(651);
                 this.bugBlue.setY(301)
                 this.input.once('pointerup', (pointer) => {

@@ -1,5 +1,10 @@
-import PreloadScene from "./PreloadScene.js";
+import Preload from "./Preload.js";
 import ChoosePlayer from "./ChoosePlayer.js";
+import CheckScore from "./CheckScore.js";
+import HighScore from "./HighScore.js";
+import AddName from "./AddName.js";
+import GameOver from "./GameOver.js";
+import Leaderboard from "./Leaderboard.js";
 import Level1 from "./Level1.js";
 import Level2 from "./Level2.js";
 import Level3 from "./Level3.js";
@@ -23,7 +28,7 @@ const config = {
             gravity: { y: 0 },
         }
     },
-    scene: [PreloadScene, ChoosePlayer, Level1, Level2, Level3, Level4, Level5, Level6, Level7 ],
+    scene: [ Preload, ChoosePlayer, Level1, Level2, Level3, Level4, Level5, Level6, Level7, CheckScore, HighScore, AddName, GameOver, Leaderboard ],
 };
 
 new Phaser.Game(config);

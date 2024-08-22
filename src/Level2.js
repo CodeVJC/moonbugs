@@ -90,33 +90,8 @@ class Level2 extends Phaser.Scene {
         this.welcomeText = this.add.text(10, 5, 'Level ' + this.level + ', ', { fontFamily: 'Concert One', fontSize: '24px', fill: '#00ffff' });  
         this.winText = this.add.text(this.sys.game.scale.width / 2, this.sys.game.scale.height / 2, '', { fontFamily: 'Concert One', fontSize: '50px', fill: '#00ffff' });
         this.winText.setOrigin(0.5);
-        this.totalText = this.add.text(this.sys.game.scale.width / 2, 350, '', { fontFamily: 'Concert One', fontSize: '50px', fill: '#00ffff' });
-        this.totalText.setOrigin(0.5);
-        this.gameOverText = this.add.text(this.sys.game.scale.width / 2, this.sys.game.scale.height / 2, 'GAMEOVER', { fontFamily: 'Rubik Moonrocks', fontSize: '50px', fill: '#00ffff' });
-        this.gameOverText.setOrigin(0.5);
-        this.gameOverText.visible = false;
-        // add button
-        this.tryAgainButton = this.add.text(230, 330, 'Try Level ' + this.level + ' Again?', { fontFamily: 'Rubik Moonrocks', fontSize: '36px', fill: '#0f0', backgroundColor: 'black'})
-            .setInteractive()
-            .on('pointerdown', () => {
-                this.tryAgainButton.setScale(0.7);
-                this.tryAgainButton.setX(280);
-                this.tryAgainButton.setY(330);
-                this.input.once('pointerup', (pointer) => {
-                    this.time.delayedCall(500, () => {
-                        this.scene.start('Level2', { cumulativeScore: 0, bug: this.bug.texture.key });
-                    });
-                });
-            })
-        this.input.on('gameobjectover', (pointer, tryAgainButton) => {
-            tryAgainButton.setStyle({ fill: '#f00' });
-            document.body.style.cursor = 'pointer';
-        });
-        this.input.on('gameobjectout', (pointer, tryAgainButton) => {
-            tryAgainButton.setStyle({ fill: '#0f0' });
-            document.body.style.cursor = 'default';
-        });
-        this.tryAgainButton.visible = false;
+        this.averageText = this.add.text(this.sys.game.scale.width / 2, 350, '', { fontFamily: 'Concert One', fontSize: '50px', fill: '#00ffff' });
+        this.averageText.setOrigin(0.5);
 
         // create h3 molecules
         this.h3 = this.physics.add.group();
@@ -286,15 +261,16 @@ class Level2 extends Phaser.Scene {
                 this.bug.setFrame(0);
                 if (this.score >= this.needed) { // check for winning level
                     this.winText.setText('Level ' + this.level + ' Clear!');
-                    this.totalText.setText('Average: ' + ( Math.round( ((this.score + this.runningTotal) / (this.levels + 1)) * 10 ) /10 ));
+                    this.averageText.setText('Average: ' + ( Math.round( ((this.score + this.runningTotal) / (this.levels + 1)) * 10 ) /10 ));
                     this.bug.setTint(0x00ff00);
                     this.time.delayedCall(2000, () => {
                         this.scene.start('Level3', { bug: this.bug.texture.key, cumulativeScore: this.score + this.runningTotal, levels: this.levels + 1 }); // start next level after delay
                     });
                 } else {
-                    this.gameOverText.visible = true;
                     this.bug.setTint(0xaaffbb);
-                    this.tryAgainButton.visible = true;
+                    this.time.delayedCall(750, () => {
+                        this.scene.start('CheckScore', { bug: this.bug.texture.key, cumulativeScore: this.score + this.runningTotal, level: 2 }); // start next level after delay
+                    });
                 }
             }
             this.canLaunch = true; // bug allowed to launch again

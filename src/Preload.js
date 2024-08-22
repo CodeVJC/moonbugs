@@ -1,4 +1,7 @@
-class PreloadScene extends Phaser.Scene {
+class Preload extends Phaser.Scene {
+    constructor() {
+        super({ key: 'Preload' });
+    }
     preload() {
         this.load.image('moonscape', 'assets/moonscape.png');
         this.load.spritesheet('red', 'assets/red.png', { frameWidth: 40, frameHeight: 37 });
@@ -39,7 +42,7 @@ class PreloadScene extends Phaser.Scene {
         this.nextLevelButton = this.add.text(350, 230, 'Start', { fontFamily: 'Rubik Moonrocks', fontSize: '36px', fill: '#0f0', backgroundColor: 'black'})
             .setInteractive()
             .on('pointerdown', () => {
-                this.nextLevelButton.setScale(0.7);
+                this.nextLevelButton.setScale(0.8);
                 this.nextLevelButton.setX(360);
                 this.nextLevelButton.setY(240);
                 this.time.delayedCall(200, () => {
@@ -57,4 +60,4 @@ class PreloadScene extends Phaser.Scene {
     }
 }
 
-export default PreloadScene;
+export default Preload;
