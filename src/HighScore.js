@@ -44,7 +44,7 @@ class HighScore extends Phaser.Scene {
         });
         this.getLeaders(addName, addScore);
     }
-    async getLeaders(getName, getScore) {
+    getLeaders(getName, getScore) {
         this.leadersPrepped.push( {name: getName, score: getScore} );
         this.leadersPrepped.sort( function ( a, b ) { 
             return b.score - a.score;
