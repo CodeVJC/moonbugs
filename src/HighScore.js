@@ -37,7 +37,7 @@ class HighScore extends Phaser.Scene {
             this.eventsAttached = true;
         }
     }
-    async addLeaders(addName, addScore) {
+    async addLeader(addName, addScore) {
         await addDoc(collection(db, "leaderboard"), {
             name: addName,
             score: addScore
@@ -45,7 +45,7 @@ class HighScore extends Phaser.Scene {
         this.getLeaders(addName, addScore);
     }
     async getLeaders(getName, getScore) {
-        this.leadersPrepped.push ( {name: getName, score: getScore} );
+        this.leadersPrepped.push( {name: getName, score: getScore} );
         this.leadersPrepped.sort( function ( a, b ) { 
             return b.score - a.score;
         } );
@@ -59,7 +59,7 @@ class HighScore extends Phaser.Scene {
         this.scene.stop('AddName');
         this.leaderName = this.username._text;
         console.log(this.leaderName);
-        this.addLeaders(this.leaderName, this.runningTotal);
+        this.addLeader(this.leaderName, this.runningTotal);
     }
 }
 

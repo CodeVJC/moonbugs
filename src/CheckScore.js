@@ -41,9 +41,9 @@ class CheckScore extends Phaser.Scene {
         console.log(this.forDeletion);
 
         // see if/where player's score belongs on leaderboard
-        if (this.leaderboard.length == 0 || this.leaderboard.length < 10) {
+        if (this.leaderboard.length < 10) {
             this.highScore = true;
-        } else if (this.leaderboard.length > 0) {
+        } else if (this.leaderboard.length == 10) {
             for (let i of this.leaderboard) {
                 if (this.runningTotal > i.score) {
                     this.highScore = true;
@@ -53,7 +53,7 @@ class CheckScore extends Phaser.Scene {
         console.log(this.leaderboard.length, this.highScore);
 
         if (this.highScore == true) {
-            if (this.forDeletion !== undefined && this.leaderboard.length == 10) {
+            if (this.leaderboard.length == 10) {
                 this.leaderboard.pop();
                 await deleteDoc(doc(db, "leaderboard", this.forDeletion));
             }
