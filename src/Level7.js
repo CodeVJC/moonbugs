@@ -312,6 +312,7 @@ class Level7 extends Phaser.Scene {
                     this.bug.setTint(0x00ff00);
                     this.time.delayedCall(750, () => {
                         if (!this.transitionToCheckScore) {
+                            console.log('level 7 to CheckScore');
                             this.transitionToCheckScore = true;
                             this.scene.start('CheckScore', { bug: this.bug.texture.key, cumulativeScore: this.score + this.runningTotal, level: 7 }); // start next level after delay
                         }
@@ -320,6 +321,7 @@ class Level7 extends Phaser.Scene {
                     this.bug.setTint(0xaaffbb);
                     this.time.delayedCall(750, () => {
                         if (!this.transitionToCheckScore) {
+                            console.log('level 7 to CheckScore');
                             this.transitionToCheckScore = true;
                             this.scene.start('CheckScore', { bug: this.bug.texture.key, cumulativeScore: this.score + this.runningTotal, level: 7 }); // start next level after delay
                         }
@@ -368,6 +370,7 @@ class Level7 extends Phaser.Scene {
         this.physics.pause();
         this.time.delayedCall(2000, () => {
             if (!this.transitionToCheckScore) {
+                console.log('level 7 to CheckScore');
                 this.transitionToCheckScore = true;
                 this.scene.start('CheckScore', { bug: this.bug.texture.key, cumulativeScore: this.score + this.runningTotal, level: 7 }); // start next level after delay
             }
