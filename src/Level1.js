@@ -16,6 +16,7 @@ class Level1 extends Phaser.Scene {
     }
     create() {
         if (!this.scene.manager.getScene('CheckScore') && !this.scene.manager.getScene('Level2')) {
+            console.log('CheckScore scene added');
             this.scene.add('CheckScore', CheckScore);
             this.scene.add('Level2', Level2);
         }
@@ -245,6 +246,7 @@ class Level1 extends Phaser.Scene {
                     this.bug.setTint(0xaaffbb);
                     this.time.delayedCall(750, () => {
                         this.scene.start('CheckScore', { bug: this.bug.texture.key, cumulativeScore: this.score, level: 1 }); // start next level after delay
+                        console.log('CheckScore scene called');
                     });
                 }
             }

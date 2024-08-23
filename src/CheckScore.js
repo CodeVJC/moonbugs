@@ -24,6 +24,7 @@ class CheckScore extends Phaser.Scene {
         }
     }
     create() {
+        console.log('arrived at CheckScore scene');
         this.checkScoreCalled = false;
         if (!this.scene.manager.getScene('HighScore') && !this.scene.manager.getScene('GameOver')) {
             this.scene.add('HighScore', HighScore);
