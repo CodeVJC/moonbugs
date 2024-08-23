@@ -24,6 +24,7 @@ class CheckScore extends Phaser.Scene {
         }
     }
     create() {
+        this.checkScoreCalled = false;
         if (!this.scene.manager.getScene('HighScore') && !this.scene.manager.getScene('GameOver')) {
             this.scene.add('HighScore', HighScore);
             this.scene.add('GameOver', GameOver);
@@ -33,9 +34,11 @@ class CheckScore extends Phaser.Scene {
         this.replaceIndex = -1;
         this.highScore = false;
         this.add.image(400, 300, 'moonscape');
-        this.checkScore();
+        this.events.once('start', this.checkScore, this);
     }
     async checkScore() {
+        if (this.checkScoreCalled) return;
+        this.checkScoreCalled = true;
         console.log("checkScore called");
         this.documents = [];
         this.leaderboard = [];

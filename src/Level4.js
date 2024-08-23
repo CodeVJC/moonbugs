@@ -24,6 +24,7 @@ class Level4 extends Phaser.Scene {
         if (!this.scene.manager.getScene('Level5')) {
             this.scene.add('Level5', Level5);
         }
+        this.transitionToCheckScore = false;
         this.sound.mute = false;
         document.body.style.cursor = 'default';
         this.needed = this.calcRequiredScore(this.runningTotal, this.levels);
@@ -285,7 +286,10 @@ class Level4 extends Phaser.Scene {
                 } else {
                     this.bug.setTint(0xaaffbb);
                     this.time.delayedCall(750, () => {
-                        this.scene.start('CheckScore', { bug: this.bug.texture.key, cumulativeScore: this.score + this.runningTotal, level: 4 }); // start next level after delay
+                        if (!this.transitionToCheckScore) {
+                            this.transitionToCheckScore = true;
+                            this.scene.start('CheckScore', { bug: this.bug.texture.key, cumulativeScore: this.score + this.runningTotal, level: 4 }); // start next level after delay
+                        }
                     });
                 }
             }
@@ -330,7 +334,10 @@ class Level4 extends Phaser.Scene {
         bug.setTint(0xaaffbb);
         this.physics.pause();
         this.time.delayedCall(750, () => {
-            this.scene.start('CheckScore', { bug: this.bug.texture.key, cumulativeScore: this.score + this.runningTotal, level: 4 }); // start next level after delay
+            if (!this.transitionToCheckScore) {
+                this.transitionToCheckScore = true;
+                this.scene.start('CheckScore', { bug: this.bug.texture.key, cumulativeScore: this.score + this.runningTotal, level: 4 }); // start next level after delay
+            }
         });
     }
     calcRequiredScore(total, rounds) {
