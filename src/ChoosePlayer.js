@@ -1,8 +1,11 @@
+import Level1 from "./Level1.js";
+
 class ChoosePlayer extends Phaser.Scene {
     constructor() {
         super({ key: 'ChoosePlayer' });
     }
     create() {
+        this.scene.add('Level1', Level1);
         document.body.style.cursor = 'default';
         this.add.image(400, 300, 'moonscape');
         this.bugRed = this.add.sprite(150, 300, 'red', 0)

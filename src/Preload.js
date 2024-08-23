@@ -1,3 +1,5 @@
+import ChoosePlayer from "./ChoosePlayer.js";
+
 class Preload extends Phaser.Scene {
     constructor() {
         super({ key: 'Preload' });
@@ -24,6 +26,7 @@ class Preload extends Phaser.Scene {
         this.load.audio("soundH3OrStar", "assets/soundH3OrStar.mp3");
     }
     create() {
+        this.scene.add('ChoosePlayer', ChoosePlayer);
         this.add.image(400, 300, 'moonscape');
         this.h3 = this.physics.add.group();
         this.h3.create(100, 300, 'h3');

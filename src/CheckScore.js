@@ -1,3 +1,5 @@
+import HighScore from "./HighScore.js";
+import GameOver from "./GameOver.js";
 import { getFirestore, deleteDoc, addDoc, getDocs, collection, orderBy, limit, query, doc } from 'https://www.gstatic.com/firebasejs/10.13/firebase-firestore.js';
 import { app, db, leadersRef } from './firebaseConfig.js';
 
@@ -22,6 +24,8 @@ class CheckScore extends Phaser.Scene {
         }
     }
     create() {
+        this.scene.add('HighScore', HighScore);
+        this.scene.add('GameOver', GameOver);
         this.documents = [];
         this.leaderboard = [];
         this.replaceIndex = -1;

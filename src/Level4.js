@@ -1,3 +1,5 @@
+import Level5 from "./Level5.js";
+
 class Level4 extends Phaser.Scene {
     constructor() {
         super({ key: 'Level4' });
@@ -19,6 +21,7 @@ class Level4 extends Phaser.Scene {
         }
     }
     create() {
+        this.scene.add('Level5', Level5);
         this.sound.mute = false;
         document.body.style.cursor = 'default';
         this.needed = this.calcRequiredScore(this.runningTotal, this.levels);

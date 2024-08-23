@@ -1,3 +1,6 @@
+import CheckScore from "./CheckScore.js";
+import Level2 from "./Level2.js";
+
 class Level1 extends Phaser.Scene {
     constructor() {
         super({ key: 'Level1' });
@@ -12,6 +15,8 @@ class Level1 extends Phaser.Scene {
         }
     }
     create() {
+        this.scene.add('CheckScore', CheckScore);
+        this.scene.add('Level2', Level2);
         this.sound.mute = false;
         document.body.style.cursor = 'default';
         this.attempt = 1;
