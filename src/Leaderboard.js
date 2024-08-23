@@ -24,7 +24,28 @@ class Leaderboard extends Phaser.Scene {
             y += 30;
             x -= 150;
         };
-        this.startOverButton = this.add.text(290, 450, 'Start Over', { fontFamily: 'Rubik Moonrocks', fontSize: '36px', fill: '#0f0', backgroundColor: 'black'})
+        this.tryAgainButton = this.add.text(100, 450, 'Try Level ' + this.level + ' Again', { fontFamily: 'Rubik Moonrocks', fontSize: '36px', fill: '#0f0', backgroundColor: 'black'})
+        .setInteractive()
+        .on('pointerdown', () => {
+            this.tryAgainButton.setScale(0.8);
+            this.tryAgainButton.setX(110);
+            this.tryAgainButton.setY(330);
+            this.input.once('pointerup', (pointer) => {
+                this.time.delayedCall(500, () => {
+                    this.scene.start('Level'+this.level, { cumulativeScore: 0, bug: this.bug });
+                });
+            });
+        })
+        this.input.on('gameobjectover', (pointer, tryAgainButton) => {
+            tryAgainButton.setStyle({ fill: '#f00' });
+            document.body.style.cursor = 'pointer';
+        });
+        this.input.on('gameobjectout', (pointer, tryAgainButton) => {
+            tryAgainButton.setStyle({ fill: '#0f0' });
+            document.body.style.cursor = 'default';
+        });
+
+        this.startOverButton = this.add.text(450, 450, 'Start Over', { fontFamily: 'Rubik Moonrocks', fontSize: '36px', fill: '#0f0', backgroundColor: 'black'})
         .setInteractive()
         .on('pointerdown', () => {
             this.startOverButton.setScale(0.8);

@@ -21,6 +21,7 @@ class HighScore extends Phaser.Scene {
         if (data.outcome) {
             this.outcome = 'won';
         }
+        this.level = data.level;
     }
     create () {
         if (!this.scene.manager.getScene('Leaderboard') && !this.scene.manager.getScene('AddName')) {
@@ -56,7 +57,7 @@ class HighScore extends Phaser.Scene {
             return b.score - a.score;
         } );
         console.log(this.leadersPrepped);
-        this.scene.start('Leaderboard', { leadersList: this.leadersPrepped } );
+        this.scene.start('Leaderboard', { leadersList: this.leadersPrepped, level: this.level } );
     }
     updateName (name) {
         this.username.setText(name);

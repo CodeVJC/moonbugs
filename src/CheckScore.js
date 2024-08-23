@@ -71,7 +71,7 @@ class CheckScore extends Phaser.Scene {
                 this.leaderboard.pop();
                 await deleteDoc(doc(db, "leaderboard", this.forDeletion));
             }
-            this.scene.start('HighScore', { leaders: this.leaderboard, bug: this.bug, cumulativeScore: this.runningTotal, leaders: this.leaderboard, outcome: this.outcome });
+            this.scene.start('HighScore', { leaders: this.leaderboard, bug: this.bug, cumulativeScore: this.runningTotal, leaders: this.leaderboard, outcome: this.outcome, level: this.level });
         } else {
             this.scene.start('GameOver', { bug: this.bug, outcome: this.outcome, level: this.level });
         }
