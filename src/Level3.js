@@ -23,7 +23,8 @@ class Level3 extends Phaser.Scene {
     create() {
         if (!this.scene.manager.getScene('Level4')) {
             this.scene.add('Level4', Level4);
-        }        
+        }  
+        this.transitionToCheckScore = false;      
         this.sound.mute = false;
         document.body.style.cursor = 'default';
         this.needed = this.calcRequiredScore(this.runningTotal, this.levels);
@@ -294,7 +295,11 @@ class Level3 extends Phaser.Scene {
                 } else {
                     this.bug.setTint(0xaaffbb);
                     this.time.delayedCall(750, () => {
-                        this.scene.start('CheckScore', { bug: this.bug.texture.key, cumulativeScore: this.score + this.runningTotal, level: 3 }); // start next level after delay
+                        if (!this.transitionToCheckScore) {
+                            console.log('level 3 to CheckScore');
+                            this.transitionToCheckScore = true;
+                            this.scene.start('CheckScore', { bug: this.bug.texture.key, cumulativeScore: this.score + this.runningTotal, level: 3 }); // start next level after delay
+                        }
                     });
                 }
             }

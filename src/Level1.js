@@ -20,6 +20,7 @@ class Level1 extends Phaser.Scene {
             this.scene.add('CheckScore', CheckScore);
             this.scene.add('Level2', Level2);
         }
+        this.transitionToCheckScore = false;
         this.sound.mute = false;
         document.body.style.cursor = 'default';
         this.attempt = 1;
@@ -245,8 +246,11 @@ class Level1 extends Phaser.Scene {
                 } else {
                     this.bug.setTint(0xaaffbb);
                     this.time.delayedCall(750, () => {
-                        this.scene.start('CheckScore', { bug: this.bug.texture.key, cumulativeScore: this.score, level: 1 }); // start next level after delay
-                        console.log('CheckScore scene called');
+                        if (!this.transitionToCheckScore) {
+                            console.log('level 1 to CheckScore');
+                            this.transitionToCheckScore = true;
+                            this.scene.start('CheckScore', { bug: this.bug.texture.key, cumulativeScore: this.score, level: 1 }); // start next level after delay
+                        }
                     });
                 }
             }
