@@ -11,6 +11,7 @@ class Leaderboard extends Phaser.Scene {
             this.bug = 'blue';
         }
         this.leadersReady = data.leadersList;
+        this.level = data.level;
     }
     create() {
         this.add.image(400, 300, 'moonscape');
