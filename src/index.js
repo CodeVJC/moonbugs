@@ -28,7 +28,7 @@ const config = {
             gravity: { y: 0 },
         }
     },
-    scene: [ Preload, ChoosePlayer, Level1, Level2, Level3, Level4, Level5, Level6, Level7, CheckScore, HighScore, AddName, GameOver, Leaderboard ],
+    scene: [ Preload ],
 };
 
 new Phaser.Game(config);

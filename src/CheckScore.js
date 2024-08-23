@@ -1,5 +1,5 @@
 import { getFirestore, deleteDoc, addDoc, getDocs, collection, orderBy, limit, query, doc } from 'https://www.gstatic.com/firebasejs/10.13/firebase-firestore.js';
-import { db, app, leadersRef } from './firebaseConfig.js';
+import { app, db, leadersRef } from './firebaseConfig.js';
 
 class CheckScore extends Phaser.Scene {
     constructor() {
@@ -30,6 +30,9 @@ class CheckScore extends Phaser.Scene {
         this.checkScore();
     }
     async checkScore() {
+        console.log("checkScore called");
+        this.documents = [];
+        this.leaderboard = [];
         // get current leaderboard from database
         this.query = query(leadersRef, orderBy("score", "desc"), limit(10));
         this.querySnapshot = await getDocs(this.query);

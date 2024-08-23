@@ -1,5 +1,5 @@
 import { getFirestore, deleteDoc, addDoc, getDocs, collection, orderBy, limit, query, doc } from 'https://www.gstatic.com/firebasejs/10.13/firebase-firestore.js';
-import { db, app, leadersRef } from './firebaseConfig.js';
+import { app, db, leadersRef } from './firebaseConfig.js';
 
 class HighScore extends Phaser.Scene {
     constructor () {
@@ -38,7 +38,7 @@ class HighScore extends Phaser.Scene {
         }
     }
     async addLeader(addName, addScore) {
-        await addDoc(collection(db, "leaderboard"), {
+        await addDoc(leadersRef, {
             name: addName,
             score: addScore
         });
