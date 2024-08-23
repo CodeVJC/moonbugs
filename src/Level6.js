@@ -21,7 +21,9 @@ class Level6 extends Phaser.Scene {
         }
     }
     create() {
-        this.scene.add('Level7', Level7);
+        if (!this.scene.manager.getScene('Level7')) {
+            this.scene.add('Level7', Level7);
+        }
         this.sound.mute = false;
         document.body.style.cursor = 'default';
         this.needed = this.calcRequiredScore(this.runningTotal, this.levels);

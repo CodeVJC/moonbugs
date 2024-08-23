@@ -1,4 +1,5 @@
 import Leaderboard from "./Leaderboard.js";
+import AddName from "./AddName.js";
 import { getFirestore, deleteDoc, addDoc, getDocs, collection, orderBy, limit, query, doc } from 'https://www.gstatic.com/firebasejs/10.13/firebase-firestore.js';
 import { app, db, leadersRef } from './firebaseConfig.js';
 
@@ -22,7 +23,10 @@ class HighScore extends Phaser.Scene {
         }
     }
     create () {
-        this.scene.add('Leaderboard', Leaderboard);
+        if (!this.scene.manager.getScene('Leaderboard') && !this.scene.manager.getScene('AddName')) {
+            this.scene.add('Leaderboard', Leaderboard);
+            this.scene.add('AddName', AddName);
+        }
         this.leaderName = '';
         this.add.image(400, 300, 'moonscape');
         this.username = this.add.text(350, 440, '', { fontFamily: 'Concert One', fontSize: '50px', fill: '#00ffff' });

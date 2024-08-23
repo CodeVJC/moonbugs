@@ -24,8 +24,10 @@ class CheckScore extends Phaser.Scene {
         }
     }
     create() {
-        this.scene.add('HighScore', HighScore);
-        this.scene.add('GameOver', GameOver);
+        if (!this.scene.manager.getScene('HighScore') && !this.scene.manager.getScene('GameOver')) {
+            this.scene.add('HighScore', HighScore);
+            this.scene.add('GameOver', GameOver);
+        }
         this.documents = [];
         this.leaderboard = [];
         this.replaceIndex = -1;

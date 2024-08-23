@@ -5,7 +5,9 @@ class ChoosePlayer extends Phaser.Scene {
         super({ key: 'ChoosePlayer' });
     }
     create() {
-        this.scene.add('Level1', Level1);
+        if (!this.scene.manager.getScene('Level1')) {
+            this.scene.add('Level1', Level1);
+        }
         document.body.style.cursor = 'default';
         this.add.image(400, 300, 'moonscape');
         this.bugRed = this.add.sprite(150, 300, 'red', 0)

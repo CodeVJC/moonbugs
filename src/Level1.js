@@ -15,8 +15,10 @@ class Level1 extends Phaser.Scene {
         }
     }
     create() {
-        this.scene.add('CheckScore', CheckScore);
-        this.scene.add('Level2', Level2);
+        if (!this.scene.manager.getScene('CheckScore') && !this.scene.manager.getScene('Level2')) {
+            this.scene.add('CheckScore', CheckScore);
+            this.scene.add('Level2', Level2);
+        }
         this.sound.mute = false;
         document.body.style.cursor = 'default';
         this.attempt = 1;
