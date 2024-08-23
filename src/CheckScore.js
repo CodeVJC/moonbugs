@@ -36,6 +36,7 @@ class CheckScore extends Phaser.Scene {
         this.highScore = false;
         this.add.image(400, 300, 'moonscape');
         this.events.once('start', this.checkScore, this);
+        this.events.emit('start');
     }
     async checkScore() {
         if (this.checkScoreCalled) return;
