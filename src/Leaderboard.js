@@ -30,7 +30,7 @@ class Leaderboard extends Phaser.Scene {
         .on('pointerdown', () => {
             this.tryAgainButton.setScale(0.8);
             this.tryAgainButton.setX(110);
-            this.tryAgainButton.setY(330);
+            this.tryAgainButton.setY(450);
             this.input.once('pointerup', (pointer) => {
                 this.time.delayedCall(500, () => {
                     this.scene.start('Level'+this.level, { cumulativeScore: 0, bug: this.bug });
@@ -50,7 +50,7 @@ class Leaderboard extends Phaser.Scene {
         .setInteractive()
         .on('pointerdown', () => {
             this.startOverButton.setScale(0.8);
-            this.startOverButton.setX(300);
+            this.startOverButton.setX(460);
             this.startOverButton.setY(450);
             this.input.once('pointerup', (pointer) => {
                 this.time.delayedCall(500, () => {
