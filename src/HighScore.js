@@ -30,6 +30,13 @@ class HighScore extends Phaser.Scene {
         }
         this.leaderName = '';
         this.add.image(400, 300, 'moonscape');
+        if (this.bugColor == 'red') {
+            this.bug = this.physics.add.sprite(380, 550, 'red', 0); // create bug before cannon so it's hidden under cannon
+        } else if (this.bugColor == 'yellow') {
+            this.bug = this.physics.add.sprite(380, 550, 'yellow', 0); // create bug before cannon so it's hidden under cannon
+        } else {
+            this.bug = this.physics.add.sprite(380, 550, 'blue', 0); // create bug before cannon so it's hidden under cannon
+        }
         this.username = this.add.text(350, 440, '', { fontFamily: 'Concert One', fontSize: '50px', fill: '#00ffff' });
 
         //  Do this, otherwise this Scene will steal all keyboard input
@@ -64,7 +71,7 @@ class HighScore extends Phaser.Scene {
                 break;
             }
         }
-        this.scene.start('Leaderboard', { leadersList: this.leadersPrepped, level: this.level, specialIndex: this.specialIndex } );
+        this.scene.start('Leaderboard', { bugColor: this.bugColor, leadersList: this.leadersPrepped, level: this.level, specialIndex: this.specialIndex } );
     }
     updateName(name) {
         this.username.setText(name);
