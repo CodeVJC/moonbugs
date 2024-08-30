@@ -22,9 +22,9 @@ class Leaderboard extends Phaser.Scene {
         let count = 0;
         for (let i of this.leadersReady) {
             if (count == this.specialIndex) {
-                this.add.text(x, y, i.name, { fontFamily: 'Rubik Moonrocks', fontSize: '44px', fill: '#ffff00' });
+                this.add.text(x, y, i.name, { fontFamily: 'Rubik Moonrocks', fontSize: '36px', fill: '#ffff00' });
                 x += 150;
-                this.add.text(x, y, i.score, { fontFamily: 'Rubik Moonrocks', fontSize: '44px', fill: '#ffff00' }); 
+                this.add.text(x, y, i.score, { fontFamily: 'Rubik Moonrocks', fontSize: '36px', fill: '#ffff00' }); 
                 y += 30;
                 x -= 150;
                 count = 10;
