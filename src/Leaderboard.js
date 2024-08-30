@@ -19,19 +19,22 @@ class Leaderboard extends Phaser.Scene {
         this.add.text(250, 25, 'LEADERBOARD', { fontFamily: 'Rubik Moonrocks', fontSize: '36px', fill: '#00ffff' }); 
         let x = 300;
         let y = 75;
+        let count = 0;
         for (let i of this.leadersReady) {
-            if (i == this.specialIndex) {
+            if (count == this.specialIndex) {
                 this.add.text(x, y, i.name, { fontFamily: 'Rubik Moonrocks', fontSize: '44px', fill: '#ffff00' });
                 x += 150;
                 this.add.text(x, y, i.score, { fontFamily: 'Rubik Moonrocks', fontSize: '44px', fill: '#ffff00' }); 
                 y += 30;
                 x -= 150;
+                count = 10;
             } else {
                 this.add.text(x, y, i.name, { fontFamily: 'Concert One', fontSize: '36px', fill: '#00ffff' }); 
                 x += 150;
                 this.add.text(x, y, i.score, { fontFamily: 'Concert One', fontSize: '36px', fill: '#00ffff' }); 
                 y += 30;
                 x -= 150;
+                count += 1;
             }
         };
         this.tryAgainButton = this.add.text(100, 450, 'Try Level ' + this.level + ' Again', { fontFamily: 'Rubik Moonrocks', fontSize: '36px', fill: '#0f0', backgroundColor: 'black'})

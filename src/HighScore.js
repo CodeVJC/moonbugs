@@ -60,6 +60,7 @@ class HighScore extends Phaser.Scene {
         for (let i=9; i>=0; i--) {
             if (this.leadersPrepped[i].name == getName && this.leadersPrepped[i].score == getScore) {
                 this.specialIndex = i;
+                console.log(this.specialIndex, this.leadersPrepped[i].name, this.leadersPrepped[i].score);
                 break;
             }
         }
