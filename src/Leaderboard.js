@@ -3,15 +3,16 @@ class Leaderboard extends Phaser.Scene {
         super({ key: 'Leaderboard' });
     }
     init (data) {
-        if (data.bug == 'red') {
-            this.bug = 'red';
-        } else if (data.bug == 'yellow') {
-            this.bug = 'yellow';
+        if (data.bugColor == 'red') {
+            this.bugColor = 'red';
+        } else if (data.bugColor == 'yellow') {
+            this.bugColor = 'yellow';
         } else {
-            this.bug = 'blue';
+            this.bugColor = 'blue';
         }
         this.leadersReady = data.leadersList;
         this.level = data.level;
+        this.specialIndex = data.specialIndex;
     }
     create() {
         this.add.image(400, 300, 'moonscape');
@@ -19,11 +20,19 @@ class Leaderboard extends Phaser.Scene {
         let x = 300;
         let y = 75;
         for (let i of this.leadersReady) {
-            this.add.text(x, y, i.name, { fontFamily: 'Concert One', fontSize: '36px', fill: '#00ffff' }); 
-            x += 150;
-            this.add.text(x, y, i.score, { fontFamily: 'Concert One', fontSize: '36px', fill: '#00ffff' }); 
-            y += 30;
-            x -= 150;
+            if (i == this.specialIndex) {
+                this.add.text(x, y, i.name, { fontFamily: 'Rubik Moonrocks', fontSize: '44px', fill: '#ffff00' });
+                x += 150;
+                this.add.text(x, y, i.score, { fontFamily: 'Rubik Moonrocks', fontSize: '44px', fill: '#ffff00' }); 
+                y += 30;
+                x -= 150;
+            } else {
+                this.add.text(x, y, i.name, { fontFamily: 'Concert One', fontSize: '36px', fill: '#00ffff' }); 
+                x += 150;
+                this.add.text(x, y, i.score, { fontFamily: 'Concert One', fontSize: '36px', fill: '#00ffff' }); 
+                y += 30;
+                x -= 150;
+            }
         };
         this.tryAgainButton = this.add.text(100, 450, 'Try Level ' + this.level + ' Again', { fontFamily: 'Rubik Moonrocks', fontSize: '36px', fill: '#0f0', backgroundColor: 'black'})
         .setInteractive()
@@ -33,7 +42,7 @@ class Leaderboard extends Phaser.Scene {
             this.tryAgainButton.setY(450);
             this.input.once('pointerup', (pointer) => {
                 this.time.delayedCall(500, () => {
-                    this.scene.start('Level'+this.level, { cumulativeScore: 0, bug: this.bug });
+                    this.scene.start('Level'+this.level, { cumulativeScore: 0, bugColor: this.bugColor });
                 });
             });
         })

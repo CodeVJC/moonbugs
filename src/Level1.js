@@ -6,12 +6,12 @@ class Level1 extends Phaser.Scene {
         super({ key: 'Level1' });
     }
     init (data) {
-        if (data.bug == 'red') {
-            this.bug = 'red';
-        } else if (data.bug == 'yellow') {
-            this.bug = 'yellow';
+        if (data.bugColor == 'red') {
+            this.bugColor = 'red';
+        } else if (data.bugColor == 'yellow') {
+            this.bugColor = 'yellow';
         } else {
-            this.bug = 'blue';
+            this.bugColor = 'blue';
         }
     }
     create() {
@@ -34,9 +34,9 @@ class Level1 extends Phaser.Scene {
 
         this.add.image(400, 300, 'moonscape');
 
-        if (this.bug == 'red') {
+        if (this.bugColor == 'red') {
             this.bug = this.physics.add.sprite(50, 550, 'red', 0); // create bug before cannon so it's hidden under cannon
-        } else if (this.bug == 'yellow') {
+        } else if (this.bugColor == 'yellow') {
             this.bug = this.physics.add.sprite(50, 550, 'yellow', 0); // create bug before cannon so it's hidden under cannon
         } else {
             this.bug = this.physics.add.sprite(50, 550, 'blue', 0); // create bug before cannon so it's hidden under cannon
@@ -241,7 +241,7 @@ class Level1 extends Phaser.Scene {
                     this.averageText.setText('Average: ' + this.score);
                     this.bug.setTint(0x00ff00);
                     this.time.delayedCall(2000, () => {
-                        this.scene.start('Level2', { bug: this.bug.texture.key, cumulativeScore: this.score, levels: 1 }); // start next level after delay
+                        this.scene.start('Level2', { bugColor: this.bugColor, cumulativeScore: this.score, levels: 1 }); // start next level after delay
                     });
                 } else {
                     this.bug.setTint(0xaaffbb);
@@ -249,7 +249,7 @@ class Level1 extends Phaser.Scene {
                         if (!this.transitionToCheckScore) {
                             console.log('level 1 to CheckScore');
                             this.transitionToCheckScore = true;
-                            this.scene.start('CheckScore', { bug: this.bug.texture.key, cumulativeScore: this.score, level: 1 }); // start next level after delay
+                            this.scene.start('CheckScore', { bugColor: this.bugColor, cumulativeScore: this.score, level: 1 }); // start next level after delay
                         }
                     });
                 }

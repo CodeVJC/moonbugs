@@ -20,9 +20,9 @@ class AddName extends Phaser.Scene {
     create() {
         this.name = '';
         this.addNameText = this.add.text(100, 100, 'Add Your Name to Leaderboard!', { fontFamily: 'Rubik Moonrocks', fontSize: '36px', fill: '#0f0', backgroundColor: 'black'})
-        if (this.bug == 'red') {
+        if (this.bugColor == 'red') {
             this.bug = this.physics.add.sprite(380, 550, 'red', 0); // create bug before cannon so it's hidden under cannon
-        } else if (this.bug == 'yellow') {
+        } else if (this.bugColor == 'yellow') {
             this.bug = this.physics.add.sprite(380, 550, 'yellow', 0); // create bug before cannon so it's hidden under cannon
         } else {
             this.bug = this.physics.add.sprite(380, 550, 'blue', 0); // create bug before cannon so it's hidden under cannon

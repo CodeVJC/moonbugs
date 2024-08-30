@@ -3,12 +3,12 @@ class Level7 extends Phaser.Scene {
         super({ key: 'Level7' });
     }
     init (data) {
-        if (data.bug == 'red') {
-            this.bug = 'red';
-        } else if (data.bug == 'yellow') {
-            this.bug = 'yellow';
+        if (data.bugColor == 'red') {
+            this.bugColor = 'red';
+        } else if (data.bugColor == 'yellow') {
+            this.bugColor = 'yellow';
         } else {
-            this.bug = 'blue';
+            this.bugColor = 'blue';
         }
         if (data.cumulativeScore == 0) {
             this.runningTotal = 0;
@@ -59,9 +59,9 @@ class Level7 extends Phaser.Scene {
         this.vertical.create(333, 250, 'vertical');
         this.vertical.create(466, 350, 'vertical');
 
-        if (this.bug == 'red') {
+        if (this.bugColor == 'red') {
             this.bug = this.physics.add.sprite(50, 550, 'red', 0); // create bug before cannon so it's hidden under cannon
-        } else if (this.bug == 'yellow') {
+        } else if (this.bugColor == 'yellow') {
             this.bug = this.physics.add.sprite(50, 550, 'yellow', 0); // create bug before cannon so it's hidden under cannon
         } else {
             this.bug = this.physics.add.sprite(50, 550, 'blue', 0); // create bug before cannon so it's hidden under cannon
@@ -314,7 +314,7 @@ class Level7 extends Phaser.Scene {
                         if (!this.transitionToCheckScore) {
                             console.log('level 7 to CheckScore');
                             this.transitionToCheckScore = true;
-                            this.scene.start('CheckScore', { bug: this.bug.texture.key, cumulativeScore: this.score + this.runningTotal, level: 7 }); // start next level after delay
+                            this.scene.start('CheckScore', { bugColor: this.bugColor, cumulativeScore: this.score + this.runningTotal, level: 7 }); // start next level after delay
                         }
                     });
                 } else {
@@ -323,7 +323,7 @@ class Level7 extends Phaser.Scene {
                         if (!this.transitionToCheckScore) {
                             console.log('level 7 to CheckScore');
                             this.transitionToCheckScore = true;
-                            this.scene.start('CheckScore', { bug: this.bug.texture.key, cumulativeScore: this.score + this.runningTotal, level: 7 }); // start next level after delay
+                            this.scene.start('CheckScore', { bugColor: this.bugColor, cumulativeScore: this.score + this.runningTotal, level: 7 }); // start next level after delay
                         }
                     });
                 }
@@ -372,7 +372,7 @@ class Level7 extends Phaser.Scene {
             if (!this.transitionToCheckScore) {
                 console.log('level 7 to CheckScore');
                 this.transitionToCheckScore = true;
-                this.scene.start('CheckScore', { bug: this.bug.texture.key, cumulativeScore: this.score + this.runningTotal, level: 7 }); // start next level after delay
+                this.scene.start('CheckScore', { bugColor: this.bugColor, cumulativeScore: this.score + this.runningTotal, level: 7 }); // start next level after delay
             }
         });
     }

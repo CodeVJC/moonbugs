@@ -5,12 +5,12 @@ class Level2 extends Phaser.Scene {
         super({ key: 'Level2' });
     }
     init (data) {
-        if (data.bug == 'red') {
-            this.bug = 'red';
-        } else if (data.bug == 'yellow') {
-            this.bug = 'yellow';
+        if (data.bugColor == 'red') {
+            this.bugColor = 'red';
+        } else if (data.bugColor == 'yellow') {
+            this.bugColor = 'yellow';
         } else {
-            this.bug = 'blue';
+            this.bugColor = 'blue';
         }
         if (data.cumulativeScore == 0) {
             this.runningTotal = 0;
@@ -49,9 +49,9 @@ class Level2 extends Phaser.Scene {
         this.asteroid.create(600, 150, 'asteroid');
         this.asteroid.create(200, 350, 'asteroid');
 
-        if (this.bug == 'red') {
+        if (this.bugColor == 'red') {
             this.bug = this.physics.add.sprite(50, 550, 'red', 0); // create bug before cannon so it's hidden under cannon
-        } else if (this.bug == 'yellow') {
+        } else if (this.bugColor == 'yellow') {
             this.bug = this.physics.add.sprite(50, 550, 'yellow', 0); // create bug before cannon so it's hidden under cannon
         } else {
             this.bug = this.physics.add.sprite(50, 550, 'blue', 0); // create bug before cannon so it's hidden under cannon
@@ -270,7 +270,7 @@ class Level2 extends Phaser.Scene {
                     this.averageText.setText('Average: ' + ( Math.round( ((this.score + this.runningTotal) / (this.levels + 1)) * 10 ) /10 ));
                     this.bug.setTint(0x00ff00);
                     this.time.delayedCall(2000, () => {
-                        this.scene.start('Level3', { bug: this.bug.texture.key, cumulativeScore: this.score + this.runningTotal, levels: this.levels + 1 }); // start next level after delay
+                        this.scene.start('Level3', { bugColor: this.bugColor, cumulativeScore: this.score + this.runningTotal, levels: this.levels + 1 }); // start next level after delay
                     });
                 } else {
                     this.bug.setTint(0xaaffbb);
@@ -278,7 +278,7 @@ class Level2 extends Phaser.Scene {
                         if (!this.transitionToCheckScore) {
                             console.log('level 2 to CheckScore');
                             this.transitionToCheckScore = true;
-                            this.scene.start('CheckScore', { bug: this.bug.texture.key, cumulativeScore: this.score + this.runningTotal, level: 2 }); // start next level after delay
+                            this.scene.start('CheckScore', { bugColor: this.bugColor, cumulativeScore: this.score + this.runningTotal, level: 2 }); // start next level after delay
                         }
                     });
                 }

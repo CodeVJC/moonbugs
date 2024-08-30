@@ -8,12 +8,12 @@ class CheckScore extends Phaser.Scene {
         super({ key: 'CheckScore' });
     }
     init (data) {
-        if (data.bug == 'red') {
-            this.bug = 'red';
-        } else if (data.bug == 'yellow') {
-            this.bug = 'yellow';
+        if (data.bugColor == 'red') {
+            this.bugColor = 'red';
+        } else if (data.bugColor == 'yellow') {
+            this.bugColor = 'yellow';
         } else {
-            this.bug = 'blue';
+            this.bugColor = 'blue';
         }
         this.runningTotal = data.cumulativeScore;
         this.level = data.level;
@@ -71,9 +71,9 @@ class CheckScore extends Phaser.Scene {
                 this.leaderboard.pop();
                 await deleteDoc(doc(db, "leaderboard", this.forDeletion));
             }
-            this.scene.start('HighScore', { leaders: this.leaderboard, bug: this.bug, cumulativeScore: this.runningTotal, leaders: this.leaderboard, outcome: this.outcome, level: this.level });
+            this.scene.start('HighScore', { leaders: this.leaderboard, bugColor: this.bugColor, cumulativeScore: this.runningTotal, leaders: this.leaderboard, outcome: this.outcome, level: this.level });
         } else {
-            this.scene.start('GameOver', { bug: this.bug, outcome: this.outcome, level: this.level });
+            this.scene.start('GameOver', { bugColor: this.bugColor, outcome: this.outcome, level: this.level });
         }
     }
 }

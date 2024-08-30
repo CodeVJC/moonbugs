@@ -18,7 +18,7 @@ class ChoosePlayer extends Phaser.Scene {
                 this.bugRed.setY(301);
                 this.input.once('pointerup', (pointer) => {
                     this.time.delayedCall(250, () => {
-                        this.scene.start('Level1', { bug: 'red' });
+                        this.scene.start('Level1', { bugColor: 'red' });
                     });
                 });
             });
@@ -30,7 +30,7 @@ class ChoosePlayer extends Phaser.Scene {
                 this.bugYellow.setY(301);
                 this.input.once('pointerup', (pointer) => {
                     this.time.delayedCall(250, () => {
-                        this.scene.start('Level1', { bug: 'yellow' });
+                        this.scene.start('Level1', { bugColor: 'yellow' });
                     });
                 });
             });
@@ -42,7 +42,7 @@ class ChoosePlayer extends Phaser.Scene {
                 this.bugBlue.setY(301)
                 this.input.once('pointerup', (pointer) => {
                     this.time.delayedCall(250, () => {
-                        this.scene.start('Level1', { bug: 'blue' });
+                        this.scene.start('Level1', { bugColor: 'blue' });
                     });
                 });
             });

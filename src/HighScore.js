@@ -9,12 +9,12 @@ class HighScore extends Phaser.Scene {
         this.eventsAttached = false;
     }
     init (data) {
-        if (data.bug == 'red') {
-            this.bug = 'red';
-        } else if (data.bug == 'yellow') {
-            this.bug = 'yellow';
+        if (data.bugColor == 'red') {
+            this.bugColor = 'red';
+        } else if (data.bugColor == 'yellow') {
+            this.bugColor = 'yellow';
         } else {
-            this.bug = 'blue';
+            this.bugColor = 'blue';
         }
         this.runningTotal = data.cumulativeScore;
         this.leadersPrepped = data.leaders;
@@ -57,12 +57,18 @@ class HighScore extends Phaser.Scene {
             return b.score - a.score;
         } );
         console.log(this.leadersPrepped);
-        this.scene.start('Leaderboard', { leadersList: this.leadersPrepped, level: this.level } );
+        for (let i=9; i>=0; i--) {
+            if (this.leadersPrepped[i].name == getName && this.leadersPrepped[i].score == getScore) {
+                this.specialIndex = i;
+                break;
+            }
+        }
+        this.scene.start('Leaderboard', { leadersList: this.leadersPrepped, level: this.level, specialIndex: this.specialIndex } );
     }
-    updateName (name) {
+    updateName(name) {
         this.username.setText(name);
     }
-    submitName () {
+    submitName() {
         this.scene.stop('AddName');
         this.leaderName = this.username._text;
         console.log(this.leaderName);

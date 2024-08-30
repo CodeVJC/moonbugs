@@ -3,12 +3,12 @@ class GameOver extends Phaser.Scene {
         super({ key: 'GameOver' });
     }
     init (data) {
-        if (data.bug == 'red') {
-            this.bug = 'red';
-        } else if (data.bug == 'yellow') {
-            this.bug = 'yellow';
+        if (data.bugColor == 'red') {
+            this.bugColor = 'red';
+        } else if (data.bugColor == 'yellow') {
+            this.bugColor = 'yellow';
         } else {
-            this.bug = 'blue';
+            this.bugColor = 'blue';
         }
         this.level = data.level;
         if (data.outcome == 'won') {
@@ -17,9 +17,9 @@ class GameOver extends Phaser.Scene {
     }
     create() {
         this.add.image(400, 300, 'moonscape');
-        if (this.bug == 'red') {
+        if (this.bugColor == 'red') {
             this.bug = this.physics.add.sprite(400, 550, 'red', 0); // create bug before cannon so it's hidden under cannon
-        } else if (this.bug == 'yellow') {
+        } else if (this.bugColor == 'yellow') {
             this.bug = this.physics.add.sprite(400, 550, 'yellow', 0); // create bug before cannon so it's hidden under cannon
         } else {
             this.bug = this.physics.add.sprite(400, 550, 'blue', 0); // create bug before cannon so it's hidden under cannon
@@ -39,7 +39,7 @@ class GameOver extends Phaser.Scene {
                 this.tryAgainButton.setY(330);
                 this.input.once('pointerup', (pointer) => {
                     this.time.delayedCall(500, () => {
-                        this.scene.start('Level'+this.level, { cumulativeScore: 0, bug: this.bug });
+                        this.scene.start('Level'+this.level, { cumulativeScore: 0, bugColor: this.bugColor });
                     });
                 });
             })
