@@ -16,6 +16,13 @@ class Leaderboard extends Phaser.Scene {
     }
     create() {
         this.add.image(400, 300, 'moonscape');
+        if (this.bugColor == 'red') {
+            this.bug = this.physics.add.sprite(400, 550, 'red', 0); // create bug before cannon so it's hidden under cannon
+        } else if (this.bugColor == 'yellow') {
+            this.bug = this.physics.add.sprite(400, 550, 'yellow', 0); // create bug before cannon so it's hidden under cannon
+        } else {
+            this.bug = this.physics.add.sprite(400, 550, 'blue', 0); // create bug before cannon so it's hidden under cannon
+        }
         this.add.text(250, 25, 'LEADERBOARD', { fontFamily: 'Rubik Moonrocks', fontSize: '36px', fill: '#00ffff' }); 
         let x = 300;
         let y = 75;
