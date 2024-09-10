@@ -15,6 +15,7 @@ class Level1 extends Phaser.Scene {
         }
     }
     create() {
+        console.log(window.location.href);
         if (!this.scene.manager.getScene('CheckScore') && !this.scene.manager.getScene('Level2')) {
             console.log('CheckScore scene added');
             this.scene.add('CheckScore', CheckScore);
@@ -227,7 +228,7 @@ class Level1 extends Phaser.Scene {
                 this.sound.mute = true;
                 this.physics.pause();
                 this.bug.setFrame(0);
-                this.bonusText = this.add.text(350, 200, '5 BONUS H3!', { fontFamily: 'Concert One', fontSize: '50px', fill: '#00ffff' }); 
+                this.bonusText = this.add.text(325, 225, '5 BONUS H3!', { fontFamily: 'Concert One', fontSize: '50px', fill: '#00ffff' }); 
                 this.winText.setText('Level ' + this.level + ' Clear!');
                 this.averageText.setText('Average: ' + this.score);
                 this.bug.setTint(0x00ff00);
