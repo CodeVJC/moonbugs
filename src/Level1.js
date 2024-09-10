@@ -228,7 +228,7 @@ class Level1 extends Phaser.Scene {
                 this.sound.mute = true;
                 this.physics.pause();
                 this.bug.setFrame(0);
-                this.bonusText = this.add.text(325, 225, '5 BONUS H3!', { fontFamily: 'Concert One', fontSize: '50px', fill: '#00ffff' }); 
+                this.bonusText = this.add.text(250, 250, '5 BONUS H3!', { fontFamily: 'Concert One', fontSize: '50px', fill: '#00ffff' }); 
                 this.winText.setText('Level ' + this.level + ' Clear!');
                 this.averageText.setText('Average: ' + this.score);
                 this.bug.setTint(0x00ff00);
