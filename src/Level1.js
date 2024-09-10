@@ -227,14 +227,14 @@ class Level1 extends Phaser.Scene {
                 this.sound.mute = true;
                 this.physics.pause();
                 this.bug.setFrame(0);
-                this.bonusText = this.add.text(this.sys.game.scale.width / 2, 150, '5 BONUS H3!', { fontFamily: 'Concert One', fontSize: '50px', fill: '#00ffff' }); 
+                this.bonusText = this.add.text(350, 200, '5 BONUS H3!', { fontFamily: 'Concert One', fontSize: '50px', fill: '#00ffff' }); 
                 this.winText.setText('Level ' + this.level + ' Clear!');
                 this.averageText.setText('Average: ' + this.score);
                 this.bug.setTint(0x00ff00);
                 this.time.delayedCall(4000, () => {
                     this.scene.start('Level2', { bugColor: this.bugColor, cumulativeScore: this.score, levels: 1 }); // start next level after delay
                 });
-            } else if (this.attempt < 3) {
+            } else if (this.attempt < 10) {
                 this.canCollect = false; // don't allow collection of h3 until following next launch
                 // reset bug and cannon
                 this.bug.setPosition(50, 550);
