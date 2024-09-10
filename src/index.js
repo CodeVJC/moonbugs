@@ -1,6 +1,6 @@
 import Preload from "./Preload.js";
 const allowedUrl = 'https://codevjc.github.io/moonbugs/';
-
+console.log(window.location.href);
 if (window.location.href === allowedUrl) {
     // Load WebFontLoader
     WebFont.load({
