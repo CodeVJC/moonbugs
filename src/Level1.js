@@ -75,6 +75,7 @@ class Level1 extends Phaser.Scene {
         this.winText.setOrigin(0.5);
         this.averageText = this.add.text(this.sys.game.scale.width / 2, 350, '', { fontFamily: 'Concert One', fontSize: '50px', fill: '#00ffff' });
         this.averageText.setOrigin(0.5);
+        this.totalText = this.add.text(750, 550, this.score, { fontFamily: 'Concert One', fontSize: '24px', fill: '#00ffff' }); 
 
         // create h3 molecules
         this.h3 = this.physics.add.group();
@@ -271,6 +272,7 @@ class Level1 extends Phaser.Scene {
         this.scoreBar.fillStyle(0x00ffff, 1);
         this.scoreBar.fillRect(515, 8, this.scoreFill, 20); // length of bar is determined by score
         this.scoreText.setText(this.score + '/25');
+        this.totalText.setText(this.score);
         if (this.score == 20) {
             this.cutoff.visible = false;
             this.requiredText.visible = false;
