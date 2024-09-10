@@ -72,12 +72,13 @@ class Level1 extends Phaser.Scene {
         this.requiredText = this.add.text(340, 5, '20 to Clear', { fontFamily: 'Concert One', fontSize: '24px', fill: '#ff0000', fontStyle: 'bold' });
         this.scoreText = this.add.text(720, 5, this.score + '/25', { fontFamily: 'Concert One', fontSize: '24px', fill: '#00ffff' });
         this.welcomeText = this.add.text(10, 5, 'Level ' + this.level + ', ', { fontFamily: 'Concert One', fontSize: '24px', fill: '#00ffff' });  
+        this.bonusText = this.add.text(this.sys.game.scale.width / 2, 250, '', { fontFamily: 'Concert One', fontSize: '50px', fill: '#00ffff' }); 
+        this.bonusText.setOrigin(0.5);
         this.winText = this.add.text(this.sys.game.scale.width / 2, this.sys.game.scale.height / 2, '', { fontFamily: 'Concert One', fontSize: '50px', fill: '#00ffff' });
         this.winText.setOrigin(0.5);
         this.averageText = this.add.text(this.sys.game.scale.width / 2, 350, '', { fontFamily: 'Concert One', fontSize: '50px', fill: '#00ffff' });
         this.averageText.setOrigin(0.5);
         this.totalText = this.add.text(750, 550, this.score, { fontFamily: 'Concert One', fontSize: '24px', fill: '#00ffff' }); 
-        this.bonusText = this.add.text(250, 150, '', { fontFamily: 'Concert One', fontSize: '50px', fill: '#00ffff' }); 
 
         // create h3 molecules
         this.h3 = this.physics.add.group();
