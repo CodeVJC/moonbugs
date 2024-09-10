@@ -1,7 +1,7 @@
 import Leaderboard from "./Leaderboard.js";
 import AddName from "./AddName.js";
-import { getFirestore, deleteDoc, addDoc, getDocs, collection, orderBy, limit, query, doc } from 'https://www.gstatic.com/firebasejs/10.13/firebase-firestore.js';
-import { app, db, leadersRef } from './firebaseConfig.js';
+import { addDoc } from 'https://www.gstatic.com/firebasejs/10.13/firebase-firestore.js';
+import { leadersRef } from './firebaseConfig.js';
 
 class HighScore extends Phaser.Scene {
     constructor () {

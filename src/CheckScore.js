@@ -1,7 +1,7 @@
 import HighScore from "./HighScore.js";
 import GameOver from "./GameOver.js";
-import { getFirestore, deleteDoc, addDoc, getDocs, collection, orderBy, limit, query, doc } from 'https://www.gstatic.com/firebasejs/10.13/firebase-firestore.js';
-import { app, db, leadersRef } from './firebaseConfig.js';
+import { deleteDoc, getDocs, orderBy, limit, query, doc } from 'https://www.gstatic.com/firebasejs/10.13/firebase-firestore.js';
+import { db, leadersRef } from './firebaseConfig.js';
 
 class CheckScore extends Phaser.Scene {
     constructor() {
