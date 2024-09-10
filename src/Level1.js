@@ -222,7 +222,19 @@ class Level1 extends Phaser.Scene {
         // check if bug's touching a bottom surface with no horizontal velocity
         // and prevent glitch where touching h3 fulfills those conditions before this.canCollect is set to true
         if (this.bug.body.blocked.down && this.bug.body.velocity.x === 0 && this.canCollect == true) {
-            if (this.attempt < 3) {
+            if (this.score == 25) {
+                this.score += 5;
+                this.sound.mute = true;
+                this.physics.pause();
+                this.bug.setFrame(0);
+                this.bonusText = this.add.text(this.sys.game.scale.width / 2, 150, '5 BONUS H3!', { fontFamily: 'Concert One', fontSize: '50px', fill: '#00ffff' }); 
+                this.winText.setText('Level ' + this.level + ' Clear!');
+                this.averageText.setText('Average: ' + this.score);
+                this.bug.setTint(0x00ff00);
+                this.time.delayedCall(4000, () => {
+                    this.scene.start('Level2', { bugColor: this.bugColor, cumulativeScore: this.score, levels: 1 }); // start next level after delay
+                });
+            } else if (this.attempt < 3) {
                 this.canCollect = false; // don't allow collection of h3 until following next launch
                 // reset bug and cannon
                 this.bug.setPosition(50, 550);
