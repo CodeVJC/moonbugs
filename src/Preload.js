@@ -31,8 +31,10 @@ class Preload extends Phaser.Scene {
         }
         this.add.image(400, 300, 'moonscape');
         this.h3 = this.physics.add.group();
-        this.h3.create(100, 300, 'h3');
-        this.h3Explainer = this.add.text(120, 290, `= Collect H-3 to win! Maintain an average of 20 per level.`, { fontFamily: 'Concert One', fontSize: '24px', fill: '#fff' });
+        this.h3.create(100, 250, 'h3');
+        this.h3Explainer = this.add.text(120, 240, `= Collect H-3 to win! Maintain an average of 20 per level.`, { fontFamily: 'Concert One', fontSize: '24px', fill: '#fff' });
+        this.bonusExplainer = this.add.text(142, 265, `Collect all 25 on any level for 3 bonus H-3.`, { fontFamily: 'Concert One', fontSize: '24px', fill: '#fff' });
+        this.bonusExplainer2 = this.add.text(142, 290, `10 bonus H-3 for winning the game.`, { fontFamily: 'Concert One', fontSize: '24px', fill: '#fff' });
         this.star = this.physics.add.staticSprite(100, 340, 'star');
         this.starExplainer = this.add.text(120, 330, '= Star, +1 attempts', { fontFamily: 'Concert One', fontSize: '24px', fill: '#fff' });
         this.spiralGalaxy = this.physics.add.staticSprite(130, 380, 'spiral_galaxy');
@@ -41,10 +43,10 @@ class Preload extends Phaser.Scene {
         this.blackHoleExplainer = this.add.text(180, 420, '= Black hole! Game Over', { fontFamily: 'Concert One', fontSize: '24px', fill: '#fff' });
         this.satellite1 = this.physics.add.staticSprite(155, 480, 'satellite', 0);
         this.satellite1Explainer = this.add.text(220, 470, `= Satellite, rebound in direction of arrow`, { fontFamily: 'Concert One', fontSize: '24px', fill: '#fff' });
-        this.welcomeText = this.add.text(190, 150, 'MOONBUGS', { fontFamily: 'Rubik Moonrocks', fontSize: '70px', fill: '#00ffff'});
+        this.welcomeText = this.add.text(190, 100, 'MOONBUGS', { fontFamily: 'Rubik Moonrocks', fontSize: '70px', fill: '#00ffff'});
 
         // create clickable button
-        this.nextLevelButton = this.add.text(350, 230, 'Start', { fontFamily: 'Rubik Moonrocks', fontSize: '36px', fill: '#0f0', backgroundColor: 'black'})
+        this.nextLevelButton = this.add.text(350, 180, 'Start', { fontFamily: 'Rubik Moonrocks', fontSize: '36px', fill: '#0f0', backgroundColor: 'black'})
             .setInteractive()
             .on('pointerdown', () => {
                 this.nextLevelButton.setScale(0.8);
