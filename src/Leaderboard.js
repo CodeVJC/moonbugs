@@ -11,10 +11,17 @@ class Leaderboard extends Phaser.Scene {
             this.bugColor = 'blue';
         }
         this.leadersReady = data.leadersList;
+        if (data.levels) {
+            this.levels = data.levels;
+        }
         this.level = data.level;
         this.specialIndex = data.specialIndex;
     }
     create() {
+        if (this.levels == 7) {
+            this.congratsText = this.add.text(this.sys.game.scale.width / 2, 550, 'CONGRATS!', { fontFamily: 'Rubik Moonrocks', fontSize: '50px', fill: '#ffff00', fontStyle: 'bold' });
+            this.congratsText.setOrigin(0.5);
+        }
         this.add.image(400, 300, 'moonscape');
         if (this.bugColor == 'red') {
             this.bug = this.physics.add.sprite(400, 550, 'red', 0); // create bug before cannon so it's hidden under cannon

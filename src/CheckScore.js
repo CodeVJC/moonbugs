@@ -1,6 +1,6 @@
 import HighScore from "./HighScore.js";
 import GameOver from "./GameOver.js";
-import { deleteDoc, getDocs, orderBy, limit, query, doc } from 'https://www.gstatic.com/firebasejs/10.13/firebase-firestore.js';
+import { deleteDoc, getDocs, orderBy, limit, query, doc } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js';
 import { db, leadersRef } from './firebaseConfig.js';
 
 class CheckScore extends Phaser.Scene {
@@ -16,12 +16,10 @@ class CheckScore extends Phaser.Scene {
             this.bugColor = 'blue';
         }
         this.runningTotal = data.cumulativeScore;
-        this.level = data.level;
-        if (data.outcome) {
-            this.outcome = 'won';
-        } else {
-            this.outcome = '';
+        if (data.levels) {
+            this.levels = data.levels;
         }
+        this.level = data.level;
     }
     create() {
         console.log('arrived at CheckScore scene');
@@ -71,9 +69,9 @@ class CheckScore extends Phaser.Scene {
                 this.leaderboard.pop();
                 await deleteDoc(doc(db, "leaderboard", this.forDeletion));
             }
-            this.scene.start('HighScore', { leaders: this.leaderboard, bugColor: this.bugColor, cumulativeScore: this.runningTotal, leaders: this.leaderboard, outcome: this.outcome, level: this.level });
+            this.scene.start('HighScore', { leaders: this.leaderboard, bugColor: this.bugColor, cumulativeScore: this.runningTotal, leaders: this.leaderboard, levels: this.levels, level: this.level });
         } else {
-            this.scene.start('GameOver', { bugColor: this.bugColor, outcome: this.outcome, level: this.level });
+            this.scene.start('GameOver', { bugColor: this.bugColor, levels: this.levels, level: this.level });
         }
     }
 }

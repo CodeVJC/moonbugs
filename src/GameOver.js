@@ -10,10 +10,10 @@ class GameOver extends Phaser.Scene {
         } else {
             this.bugColor = 'blue';
         }
-        this.level = data.level;
-        if (data.outcome == 'won') {
-            this.outcome = 'won';
+        if (data.levels) {
+            this.levels = data.levels;
         }
+        this.level = data.level;
     }
     create() {
         this.add.image(400, 300, 'moonscape');
@@ -24,9 +24,9 @@ class GameOver extends Phaser.Scene {
         } else {
             this.bug = this.physics.add.sprite(400, 550, 'blue', 0); // create bug before cannon so it's hidden under cannon
         }
-        if (this.outcome == 'won') {
-            this.gameOverText = this.add.text(this.sys.game.scale.width / 2, this.sys.game.scale.height / 2, 'YOU WON!', { fontFamily: 'Rubik Moonrocks', fontSize: '50px', fill: '#00ffff' });
-            this.gameOverText.setOrigin(0.5);
+        if (this.levels == 7) {
+            this.congratsText = this.add.text(this.sys.game.scale.width / 2, this.sys.game.scale.height / 2, 'CONGRATS!', { fontFamily: 'Rubik Moonrocks', fontSize: '50px', fill: '#ffff00', fontStyle: 'bold' });
+            this.congratsText.setOrigin(0.5);
         } else {
             this.gameOverText = this.add.text(this.sys.game.scale.width / 2, this.sys.game.scale.height / 2, 'GAMEOVER', { fontFamily: 'Rubik Moonrocks', fontSize: '50px', fill: '#00ffff' });
             this.gameOverText.setOrigin(0.5);

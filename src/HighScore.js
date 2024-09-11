@@ -1,6 +1,6 @@
 import Leaderboard from "./Leaderboard.js";
 import AddName from "./AddName.js";
-import { addDoc } from 'https://www.gstatic.com/firebasejs/10.13/firebase-firestore.js';
+import { addDoc } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js';
 import { leadersRef } from './firebaseConfig.js';
 
 class HighScore extends Phaser.Scene {
@@ -18,8 +18,8 @@ class HighScore extends Phaser.Scene {
         }
         this.runningTotal = data.cumulativeScore;
         this.leadersPrepped = data.leaders;
-        if (data.outcome) {
-            this.outcome = 'won';
+        if (data.levels) {
+            this.levels = data.levels;
         }
         this.level = data.level;
     }
@@ -71,7 +71,7 @@ class HighScore extends Phaser.Scene {
                 break;
             }
         }
-        this.scene.start('Leaderboard', { bugColor: this.bugColor, leadersList: this.leadersPrepped, level: this.level, specialIndex: this.specialIndex } );
+        this.scene.start('Leaderboard', { bugColor: this.bugColor, leadersList: this.leadersPrepped, levels: this.levels, level: this.level, specialIndex: this.specialIndex } );
     }
     updateName(name) {
         this.username.setText(name);

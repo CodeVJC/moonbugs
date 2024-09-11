@@ -77,33 +77,36 @@ class Level5 extends Phaser.Scene {
 
         this.scoreBar = this.add.graphics(); // create score bar
         this.scoreBar.fillStyle(0x00ffff, 1);
-        this.scoreBar.fillRect(515, 8, 0, 20);
+        this.scoreBar.fillRect(530, 8, 0, 20);
 
         this.scoreBarBorder = this.add.graphics(); // create score bar border
         this.scoreBarBorder.lineStyle(2, 0x00ffff, 1);
-        this.scoreBarBorder.strokeRect(515, 8, 200, 20);
+        this.scoreBarBorder.strokeRect(530, 8, 200, 20);
 
         this.cutoff = this.add.graphics();
         this.cutoff.lineStyle(4, 0xff0000);
         this.cutoff.beginPath();
-        this.cutoff.moveTo(515 + this.needed * 8, 9);
-        this.cutoff.lineTo(515 + this.needed * 8, 27);
+        this.cutoff.moveTo(530 + this.needed * 8, 9);
+        this.cutoff.lineTo(530 + this.needed * 8, 27);
         this.cutoff.closePath();
         this.cutoff.strokePath();
 
         // add text objects
         this.attemptText = this.add.text(100, 5, 'Attempt ' + this.attempt + '/3', { fontFamily: 'Concert One', fontSize: '24px', fill: '#00ffff' }); 
         if (this.runningTotal != 0) {
-            this.requiredText = this.add.text(340, 5, this.needed + ' to Clear', { fontFamily: 'Concert One', fontSize: '24px', fill: '#ff0000', fontStyle: 'bold' }); 
+            this.requiredText = this.add.text(405, 5, this.needed + ' to Clear', { fontFamily: 'Concert One', fontSize: '24px', fill: '#ff0000' }); 
         } else {
-            this.requiredText = this.add.text(340, 5, '20 to Clear', { fontFamily: 'Concert One', fontSize: '24px', fill: '#ff0000', fontStyle: 'bold' });
+            this.requiredText = this.add.text(405, 5, '20 to Clear', { fontFamily: 'Concert One', fontSize: '24px', fill: '#ff0000' });
         }
-        this.scoreText = this.add.text(720, 5, this.score + '/25', { fontFamily: 'Concert One', fontSize: '24px', fill: '#00ffff' });
-        this.welcomeText = this.add.text(10, 5, 'Level ' + this.level + ', ', { fontFamily: 'Concert One', fontSize: '24px', fill: '#00ffff' }); 
+        this.scoreText = this.add.text(735, 5, this.score + '/25', { fontFamily: 'Concert One', fontSize: '24px', fill: '#00ffff' });
+        this.welcomeText = this.add.text(6, 5, 'Level ' + this.level + ', ', { fontFamily: 'Concert One', fontSize: '24px', fill: '#00ffff' }); 
+        this.bonusText = this.add.text(this.sys.game.scale.width / 2, 250, '', { fontFamily: 'Concert One', fontSize: '50px', fill: '#00ffff' }); 
+        this.bonusText.setOrigin(0.5);
         this.winText = this.add.text(this.sys.game.scale.width / 2, this.sys.game.scale.height / 2, '', { fontFamily: 'Concert One', fontSize: '50px', fill: '#00ffff' });
         this.winText.setOrigin(0.5);
         this.averageText = this.add.text(this.sys.game.scale.width / 2, 350, '', { fontFamily: 'Concert One', fontSize: '50px', fill: '#00ffff' });
         this.averageText.setOrigin(0.5);
+        this.totalText = this.add.text(245, 5, 'Total H3: ' + this.runningTotal, { fontFamily: 'Concert One', fontSize: '24px', fill: '#ffff00' }); 
 
         // create h3 molecules
         this.h3 = this.physics.add.group();
@@ -270,7 +273,19 @@ class Level5 extends Phaser.Scene {
         // check if bug's touching a bottom surface with no horizontal velocity
         // and prevent glitch where touching h3 fulfills those conditions before this.canCollect is set to true
         if (this.bug.body.blocked.down && this.bug.body.velocity.x === 0 && this.canCollect == true) {
-            if (this.attempt < 3) {
+            if (this.score == 25) {
+                this.score += 3;
+                this.sound.mute = true;
+                this.physics.pause();
+                this.bug.setFrame(0);
+                this.bonusText.setText('3 BONUS H3!'); 
+                this.winText.setText('Level ' + this.level + ' Clear!');
+                this.averageText.setText('Average: ' + ( Math.round( ((this.score + this.runningTotal) / (this.levels + 1)) * 10 ) /10 ));
+                this.bug.setTint(0x00ff00);
+                this.time.delayedCall(4000, () => {
+                    this.scene.start('Level6', { bugColor: this.bugColor, cumulativeScore: this.score + this.runningTotal, levels: this.levels + 1 }); // start next level after delay
+                });
+            } else if (this.attempt < 3) {
                 this.canCollect = false; // don't allow collection of h3 until following next launch
                 this.colliderAsteroid.active = false; // don't allow collisions with asteroids until next launch
 
@@ -320,12 +335,13 @@ class Level5 extends Phaser.Scene {
         this.scoreFill += 8;
         this.scoreBar.clear();
         this.scoreBar.fillStyle(0x00ffff, 1);
-        this.scoreBar.fillRect(515, 8, this.scoreFill, 20); // length of bar is determined by score
+        this.scoreBar.fillRect(530, 8, this.scoreFill, 20); // length of bar is determined by score
         this.scoreText.setText(this.score + '/25');
+        this.totalText.setText('Total H3: ' + (this.runningTotal + this.score));
         if (this.score == this.needed) {
             this.cutoff.visible = false;
             this.requiredText.visible = false;
-            this.clearText = this.add.text(360, 5, 'CLEAR!', { fontFamily: 'Concert One', fontSize: '24px', fill: '#00ffff', fontStyle: 'bold' });
+            this.clearText = this.add.text(450, 5, 'CLEAR!', { fontFamily: 'Concert One', fontSize: '24px', fill: '#00ffff' });
         }
     }
     hitStar(bug, star) {
