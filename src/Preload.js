@@ -51,7 +51,7 @@ class Preload extends Phaser.Scene {
             .on('pointerdown', () => {
                 this.nextLevelButton.setScale(0.8);
                 this.nextLevelButton.setX(360);
-                this.nextLevelButton.setY(240);
+                this.nextLevelButton.setY(190);
                 this.time.delayedCall(200, () => {
                     this.scene.start('ChoosePlayer')
                 })
