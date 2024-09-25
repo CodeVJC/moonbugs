@@ -56,12 +56,12 @@ class Preload extends Phaser.Scene {
                     this.scene.start('ChoosePlayer')
                 })
             });
-        this.input.on('gameobjectover', (pointer, nextLevelButton) => {
-            nextLevelButton.setStyle({ fill: '#f00' });
+        this.input.on('gameobjectover', (pointer, button) => {
+            button.setStyle({ fill: '#f00' });
             document.body.style.cursor = 'pointer';
         });
-        this.input.on('gameobjectout', (pointer, nextLevelButton) => {
-            nextLevelButton.setStyle({ fill: '#0f0' });
+        this.input.on('gameobjectout', (pointer, button) => {
+            button.setStyle({ fill: '#0f0' });
             document.body.style.cursor = 'default';
         });
     }

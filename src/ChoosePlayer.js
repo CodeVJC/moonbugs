@@ -52,30 +52,6 @@ class ChoosePlayer extends Phaser.Scene {
             });
         this.welcomeText = this.add.text(180, 150, 'Choose Your Bug', { fontFamily: 'Rubik Moonrocks', fontSize: '50px', fill: '#fff'});
 
-        this.input.on('gameobjectover', (pointer, bugRed) => {
-            bugRed.setTint(0x00ff00);
-            document.body.style.cursor = 'pointer';
-        });
-        this.input.on('gameobjectout', (pointer, bugRed) => {
-            bugRed.clearTint();
-            document.body.style.cursor = 'default';
-        });
-        this.input.on('gameobjectover', (pointer, bugYellow) => {
-            bugYellow.setTint(0x00ff00);
-            document.body.style.cursor = 'pointer';
-        });
-        this.input.on('gameobjectout', (pointer, bugYellow) => {
-            bugYellow.clearTint();
-            document.body.style.cursor = 'default';
-        });
-        this.input.on('gameobjectover', (pointer, bugBlue) => {
-            bugBlue.setTint(0x00ff00);
-            document.body.style.cursor = 'pointer';
-        });
-        this.input.on('gameobjectout', (pointer, bugBlue) => {
-            bugBlue.clearTint();
-            document.body.style.cursor = 'default';
-        });
         // create clickable button
         this.skipAheadButton = this.add.text(300, 400, 'Try Level 8', { fontFamily: 'Rubik Moonrocks', fontSize: '36px', fill: '#0f0', backgroundColor: 'black'})
             .setInteractive()
@@ -87,14 +63,20 @@ class ChoosePlayer extends Phaser.Scene {
                     this.scene.start('Level8', { cumulativeScore: 0, bugColor: 'blue' })
                 })
             });
-        this.input.on('gameobjectover', (pointer, skipAheadButton) => {
-            skipAheadButton.clearTint();
-            skipAheadButton.setStyle({ fill: '#00f' });
+        this.input.on('gameobjectover', (pointer, object) => {
+            if (object.type == 'Sprite') {
+                object.setTint(0x00ff00);
+            } else {
+                object.setStyle({ fill: '#00f' });
+            }
             document.body.style.cursor = 'pointer';
         });
-        this.input.on('gameobjectout', (pointer, skipAheadButton) => {
-            skipAheadButton.clearTint();
-            skipAheadButton.setStyle({ fill: '#0f0' });
+        this.input.on('gameobjectout', (pointer, object) => {
+            if (object.type == 'Sprite') {
+                object.clearTint();
+            } else {
+                object.setStyle({ fill: '#0f0' });
+            }
             document.body.style.cursor = 'default';
         });
     }
