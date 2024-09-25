@@ -1,8 +1,8 @@
-import Level8 from "./Level8.js";
+import CheckScore from "./CheckScore.js";
 
-class Level7 extends Phaser.Scene {
+class Level8 extends Phaser.Scene {
     constructor() {
-        super({ key: 'Level7' });
+        super({ key: 'Level8' });
     }
     init (data) {
         if (data.bugColor == 'red') {
@@ -21,8 +21,8 @@ class Level7 extends Phaser.Scene {
         }
     }
     create() {
-        if (!this.scene.manager.getScene('Level8')) {
-            this.scene.add('Level8', Level8);
+        if (!this.scene.manager.getScene('CheckScore')) {
+            this.scene.add('CheckScore', CheckScore);
         }
         this.transitionToCheckScore = false;
         this.sound.mute = false;
@@ -30,7 +30,7 @@ class Level7 extends Phaser.Scene {
         this.needed = this.calcRequiredScore(this.runningTotal, this.levels);
         this.attempt = 1;
         this.score = 0;
-        this.level = 7;
+        this.level = 8;
         this.scoreFill = 0;
         this.scoreExtra = 0;
         this.canLaunch = true;
@@ -40,29 +40,26 @@ class Level7 extends Phaser.Scene {
         this.add.image(400, 300, 'moonscape');
 
         // create spiral galaxy
-        this.spiralGalaxy = this.physics.add.staticSprite(66, 50, 'spiral_galaxy');
+        this.spiralGalaxy = this.physics.add.staticSprite(333, 450, 'spiral_galaxy');
         // create star   
-        this.star = this.physics.add.staticSprite(600, 150, 'star');
-        // create black hole   
-        this.blackHole = this.physics.add.staticSprite(333, 450, 'black_hole');
+        this.star = this.physics.add.staticSprite(733, 450, 'star');
         // create asteroids
         this.asteroid = this.physics.add.staticGroup();
-        this.asteroid.create(733, 50, 'asteroid');
-        this.asteroid.create(200, 250, 'asteroid');
-        this.asteroid.create(466, 150, 'asteroid');
-        this.asteroid.create(600, 550, 'asteroid');
+        this.asteroid.create(466, 50, 'asteroid');
+        this.asteroid.create(600, 250, 'asteroid');
+        this.asteroid.create(733, 150, 'asteroid');
+        this.asteroid.create(200, 500, 'asteroid');
         // create satellites
-        this.satellite1 = this.physics.add.staticSprite(733, 550, 'satellite', 0);
-        this.satellite2 = this.physics.add.staticSprite(333, 50, 'satellite', 2);
-        this.satellite3 = this.physics.add.staticSprite(600, 250, 'satellite', 3);
+        this.satellite1 = this.physics.add.staticSprite(75, 250, 'satellite', 3);
+        this.satellite2 = this.physics.add.staticSprite(733, 50, 'satellite', 2);
         // create horizontal barriers
         this.horizontal = this.physics.add.staticGroup();
+        this.horizontal.create(333, 150, 'horizontal');
         this.horizontal.create(266, 350, 'horizontal');
-        this.horizontal.create(533, 450, 'horizontal');
         // create vertical barriers
         this.vertical = this.physics.add.staticGroup();
-        this.vertical.create(333, 250, 'vertical');
         this.vertical.create(466, 350, 'vertical');
+        this.vertical.create(600, 400, 'vertical');
 
         if (this.bugColor == 'red') {
             this.bug = this.physics.add.sprite(50, 550, 'red', 0); // create bug before cannon so it's hidden under cannon
@@ -106,6 +103,7 @@ class Level7 extends Phaser.Scene {
         this.cutoff.strokePath();
 
         // add text objects
+        this.gravityText = this.add.text(170, 250, 'Gravity Inversion!', { fontFamily: 'Rubik Moonrocks', fontSize: '50px', fill: '#00ffff' });
         this.attemptText = this.add.text(100, 5, 'Attempt ' + this.attempt + '/3', { fontFamily: 'Concert One', fontSize: '24px', fill: '#00ffff' }); 
         if (this.runningTotal != 0) {
             this.requiredText = this.add.text(405, 5, this.needed + ' to Clear', { fontFamily: 'Concert One', fontSize: '24px', fill: '#ff0000' }); 
@@ -121,7 +119,9 @@ class Level7 extends Phaser.Scene {
         this.averageText = this.add.text(this.sys.game.scale.width / 2, 350, '', { fontFamily: 'Concert One', fontSize: '50px', fill: '#00ffff' });
         this.averageText.setOrigin(0.5);
         this.totalText = this.add.text(245, 5, 'Total H3: ' + this.runningTotal, { fontFamily: 'Concert One', fontSize: '24px', fill: '#ffff00' }); 
-
+        this.time.delayedCall(2000, () => {
+            this.gravityText.visible = false;
+        });
         // create h3 molecules
         this.h3 = this.physics.add.group();
         this.h3.create(133, 100, 'h3');
@@ -214,11 +214,9 @@ class Level7 extends Phaser.Scene {
             this.physics.add.overlap(this.bug, this.h3, this.collecth3, null, this);
             this.physics.add.overlap(this.bug, this.spiralGalaxy, this.hitSpiral, null, this);
             this.physics.add.overlap(this.bug, this.star, this.hitStar, null, this);
-            this.physics.add.overlap(this.bug, this.blackHole, this.hitBlackHole, null, this);
             // create overlaps between bug and satellites
             this.physics.add.overlap(this.bug, this.satellite1, this.hitSatellite, null, this);
             this.physics.add.overlap(this.bug, this.satellite2, this.hitSatellite, null, this);
-            this.physics.add.overlap(this.bug, this.satellite3, this.hitSatellite, null, this);
 
             this.time.delayedCall(750, () => {
                 this.cannon.setVisible(false);  // remove cannon after delay
@@ -268,7 +266,7 @@ class Level7 extends Phaser.Scene {
 
             this.bug.setFrame(0); // forward pose
             this.bug.setVelocity(velocity.x, velocity.y);
-            this.bug.body.gravity.y = 200;
+            this.bug.body.gravity.y = -200;
 
             this.canLaunch = false;  // can't launch bug again until it's reset back into cannon
         }, this);
@@ -286,7 +284,7 @@ class Level7 extends Phaser.Scene {
         }
 
         // apply more drag when bug's touching a bottom surface
-        if (this.bug.body.blocked.down) {
+        if (this.bug.body.blocked.up) {
             this.soundGround.play();
             this.bug.setDragX(1000);
         } else {
@@ -295,18 +293,24 @@ class Level7 extends Phaser.Scene {
 
         // check if bug's touching a bottom surface with no horizontal velocity
         // and prevent glitch where touching h3 fulfills those conditions before this.canCollect is set to true
-        if (this.bug.body.blocked.down && this.bug.body.velocity.x === 0 && this.canCollect == true) {
+        if (this.bug.body.blocked.up && this.bug.body.velocity.x === 0 && this.canCollect == true) {
             if (this.score == 25) {
-                this.score += 3;
                 this.sound.mute = true;
                 this.physics.pause();
                 this.bug.setFrame(0);
-                this.bonusText.setText('3 BONUS H3!'); 
-                this.winText.setText('Level ' + this.level + ' Clear!');
+                if (this.levels == 7) {
+                    this.score += 13;
+                    this.bonusText.setText('13 BONUS H3!'); 
+                    this.winText.setText('Level ' + this.level + ' Clear! YOU WON!');
+                } else {
+                    this.score += 3;
+                    this.bonusText.setText('3 BONUS H3!'); 
+                    this.winText.setText('Level ' + this.level + ' Clear!');
+                }
                 this.averageText.setText('Average: ' + ( Math.round( ((this.score + this.runningTotal) / (this.levels + 1)) * 10 ) /10 ));
                 this.bug.setTint(0x00ff00);
                 this.time.delayedCall(4000, () => {
-                    this.scene.start('Level8', { bugColor: this.bugColor, cumulativeScore: this.score + this.runningTotal, levels: this.levels + 1 }); // start next level after delay
+                    this.scene.start('CheckScore', { bugColor: this.bugColor, cumulativeScore: this.score + this.runningTotal, levels: this.levels + 1, level: 8 }); // start next level after delay
                 });
             } else if (this.attempt < 3) {
                 this.canCollect = false; // don't allow collection of h3 until following next launch
@@ -327,19 +331,29 @@ class Level7 extends Phaser.Scene {
                 this.physics.pause();
                 this.bug.setFrame(0);
                 if (this.score >= this.needed) { // check for winning level
-                    this.winText.setText('Level ' + this.level + ' Clear!');
+                    if (this.levels == 7) {
+                        this.score += 10;
+                        this.bonusText.setText('10 BONUS H3!'); 
+                        this.winText.setText('Level ' + this.level + ' Clear! YOU WON!');
+                    } else {
+                        this.winText.setText('Level ' + this.level + ' Clear!');
+                    }
                     this.averageText.setText('Average: ' + ( Math.round( ((this.score + this.runningTotal) / (this.levels + 1)) * 10 ) /10 ));
                     this.bug.setTint(0x00ff00);
-                    this.time.delayedCall(2000, () => {
-                        this.scene.start('Level8', { bugColor: this.bugColor, cumulativeScore: this.score + this.runningTotal, levels: this.levels + 1 }); // start next level after delay
+                    this.time.delayedCall(4000, () => {
+                        if (!this.transitionToCheckScore) {
+                            console.log('level 8 to CheckScore');
+                            this.transitionToCheckScore = true;
+                            this.scene.start('CheckScore', { bugColor: this.bugColor, cumulativeScore: this.score + this.runningTotal, levels: this.levels + 1, level: 8 }); // start next level after delay
+                        }
                     });
                 } else {
                     this.bug.setTint(0xaaffbb);
                     this.time.delayedCall(750, () => {
                         if (!this.transitionToCheckScore) {
-                            console.log('level 7 to CheckScore');
+                            console.log('level 8 to CheckScore');
                             this.transitionToCheckScore = true;
-                            this.scene.start('CheckScore', { bugColor: this.bugColor, cumulativeScore: this.score + this.runningTotal, level: 7 }); // start next level after delay
+                            this.scene.start('CheckScore', { bugColor: this.bugColor, cumulativeScore: this.score + this.runningTotal, level: 8 }); // start next level after delay
                         }
                     });
                 }
@@ -380,19 +394,6 @@ class Level7 extends Phaser.Scene {
         spiralGalaxy.disableBody(true, true);  // remove star
         this.attemptText.setText('Attempt ' + this.attempt + '/3');
     }
-    hitBlackHole(bug, blackHole) {
-        this.soundBlackHoleOrSpiral.play();
-        bug.setFrame(0);
-        bug.setTint(0xaaffbb);
-        this.physics.pause();
-        this.time.delayedCall(2000, () => {
-            if (!this.transitionToCheckScore) {
-                console.log('level 7 to CheckScore');
-                this.transitionToCheckScore = true;
-                this.scene.start('CheckScore', { bugColor: this.bugColor, cumulativeScore: this.score + this.runningTotal, level: 7 }); // start next level after delay
-            }
-        });
-    }
     hitSatellite(bug, satellite) { // handle overlap with satellite
         if (!this.canCollect) {
             return;
@@ -419,4 +420,4 @@ class Level7 extends Phaser.Scene {
     }
 }
 
-export default Level7;
+export default Level8;

@@ -1,4 +1,5 @@
 import Level1 from "./Level1.js";
+import Level8 from "./Level8.js";
 
 class ChoosePlayer extends Phaser.Scene {
     constructor() {
@@ -7,6 +8,9 @@ class ChoosePlayer extends Phaser.Scene {
     create() {
         if (!this.scene.manager.getScene('Level1')) {
             this.scene.add('Level1', Level1);
+        }
+        if (!this.scene.manager.getScene('Level8')) {
+            this.scene.add('Level8', Level8);
         }
         document.body.style.cursor = 'default';
         this.add.image(400, 300, 'moonscape');
@@ -70,6 +74,27 @@ class ChoosePlayer extends Phaser.Scene {
         });
         this.input.on('gameobjectout', (pointer, bugBlue) => {
             bugBlue.clearTint();
+            document.body.style.cursor = 'default';
+        });
+        // create clickable button
+        this.skipAheadButton = this.add.text(300, 400, 'Try Level 8', { fontFamily: 'Rubik Moonrocks', fontSize: '36px', fill: '#0f0', backgroundColor: 'black'})
+            .setInteractive()
+            .on('pointerdown', () => {
+                this.skipAheadButton.setScale(0.8);
+                this.skipAheadButton.setX(310);
+                this.skipAheadButton.setY(410);
+                this.time.delayedCall(200, () => {
+                    this.scene.start('Level8', { cumulativeScore: 0, bugColor: 'blue' })
+                })
+            });
+        this.input.on('gameobjectover', (pointer, skipAheadButton) => {
+            skipAheadButton.clearTint();
+            skipAheadButton.setStyle({ fill: '#00f' });
+            document.body.style.cursor = 'pointer';
+        });
+        this.input.on('gameobjectout', (pointer, skipAheadButton) => {
+            skipAheadButton.clearTint();
+            skipAheadButton.setStyle({ fill: '#0f0' });
             document.body.style.cursor = 'default';
         });
     }
