@@ -16,8 +16,12 @@ class Preload extends Phaser.Scene {
         this.load.image('black_hole', 'assets/black_hole.png');
         this.load.image('asteroid', 'assets/asteroid.png');
         this.load.spritesheet('satellite', 'assets/satellite.png', { frameWidth: 128, frameHeight: 111 });
-        this.load.image('horizontal', 'assets/horizontal.png');
-        this.load.image('vertical', 'assets/vertical.png');
+        this.load.image('horizontal', 'assets/horizontal_white.png');
+        this.load.image('horizontal_half', 'assets/horizontal_white_half.png');
+        this.load.image('horizontal_quarter', 'assets/horizontal_white_quarter.png');
+        this.load.image('vertical', 'assets/vertical_white.png');
+        this.load.image('vertical_half', 'assets/vertical_white_half.png');
+        this.load.image('vertical_quarter', 'assets/vertical_white_quarter.png');
         this.load.audio("soundSatellite", "assets/soundSatellite.mp3");
         this.load.audio("soundCannon", "assets/soundCannon.mp3");
         this.load.audio("soundBorder", "assets/soundBorder.mp3");
