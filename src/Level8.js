@@ -45,9 +45,10 @@ class Level8 extends Phaser.Scene {
 
         // create star   
         this.star = this.physics.add.staticGroup();
-        this.star.create(400, 150, 'star');
+        //this.star.create(400, 150, 'star');
         this.star.create(600, 400, 'star');
-
+        // create satellites
+        this.satellite1 = this.physics.add.staticSprite(400, 25, 'satellite', 3); // 733, 550
         // create horizontal barriers
         this.horizontal_quarter = this.physics.add.staticGroup();
         this.horizontal_quarter.create(200, 150, 'horizontal_quarter');
@@ -154,6 +155,11 @@ class Level8 extends Phaser.Scene {
         this.h3.create(533, 500, 'h3');
         this.h3.create(666, 500, 'h3');
 
+        this.soundSatellite = this.sound.add("soundSatellite", { 
+            volume: .9, 
+            loop: false 
+        });
+
         this.soundCannon = this.sound.add("soundCannon", { 
             volume: .7, 
             loop: false 
@@ -207,6 +213,8 @@ class Level8 extends Phaser.Scene {
             // add overlap checks between bug and other objects
             this.physics.add.overlap(this.bug, this.h3, this.collecth3, null, this);
             this.physics.add.overlap(this.bug, this.star, this.hitStar, null, this);
+            // create overlaps between bug and satellites
+            this.physics.add.overlap(this.bug, this.satellite1, this.hitSatellite, null, this);
 
             this.time.delayedCall(750, () => {
                 this.cannon.setVisible(false);  // remove cannon after delay
@@ -361,6 +369,23 @@ class Level8 extends Phaser.Scene {
         this.attempt -=1;
         star.disableBody(true, true);  // remove star
         this.attemptText.setText('Attempt ' + this.attempt + '/3');
+    }
+    hitSatellite(bug, satellite) { // handle overlap with satellite
+        if (!this.canCollect) {
+            return;
+        }
+        this.soundSatellite.play();
+        satellite.disableBody(true, true);  // remove satellite
+
+        if (satellite.frame.name == 0) { // satellite with up arrow
+            bug.body.velocity.y += -700;  // launch bug up
+        } else if (satellite.frame.name == 1) { // satellite with down arrow
+            bug.body.velocity.y += 700;  // launch bug down
+        } else if (satellite.frame.name == 2) { // satellite with left arrow
+            bug.body.velocity.x += -700;  // launch bug left
+        } else { // satellite with right arrow
+            bug.body.velocity.x += 700;  // launch bug right
+        }
     }
     calcRequiredScore(total, rounds) {
         for (let i=0; i<=25; i++) {
