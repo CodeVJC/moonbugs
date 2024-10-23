@@ -9,6 +9,7 @@ class Preload extends Phaser.Scene {
         this.load.spritesheet('red', 'assets/red.png', { frameWidth: 40, frameHeight: 37 });
         this.load.spritesheet('yellow', 'assets/yellow.png', { frameWidth: 40, frameHeight: 37 });
         this.load.spritesheet('blue', 'assets/blue.png', { frameWidth: 40, frameHeight: 37 });
+        this.load.spritesheet('green', 'assets/green.png', { frameWidth: 40, frameHeight: 37 });
         this.load.image('h3', 'assets/h3.png');
         this.load.spritesheet('cannon', 'assets/cannon.png', { frameWidth: 100, frameHeight: 57 });
         this.load.image('spiral_galaxy', 'assets/spiral_galaxy.png');

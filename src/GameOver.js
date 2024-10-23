@@ -7,6 +7,8 @@ class GameOver extends Phaser.Scene {
             this.bugColor = 'red';
         } else if (data.bugColor == 'yellow') {
             this.bugColor = 'yellow';
+        } else if (data.bugColor == 'green') {
+            this.bugColor = 'green';
         } else {
             this.bugColor = 'blue';
         }
@@ -21,6 +23,8 @@ class GameOver extends Phaser.Scene {
             this.bug = this.physics.add.sprite(400, 550, 'red', 0); // create bug before cannon so it's hidden under cannon
         } else if (this.bugColor == 'yellow') {
             this.bug = this.physics.add.sprite(400, 550, 'yellow', 0); // create bug before cannon so it's hidden under cannon
+        } else if (this.bugColor == 'green') {
+            this.bug = this.physics.add.sprite(400, 550, 'green', 0); // create bug before cannon so it's hidden under cannon
         } else {
             this.bug = this.physics.add.sprite(400, 550, 'blue', 0); // create bug before cannon so it's hidden under cannon
         }

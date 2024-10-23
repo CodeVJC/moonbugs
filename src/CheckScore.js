@@ -12,6 +12,8 @@ class CheckScore extends Phaser.Scene {
             this.bugColor = 'red';
         } else if (data.bugColor == 'yellow') {
             this.bugColor = 'yellow';
+        } else if (data.bugColor == 'green') {
+            this.bugColor = 'green';
         } else {
             this.bugColor = 'blue';
         }
