@@ -42,61 +42,59 @@ class Level9 extends Phaser.Scene {
         this.canLaunch = true;
         this.canCollect = false;
         this.distance = 0;
+        this.initial = true;
+        this.left = false;
 
         this.add.image(400, 300, 'moonscape');
+
+        // create asteroids
+        this.asteroid = this.physics.add.staticGroup();
+        this.asteroid.create(160, 150, 'asteroid');
+        this.asteroid.create(250, 450, 'asteroid');
+        this.asteroid.create(550, 350, 'asteroid');
+        this.asteroid.create(630, 150, 'asteroid');
 
         // create star   
         this.star = this.physics.add.staticGroup();
         //this.star.create(400, 150, 'star');
-        this.star.create(600, 400, 'star');
+        this.star.create(30, 350, 'star');
+        this.star.create(666, 350, 'star');
         // create satellites
-        this.satellite1 = this.physics.add.staticSprite(400, 25, 'satellite', 3); // 733, 550
-        // create horizontal barriers
-        this.horizontal_quarter = this.physics.add.staticGroup();
-        this.horizontal_quarter.create(200, 150, 'horizontal_quarter');
-        this.horizontal_quarter.create(266, 450, 'horizontal_quarter');
-        this.horizontal_quarter.create(600, 150, 'horizontal_quarter');
-        this.horizontal_quarter.create(533, 450, 'horizontal_quarter');
-        this.horizontal_quarter.create(400, 450, 'horizontal_quarter');
-        this.horizontal_quarter.create(666, 250, 'horizontal_quarter');
-        this.horizontal_half = this.physics.add.staticGroup();
-        this.horizontal_half.create(333, 250, 'horizontal_half');
-        this.horizontal_half.create(600, 350, 'horizontal_half');
-
+        //this.satellite1 = this.physics.add.staticSprite(400, 25, 'satellite', 3); // 733, 550
         // create vertical barriers
-        this.vertical_quarter = this.physics.add.staticGroup();
-        this.vertical_quarter.create(200, 250, 'vertical_quarter');
-        this.vertical_quarter.create(466, 350, 'vertical_quarter');
-        this.vertical_quarter.create(466, 150, 'vertical_quarter');
-        this.vertical_quarter.create(600, 250, 'vertical_quarter');
-        this.vertical_quarter.create(600, 500, 'vertical_quarter');
-        this.vertical_quarter.create(333, 350, 'vertical_quarter');
+        this.vertical = this.physics.add.staticGroup();
+        this.vertical.create(66, 325, 'vertical_long');
+        this.vertical.create(200, 325, 'vertical_long');
+        this.vertical.create(333, 325, 'vertical_long');
+        this.vertical.create(466, 325, 'vertical_long');
+        this.vertical.create(600, 325, 'vertical_long');
+        this.vertical.create(733, 325, 'vertical_long');
 
         if (this.bugColor == 'red') {
-            this.bug = this.physics.add.sprite(50, 550, 'red', 0); // create bug before cannon so it's hidden under cannon
+            this.bug = this.physics.add.sprite(20, 0, 'red', 2); // create bug before cannon so it's hidden under cannon
         } else if (this.bugColor == 'yellow') {
-            this.bug = this.physics.add.sprite(50, 550, 'yellow', 0); // create bug before cannon so it's hidden under cannon
+            this.bug = this.physics.add.sprite(20, 0, 'yellow', 2); // create bug before cannon so it's hidden under cannon
         } else if (this.bugColor == 'green') {
-            this.bug = this.physics.add.sprite(50, 550, 'green', 0); // create bug before cannon so it's hidden under cannon
+            this.bug = this.physics.add.sprite(20, 0, 'green', 2); // create bug before cannon so it's hidden under cannon
         } else {
-            this.bug = this.physics.add.sprite(50, 550, 'blue', 0); // create bug before cannon so it's hidden under cannon
+            this.bug = this.physics.add.sprite(20, 0, 'blue', 2); // create bug before cannon so it's hidden under cannon
         }
         this.bug.setCollideWorldBounds(true); // stay within boundaries of game   
         this.bug.setVelocity(0, 0);
         this.bug.setBounce(.7);
         this.bug.setDrag(.2);
         this.bug.body.gravity.y = 0;
+        this.bug.setVisible(false);
 
-        this.cannon = this.physics.add.sprite(this.bug.x, this.bug.y, 'cannon');  // create cannon
-        this.cannon.setOrigin(0.5, 0.5);  // set rotation axis to center
+        this.cannon = this.physics.add.sprite(this.bug.x, this.bug.y, 'cannonPlinko');  // create cannon
+
+        // add collision check between bug and asteroid and de-activate them until launch
+        this.colliderAsteroid = this.physics.add.collider(this.bug, this.asteroid);
+        this.colliderAsteroid.active = false;
 
         // add collision check between bug and horizontals and verticals and de-activate them until launch
-        this.colliderHorizontalquarter = this.physics.add.collider(this.bug, this.horizontal_quarter);
-        this.colliderHorizontalhalf = this.physics.add.collider(this.bug, this.horizontal_half);
-        this.colliderVerticalquarter = this.physics.add.collider(this.bug, this.vertical_quarter);
-        this.colliderHorizontalquarter.active = false;
-        this.colliderHorizontalhalf.active = false;
-        this.colliderVerticalquarter.active = false;
+        this.colliderVertical = this.physics.add.collider(this.bug, this.vertical);
+        this.colliderVertical.active = false;
 
         this.scoreBar = this.add.graphics(); // create score bar
         this.scoreBar.fillStyle(0x00ffff, 1);
@@ -115,7 +113,7 @@ class Level9 extends Phaser.Scene {
         this.cutoff.strokePath();
 
         // add text objects
-        this.plinkoText = this.add.text(280, 250, 'Plinko!', { fontFamily: 'Rubik Moonrocks', fontSize: '50px', fill: '#00ffff' });
+        this.plinkoText = this.add.text(255, 250, 'Plinko!', { fontFamily: 'Rubik Moonrocks', fontSize: '75px', fill: '#00ffff' });
         this.time.delayedCall(2000, () => {
             this.plinkoText.visible = false;
         });
@@ -135,6 +133,12 @@ class Level9 extends Phaser.Scene {
         this.averageText.setOrigin(0.5);
         this.totalText = this.add.text(245, 5, 'Total H3: ' + this.runningTotal, { fontFamily: 'Concert One', fontSize: '24px', fill: '#ffff00' }); 
 
+        // create h3 bundle
+        this.h3Bundle = this.physics.add.group();
+        this.h3Bundle.create(133, 200, 'h3_bundle');
+        this.h3Bundle.create(266, 500, 'h3_bundle');
+        this.h3Bundle.create(765, 140, 'h3_bundle');
+
         // create h3 molecules
         this.h3 = this.physics.add.group();
         this.h3.create(133, 100, 'h3');
@@ -142,7 +146,7 @@ class Level9 extends Phaser.Scene {
         this.h3.create(400, 100, 'h3');
         this.h3.create(533, 100, 'h3');
         this.h3.create(666, 100, 'h3');
-        this.h3.create(133, 200, 'h3');
+        //this.h3.create(133, 200, 'h3');
         this.h3.create(266, 200, 'h3');
         this.h3.create(400, 200, 'h3');
         this.h3.create(533, 200, 'h3');
@@ -158,7 +162,7 @@ class Level9 extends Phaser.Scene {
         this.h3.create(533, 400, 'h3');
         this.h3.create(666, 400, 'h3');
         this.h3.create(133, 500, 'h3');
-        this.h3.create(266, 500, 'h3');
+        //this.h3.create(266, 500, 'h3');
         this.h3.create(400, 500, 'h3');
         this.h3.create(533, 500, 'h3');
         this.h3.create(666, 500, 'h3');
@@ -189,28 +193,38 @@ class Level9 extends Phaser.Scene {
         });
     }
     update() {
-        this.input.on('pointermove', function (pointer) { // pointer move event listener
-            const angle = Phaser.Math.Angle.Between(this.cannon.x, this.cannon.y, pointer.x, pointer.y);
-            this.cannon.setRotation(angle); // rotate cannon toward the pointer
-
-            // calculate distance between cannon and pointer
-            this.distance = Phaser.Math.Distance.Between(this.cannon.x, this.cannon.y, pointer.x, pointer.y);
-            if (this.distance <= 125) { // change cannon's color based on distance from pointer
-                this.cannon.setFrame(0);
-            } else if (this.distance <= 250) {
-                this.cannon.setFrame(1);
-            } else if (this.distance <= 375) {
-                this.cannon.setFrame(2);
-            } else if (this.distance <= 500) {
-                this.cannon.setFrame(3);
-            } else if (this.distance <= 625) {
-                this.cannon.setFrame(4);
-            } else if (this.distance <= 750) {
-                this.cannon.setFrame(5);
-            } else {
-                this.cannon.setFrame(6);
+        if (this.bug.body.blocked.left || this.initial == true) { // hits left surface or just started
+            this.left = false;
+            this.initial = false;
+            this.bug.setVelocityY(0);        
+            this.cannon.setVelocityY(0);
+            if (this.attempt == 1) {
+                this.bug.setVelocityX(500);        
+                this.cannon.setVelocityX(500);
+            } else if (this.attempt == 2) {
+                this.bug.setVelocityX(700);        
+                this.cannon.setVelocityX(700);
+            } else if (this.attempt == 3) {
+                this.bug.setVelocityX(900);        
+                this.cannon.setVelocityX(900);
             }
-        }, this);
+        }
+        if (this.bug.body.blocked.right) { // hits right surface
+            this.soundBorder.play();
+            this.left = true;
+            this.bug.setVelocityY(0);        
+            this.cannon.setVelocityY(0);
+            if (this.attempt == 1) {
+                this.bug.setVelocityX(-500);        
+                this.cannon.setVelocityX(-500);
+            } else if (this.attempt == 2) {
+                this.bug.setVelocityX(-700);        
+                this.cannon.setVelocityX(-700);
+            } else if (this.attempt == 3) {
+                this.bug.setVelocityX(-900);        
+                this.cannon.setVelocityX(-900);
+            }
+        }
 
         // pointer up event listener to launch bug in direction cannon is facing
         this.input.on('pointerup', function (pointer) {
@@ -218,76 +232,30 @@ class Level9 extends Phaser.Scene {
             if (!this.canLaunch) return;          
             this.soundCannon.play();
 
+            // stop cannon's movement
+            this.cannon.setVelocityX(0);
+            this.bug.setVelocityX(0);
+            // launch bug downward from cannon
+            this.bug.setVisible(true);
+            this.bug.setVelocityY(500);
+            this.bug.body.gravity.y = 1000;
             // add overlap checks between bug and other objects
             this.physics.add.overlap(this.bug, this.h3, this.collecth3, null, this);
+            this.physics.add.overlap(this.bug, this.h3Bundle, this.collecth3Bundle, null, this);
             this.physics.add.overlap(this.bug, this.star, this.hitStar, null, this);
             // create overlaps between bug and satellites
-            this.physics.add.overlap(this.bug, this.satellite1, this.hitSatellite, null, this);
+            //this.physics.add.overlap(this.bug, this.satellite1, this.hitSatellite, null, this);
 
-            this.time.delayedCall(750, () => {
+            this.time.delayedCall(1500, () => {
                 this.cannon.setVisible(false);  // remove cannon after delay
             });
 
-            // normalize distance to suitable range for speed
-            const minDistance = 0;  // min distance
-            const maxDistance = 800;  // max distance
-            const minSpeed = 200;  // min speed
-            const maxSpeed = 800;  // max speed
-            const speed = Phaser.Math.Percent(this.distance, minDistance, maxDistance) * (maxSpeed - minSpeed) + minSpeed;
-
-            // only access collecth3 logic after delay, to prevent collecting h3 while still inside cannon
-            // faster speeds will enable collection sooner, since bug leaves cannon sooner
-            if (speed < 300) {
-                this.time.delayedCall(200, () => {
-                    this.canCollect = true;
-                    this.colliderHorizontalquarter.active = true;
-                    this.colliderHorizontalhalf.active = true;
-                    this.colliderVerticalquarter.active = true;
-                });
-            } else if (speed < 400) {
-                this.time.delayedCall(100, () => {
-                    this.canCollect = true;
-                    this.colliderHorizontalquarter.active = true;
-                    this.colliderHorizontalhalf.active = true;
-                    this.colliderVerticalquarter.active = true;
-                });   
-            } else if (speed < 500) {
-                this.time.delayedCall(50, () => {
-                    this.canCollect = true;
-                    this.colliderHorizontalquarter.active = true;
-                    this.colliderHorizontalhalf.active = true;
-                    this.colliderVerticalquarter.active = true;
-                });  
-            } else {
-                this.time.delayedCall(25, () => {
-                    this.canCollect = true;
-                    this.colliderHorizontalquarter.active = true;
-                    this.colliderHorizontalhalf.active = true;
-                    this.colliderVerticalquarter.active = true;
-                });  
-            }
-
-            // get velocity from cannon's rotation
-            const velocity = this.physics.velocityFromRotation(this.cannon.rotation, speed);
-
-            this.bug.setFrame(0); // forward pose
-            this.bug.setVelocity(velocity.x, velocity.y);
-            this.bug.body.gravity.y = 200;
+            this.canCollect = true;
+            this.colliderAsteroid.active = true;
+            this.colliderVertical.active = true;
 
             this.canLaunch = false;  // can't launch bug again until it's reset back into cannon
         }, this);
-
-        // set bug's pose when it hits any left, right or top surface
-        if (this.bug.body.blocked.left) { // hits left surface
-            this.soundBorder.play();
-            this.bug.setFrame(4);  // right pose
-        } else if (this.bug.body.blocked.right) { // hits right surface
-            this.soundBorder.play();
-            this.bug.setFrame(3);  // left pose
-        } else if (this.bug.body.blocked.up) { // hits top surface
-            this.soundBorder.play();
-            this.bug.setFrame(2);  // down pose
-        }
 
         // apply more drag when bug's touching a bottom surface
         if (this.bug.body.blocked.down) {
@@ -313,16 +281,15 @@ class Level9 extends Phaser.Scene {
                     this.scene.start('Level10', { bugColor: this.bugColor, cumulativeScore: this.score + this.runningTotal, levels: this.levels + 1 }); // start next level after delay
                 });
             } else if (this.attempt < 3) {
+                this.initial = true;
                 this.canCollect = false; // don't allow collection of h3 until following next launch
-                this.colliderHorizontalquarter.active = false; // don't allow collisions with barriers until next launch
-                this.colliderHorizontalhalf.active = false;
-                this.colliderVerticalquarter.active = false;
+                this.colliderAsteroid.active = false;
+                this.colliderVertical.active = false;
                 // reset bug and cannon
-                this.bug.setPosition(50, 550);
-                this.bug.setVelocity(0, 0);
+                this.bug.setPosition(20, 0);
                 this.bug.body.gravity.y = 0;
+                this.bug.setVisible(false);
                 this.cannon.setVisible(true);
-                this.cannon.setFrame(0);
                 this.cannon.setPosition(this.bug.x, this.bug.y);
                 this.attempt += 1; // update attempt
                 this.attemptText.setText('Attempt ' + this.attempt + '/3');
@@ -367,6 +334,27 @@ class Level9 extends Phaser.Scene {
         this.scoreText.setText(this.score + '/25');
         this.totalText.setText('Total H3: ' + (this.runningTotal + this.score));
         if (this.score == this.needed) {
+            this.cutoff.visible = false;
+            this.requiredText.visible = false;
+            this.clearText = this.add.text(450, 5, 'CLEAR!', { fontFamily: 'Concert One', fontSize: '24px', fill: '#00ffff' });
+        }
+    }
+    collecth3Bundle(bug, h3) {
+        if (!this.canCollect) {
+            return;
+        }
+        this.soundH3OrStar.play();
+        h3.disableBody(true, true);  // remove collected h3
+
+        // update score and scorebar
+        this.score += 5;
+        this.scoreFill += 40;
+        this.scoreBar.clear();
+        this.scoreBar.fillStyle(0x00ffff, 1);
+        this.scoreBar.fillRect(530, 8, this.scoreFill, 20); // length of bar is determined by score
+        this.scoreText.setText(this.score + '/25');
+        this.totalText.setText('Total H3: ' + (this.runningTotal + this.score));
+        if (this.score >= this.needed) {
             this.cutoff.visible = false;
             this.requiredText.visible = false;
             this.clearText = this.add.text(450, 5, 'CLEAR!', { fontFamily: 'Concert One', fontSize: '24px', fill: '#00ffff' });
